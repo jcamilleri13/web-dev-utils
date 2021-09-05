@@ -1,0 +1,10 @@
+/* Non-hexadeciaml colour formats seem to break the build process. */
+
+:root {
+  --brand-primary: #ff0000;
+  --brand-primary--inverted: #ffffff;
+  --brand-secondary: #00ff00;
+  --brand-secondary--inverted: #000000;
+
+  /* --font-family-base: '?'; */
+}
