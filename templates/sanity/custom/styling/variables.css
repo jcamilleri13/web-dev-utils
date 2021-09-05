@@ -1,4 +1,4 @@
-/* Non-hexadeciaml colour formats seem to break the build process. */
+/* Non-hexadecimal colour formats seem to break the build process. */
 
 :root {
   --brand-primary: #ff0000;
