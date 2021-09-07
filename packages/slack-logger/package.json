@@ -1,0 +1,21 @@
+{
+  "name": "@jcamilleri13/slack-logger",
+  "version": "1.0.0",
+  "description": "Tool for logging to a Slack webhook alongside the console",
+  "main": "index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcamilleri13/web-dev-utils.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "author": "James Camilleri",
+  "license": "ISC",
+  "dependencies": {
+    "got": "^11.8.2"
+  }
+}
