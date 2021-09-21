@@ -28,7 +28,7 @@ function log (level,  ...logs) {
 
   console[level === 'error' ? 'error' : 'log'](prefix, ...logs)
 
-  if (LOG_LEVEL[level] || DEFAULT_LOG_LEVEL > _level)  {
+  if (LOG_LEVEL[level] <= _level)  {
     _log.push([prefix, ...logs].join(' '))
   }
 }
