@@ -1,9 +1,10 @@
 {
   "name": "@jcamilleri13/sanity-web-image",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Definition and tools for automatically optimising Sanity web images",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "type": "module",
   "scripts": {
     "build": "tsc && fix-esm-import-path dist/index.js",
     "prepublish": "tsc && fix-esm-import-path dist/index.js",
