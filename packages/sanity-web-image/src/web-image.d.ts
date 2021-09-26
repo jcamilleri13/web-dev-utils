@@ -4,3 +4,9 @@ export interface WebImage extends SanityImageObject {
   alt: string
   breakpoints: number[]
 }
+
+export interface SanityImageInfo {
+  field: string
+  url: string
+  width: number
+}

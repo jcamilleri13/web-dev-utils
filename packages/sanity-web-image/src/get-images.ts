@@ -2,13 +2,9 @@ import log from '@jcamilleri13/slack-logger'
 import { HandlerEvent } from '@netlify/functions'
 import { SanityClient, SanityDocument } from '@sanity/client'
 
-const WEB_IMAGE = 'webImage'
+import { SanityImageInfo } from './web-image'
 
-interface SanityImageInfo {
-  field: string
-  url: string
-  width: number
-}
+const WEB_IMAGE = 'webImage'
 
 export async function getImagesForProcessing (client: SanityClient, event: HandlerEvent): Promise<Array<SanityImageInfo>> {
   const documents = await getModifiedDocuments(client, event)
