@@ -1,4 +1,4 @@
-import svg  from '@poppanator/sveltekit-svg'
+import svg from '@poppanator/sveltekit-svg'
 import adapter from '@sveltejs/adapter-netlify'
 import preprocess from 'svelte-preprocess'
 
