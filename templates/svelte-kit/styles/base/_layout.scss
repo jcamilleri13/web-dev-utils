@@ -1,0 +1,19 @@
+html { overflow-y: scroll; }
+
+#svelte {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+main { margin: 0 var(--gutter); }
+
+img { max-width: 100%; }
+
+svg {
+  width: 100%;
+  height: 100%;
+
+  // Safari Fix.
+  max-height: 100%;
+}

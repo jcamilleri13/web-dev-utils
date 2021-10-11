@@ -1,0 +1,45 @@
+// Typographic ratio.
+// Select from: 'octave', 'major-seventh', 'minor-seventh', 'major-sixth',
+// 'minor-sixth', fifth', 'augmented-fourth', 'fourth', 'major-third',
+// 'minor-third', 'major-second', 'minor-second', 'cinema', and 'golden';
+// or insert a custom ratio.
+$ratio: '';
+
+// Typography.
+$font-family: '';
+$base-font-size: 0px;
+$line-height: 1.5;
+
+// Colours.
+$light: rgb(0, 0, 0);
+$dark: rgb(0, 0, 0);
+
+$primary: rgb(0, 0, 0);
+$secondary: rgb(0, 0, 0);
+$neutral: rgb(0, 0, 0);
+
+$info: rgb(0, 0, 0);
+$warning: rgb(0, 0, 0);
+$error: rgb(0, 0, 0);
+$success: rgb(0, 0, 0);
+
+// Borders.
+$border-thickness: 0px;
+$border-radius: 0px;
+
+// Animation.
+$transition-fast: 0.15s;
+$transition-medium: 0.3s;
+
+// Breakpoints.
+$breakpoint-sm: 30rem;
+$breakpoint-md: 50rem;
+$breakpoint-lg: 70rem;
+
+
+:root {
+  --foreground: var(--light);
+  --background: var(--dark);
+
+  --gutter: var(--xl);
+}
