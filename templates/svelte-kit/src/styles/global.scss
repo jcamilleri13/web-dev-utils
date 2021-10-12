@@ -1,4 +1,6 @@
-@use '../../node_modules/sanitize.css/evergreen.css';
+// v13 of this currently blows up the <scss global> tag,
+// so stick to v12 until it gets fixed.
+@use '../../node_modules/sanitize.css/sanitize.css';
 @use '../../node_modules/sanitize.css/reduce-motion.css';
 
 @use './setup/fonts';

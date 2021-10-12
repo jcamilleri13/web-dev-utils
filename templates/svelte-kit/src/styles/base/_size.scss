@@ -1,5 +1,5 @@
 @use 'sass:math';
-@use '../config';
+@use '../setup/config';
 
 // From Accoutrement.
 // https://github.com/oddbird/accoutrement/blob/master/sass/core/_ratios.scss
@@ -22,6 +22,10 @@ $ratios: (
 );
 
 $ratio: map-get($ratios, config.$ratio);
+
+@if (meta.type-of($ratio) != number) {
+  @warn 'Typographic ratio not defined.';
+}
 
 $md:  1rem;
 

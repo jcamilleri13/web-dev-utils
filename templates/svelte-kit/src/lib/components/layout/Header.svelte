@@ -1,11 +1,13 @@
 <script lang="ts">
-  import Logo from '../../../assets/images/logo.svg'
+  // import Logo from '../../../assets/images/logo.svg'
   import Navigation from './Navigation/index.svelte'
 </script>
 
 <header>
   <div class="wrapper">
-    <a class="logo" href="/" tabindex="-1"><Logo /></a>
+    <a class="logo" href="/" tabindex="-1">
+      <!-- <Logo /> -->
+    </a>
     <Navigation />
   </div>
 </header>

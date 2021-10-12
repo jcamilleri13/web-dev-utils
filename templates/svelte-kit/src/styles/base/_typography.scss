@@ -1,7 +1,8 @@
+@use 'sass:list';
 @use 'sass:math';
 
 @use 'size';
-@use '../config';
+@use '../setup/config';
 
 $system-defaults: system-ui,
   -apple-system,

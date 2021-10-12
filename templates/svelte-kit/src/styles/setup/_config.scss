@@ -1,8 +1,7 @@
 // Typographic ratio.
 // Select from: 'octave', 'major-seventh', 'minor-seventh', 'major-sixth',
 // 'minor-sixth', fifth', 'augmented-fourth', 'fourth', 'major-third',
-// 'minor-third', 'major-second', 'minor-second', 'cinema', and 'golden';
-// or insert a custom ratio.
+// 'minor-third', 'major-second', 'minor-second', 'cinema', and 'golden'.
 $ratio: '';
 
 // Typography.
@@ -38,8 +37,8 @@ $breakpoint-lg: 70rem;
 
 
 :root {
-  --foreground: var(--light);
-  --background: var(--dark);
+  --foreground: var(--dark);
+  --background: var(--light);
 
   --gutter: var(--xl);
 }
