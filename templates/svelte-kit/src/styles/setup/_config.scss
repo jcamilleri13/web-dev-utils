@@ -1,16 +1,23 @@
+// Configuration instructions:
+// [1] Pick a font.
+// [2] Select the best base font-size and line-height.
+// [3] Select a typographic ratio based on that font.
+// [4] Tweak colours and other configuration options.
+// [5] Add custom styles as required.
+
+// Typography.
+$font-family: '';
+$base-font-size: 16px;
+$line-height: 1.5;
+
 // Typographic ratio.
 // Select from: 'octave', 'major-seventh', 'minor-seventh', 'major-sixth',
 // 'minor-sixth', fifth', 'augmented-fourth', 'fourth', 'major-third',
 // 'minor-third', 'major-second', 'minor-second', 'cinema', and 'golden'.
 $ratio: '';
 
-// Typography.
-$font-family: '';
-$base-font-size: 0px;
-$line-height: 1.5;
-
 // Colours.
-$light: rgb(0, 0, 0);
+$light: rgb(255, 255, 255);
 $dark: rgb(0, 0, 0);
 
 $primary: rgb(0, 0, 0);
