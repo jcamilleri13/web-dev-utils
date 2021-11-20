@@ -25,7 +25,7 @@ export async function getImagesForProcessing(
             .filter(([_, value]) => value._type === WEB_IMAGE && !value.breakpoints)
             .map(async ([field, value]) => {
               const { url, width } = await getSanityImageMetadata(client, value.asset._ref)
-              return { field, url, width }
+              return { documentId: document._id, field, url, width }
             })
         )
       }
