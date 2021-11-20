@@ -6,6 +6,7 @@ export interface WebImage extends SanityImageObject {
 }
 
 export interface SanityImageInfo {
+  documentId: string
   field: string
   url: string
   width: number
