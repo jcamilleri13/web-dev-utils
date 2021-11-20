@@ -1,6 +1,6 @@
 {
   "name": "@james-camilleri/replace-sanity-favicon",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Replaces the default Sanity favicon with a custom favicon in the `/static` folder",
   "main": "index.js",
   "scripts": {
