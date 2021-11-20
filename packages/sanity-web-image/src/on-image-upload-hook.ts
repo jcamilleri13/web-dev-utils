@@ -1,11 +1,14 @@
-import log from '@jcamilleri13/slack-logger'
+import log from '@james-camilleri/slack-logger'
 import { HandlerEvent, HandlerResponse } from '@netlify/functions'
 import { SanityClient } from '@sanity/client'
 
 import { getImagesForProcessing } from './get-images'
 import { queueImagesForProcessing } from './queue-images'
 
-export async function onImageUploadHook (client: SanityClient, event: HandlerEvent): Promise<HandlerResponse> {
+export async function onImageUploadHook(
+  client: SanityClient,
+  event: HandlerEvent
+): Promise<HandlerResponse> {
   try {
     log.setHeader('Queuing images for breakpoint generation')
     const images = await getImagesForProcessing(client, event)

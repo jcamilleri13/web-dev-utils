@@ -1,4 +1,4 @@
-import log from '@jcamilleri13/slack-logger'
+import log from '@james-camilleri/slack-logger'
 import { HandlerEvent } from '@netlify/functions'
 import { SanityClient, SanityDocument } from '@sanity/client'
 
@@ -6,7 +6,10 @@ import { SanityImageInfo } from './web-image'
 
 const WEB_IMAGE = 'webImage'
 
-export async function getImagesForProcessing (client: SanityClient, event: HandlerEvent): Promise<Array<SanityImageInfo>> {
+export async function getImagesForProcessing(
+  client: SanityClient,
+  event: HandlerEvent
+): Promise<Array<SanityImageInfo>> {
   const documents = await getModifiedDocuments(client, event)
 
   // Find all webImages in updated documents.
@@ -30,7 +33,7 @@ export async function getImagesForProcessing (client: SanityClient, event: Handl
   )
 }
 
-async function getModifiedDocuments (client: SanityClient, event: HandlerEvent) {
+async function getModifiedDocuments(client: SanityClient, event: HandlerEvent) {
   if (!event.body) return []
 
   const ids = JSON.parse(event.body).ids
@@ -40,7 +43,7 @@ async function getModifiedDocuments (client: SanityClient, event: HandlerEvent) 
   return client.fetch(`*[_id in ${modifiedIds}]`)
 }
 
-async function getSanityImageMetadata (client: SanityClient, imageId: string) {
+async function getSanityImageMetadata(client: SanityClient, imageId: string) {
   const result = await client.fetch(`*[_id=="${imageId}"]`)
   const { metadata, url } = result[0]
   const { width } = metadata.dimensions
