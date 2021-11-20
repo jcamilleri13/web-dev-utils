@@ -1,5 +1,5 @@
 {
-  "name": "@jcamilleri13/replace-sanity-favicon",
+  "name": "@james-camilleri/replace-sanity-favicon",
   "version": "1.0.0",
   "description": "Replaces the default Sanity favicon with a custom favicon in the `/static` folder",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jcamilleri13/web-dev-utils.git"
+    "url": "https://github.com/james-camilleri/web-dev-utils.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
