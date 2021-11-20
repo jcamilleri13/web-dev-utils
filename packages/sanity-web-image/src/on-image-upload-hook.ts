@@ -2,12 +2,13 @@ import log from '@james-camilleri/slack-logger'
 import { HandlerEvent, HandlerResponse } from '@netlify/functions'
 import { SanityClient } from '@sanity/client'
 
+import { generateCloudinaryBreakpoints } from './generate-cloudinary-breakpoints'
 import { getImagesForProcessing } from './get-images'
-import { queueImagesForProcessing } from './queue-images'
 
 export async function onImageUploadHook(
   client: SanityClient,
-  event: HandlerEvent
+  event: HandlerEvent,
+  onComplete: string
 ): Promise<HandlerResponse> {
   try {
     log.setHeader('Queuing images for breakpoint generation')
@@ -15,7 +16,7 @@ export async function onImageUploadHook(
     const urls = images.map(({ url }) => url).join()
     log.info(`Queuing images: ${urls}`)
 
-    await queueImagesForProcessing(images)
+    await generateCloudinaryBreakpoints(images, event, onComplete)
   } catch (error) {
     log.error(error)
     await log.flushAll()
