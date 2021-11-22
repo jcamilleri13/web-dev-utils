@@ -1,5 +1,5 @@
-export { getCloudinaryBreakpoints } from './get-cloudinary-breakpoints'
-export { onImageUploadHook } from './on-image-upload-hook'
+export { generateImageBreakpoints } from './generate-image-breakpoints'
+export { updateImageMetadata } from './update-image-metadata'
 
 export { WebImage } from './web-image'
 export { WebImageSchema } from './sanity-schema'

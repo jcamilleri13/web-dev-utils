@@ -11,12 +11,6 @@ export const WebImageSchema = {
       options: {
         isHighlighted: true
       }
-    }, {
-      title: 'Responsive image breakpoints',
-      name: 'breakpoints',
-      type: 'array',
-      of: [{ type: 'number' }],
-      hidden: true
     }
   ]
 }
