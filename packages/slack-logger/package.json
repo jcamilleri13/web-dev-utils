@@ -1,6 +1,6 @@
 {
   "name": "@james-camilleri/slack-logger",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Tool for logging to a Slack webhook alongside the console",
   "main": "index.mjs",
   "types": "types.d.ts",

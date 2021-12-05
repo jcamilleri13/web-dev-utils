@@ -24,24 +24,24 @@ const LOG_LEVEL = {
   debug: 4
 }
 
-function log (level,  ...logs) {
+function log(level, ...logs) {
   const prefix = LOG_PREFIX[level] || LOG_PREFIX['info']
 
   console[level === 'error' ? 'error' : 'log'](prefix, ...logs)
 
   _verboseLog.push([prefix, ...logs].join(' '))
 
-  if (LOG_LEVEL[level] <= _level)  {
+  if (LOG_LEVEL[level] <= _level) {
     _log.push([prefix, ...logs].join(' '))
   }
 }
 
-function setLogLevel (level) {
+function setLogLevel(level) {
   log('debug', `Setting log level to "${level}"`)
   _level = LOG_LEVEL[level] || DEFAULT_LOG_LEVEL
 }
 
-function setHeader (text) {
+function setHeader(text) {
   _header = text
 }
 
@@ -52,21 +52,26 @@ async function pushToSlack(logs) {
     method: 'POST',
     json: {
       text: _log.join('\n'),
-      blocks: [{
-        'type': 'header',
-        'text': {
-          'type': 'plain_text',
-          'text': _header
+      blocks: [
+        {
+          type: 'header',
+          text: {
+            type: 'plain_text',
+            text: _header
+          }
+        },
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: logs.join('\n')
+          }
         }
-      }, {
-        'type': 'section',
-        'text': {
-          'type': 'mrkdwn',
-          'text': logs.join('\n')
-        }
-      }]
+      ]
     }
   })
+
+  logs = []
 }
 
 log.flush = () => pushToSlack(_log)
