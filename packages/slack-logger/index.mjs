@@ -9,11 +9,11 @@ const _log = []
 const _verboseLog = []
 
 const LOG_PREFIX = {
-  debug: '⚫ *[DEBUG]*',
-  info: '🔵 *[INFO]*',
-  warning: '🟡 *[WARNING]*',
-  error: '🔴 *[ERROR]*',
-  success: '🟢 *[SUCCESS]*'
+  debug: '⚫ ',
+  info: '🔵 ',
+  warning: '🟡 ',
+  error: '🔴 ',
+  success: '🟢 '
 }
 
 const LOG_LEVEL = {
