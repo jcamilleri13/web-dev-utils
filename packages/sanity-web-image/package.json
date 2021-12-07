@@ -6,8 +6,9 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "build": "tsc && fix-esm-import-path dist/index.js",
-    "prepublish": "tsc && fix-esm-import-path dist/index.js",
+    "clear": "rimraf dist",
+    "build": "npm run clear && tsc && fix-esm-import-path dist/index.js",
+    "prepublish": "npm run clear && tsc && fix-esm-import-path dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -26,6 +27,7 @@
     "@types/node": "^16.7.13",
     "@types/svgo": "^2.6.0",
     "fix-esm-import-path": "^1.1.0",
+    "rimraf": "^3.0.2",
     "typescript": "^4.4.2"
   },
   "dependencies": {
