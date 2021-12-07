@@ -13,7 +13,10 @@ export async function optimiseSvg(
   payload: SanityImageAssetDocument,
   client: SanityClient
 ): Promise<HandlerResponse> {
-  const { _id, url } = payload
+  const { _id, label, url } = payload
+
+  // Don't re-optimise an optimised SVG.
+  if (label === 'optimised') return { statusCode: 200 }
 
   log.setHeader(`Optimising SVG ${_id}`)
 
@@ -64,7 +67,8 @@ async function uploadSvg(client: SanityClient, svg: string): Promise<string> {
   const readable = Readable.from([svg])
   const { _id } = await client.assets.upload(
     'image',
-    readable as unknown as ReadableStream<any> // Node streams and web streams aren't quite compatible
+    readable as unknown as ReadableStream<any>, // Node streams and web streams aren't quite compatible
+    { label: 'optimised' }
   )
 
   log.info(`Optimised SVG ${_id} uploaded`)
