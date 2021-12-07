@@ -1,6 +1,6 @@
 {
   "name": "@james-camilleri/sanity-web-image",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Definition and tools for automatically optimising Sanity web images",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
