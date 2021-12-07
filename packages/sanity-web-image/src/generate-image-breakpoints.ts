@@ -1,31 +1,25 @@
 import log from '@james-camilleri/slack-logger'
-import { HandlerEvent, HandlerResponse } from '@netlify/functions'
+import { HandlerResponse } from '@netlify/functions'
+import { SanityImageAssetDocument } from '@sanity/client'
 import { v2 as cloudinary } from 'cloudinary'
 
-const IMAGE_TYPE = 'sanity.imageAsset'
-const SVG_EXTENSION = 'svg'
 const MIN_WIDTH = 300
 const BYTE_STEP = 20000
 
 export async function generateImageBreakpoints(
-  event: HandlerEvent,
-  onComplete: string
+  payload: SanityImageAssetDocument,
+  notificationUrl: string
 ): Promise<HandlerResponse> {
-  if (!event.body) return { statusCode: 400 }
-
-  const payload = JSON.parse(event.body)
-  const { _id, _type, extension, url } = payload
-
-  if (_type !== IMAGE_TYPE) return { statusCode: 415 }
-  if (extension === SVG_EXTENSION) return { statusCode: 200 }
-
   try {
+    const { _id, url } = payload
+
     log.setHeader(`Generating breakpoints for image ${_id}`)
 
     const width = payload.metadata.dimensions.width
-    const notificationUrl = createNotificationUrl(event, onComplete, _id)
+    const notificationUrlWithId = `${notificationUrl}?id=${_id}`
+    log.debug(`Generated Cloudinary notification URL: ${notificationUrlWithId}`)
 
-    await queueBreakpointGeneration(url, width, notificationUrl)
+    await queueBreakpointGeneration(url, width, notificationUrlWithId)
   } catch (error) {
     log.error(error)
     await log.flushAll()
@@ -37,17 +31,6 @@ export async function generateImageBreakpoints(
   await log.flush()
 
   return { statusCode: 200 }
-}
-
-function createNotificationUrl(event: HandlerEvent, onComplete: string, id: string) {
-  const { rawUrl } = event
-
-  const baseUrl = rawUrl.split('/').slice(0, -1).join('/')
-  const notificationUrl = `${baseUrl}/${onComplete}?id=${id}`
-
-  log.debug(`Generated Cloudinary notification URL: ${notificationUrl}`)
-
-  return notificationUrl
 }
 
 async function queueBreakpointGeneration(
