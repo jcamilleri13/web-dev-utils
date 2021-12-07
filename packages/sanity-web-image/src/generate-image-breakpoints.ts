@@ -42,6 +42,7 @@ async function queueBreakpointGeneration(
     cloudinary.uploader.upload(
       url,
       {
+        async: true,
         notification_url: notificationUrl,
         responsive_breakpoints: [
           {
