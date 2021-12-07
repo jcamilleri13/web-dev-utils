@@ -7,6 +7,7 @@ import got from 'got'
 import { optimize } from 'svgo'
 
 import { deepMap } from './deep-map'
+import { isWebImage } from './type-guards'
 import { WebImage } from './web-image'
 
 export async function optimiseSvg(
@@ -83,8 +84,11 @@ async function replaceAllReferences(
   const documents = await getReferencedDocuments(client, oldId)
   const updatedDocuments = documents.map((document) =>
     deepMap(document, (input) => {
+      // Return block content as is to prevent unnecessary recursion.
+      if (input._type === 'block') return input
+
       if (!isWebImage(input)) return
-      if (input.asset._ref !== oldId) return
+      if (input.asset._ref !== oldId) return input
 
       input.asset._ref = newId
       log.debug(`Replaced reference in ${document._id}`)
@@ -97,10 +101,6 @@ async function replaceAllReferences(
   )
 
   log.debug('Updated all references')
-}
-
-function isWebImage(document: WebImage | SanityDocument): document is WebImage {
-  return document._type === 'webImage'
 }
 
 async function getReferencedDocuments(client: SanityClient, id: string): Promise<SanityDocument[]> {
