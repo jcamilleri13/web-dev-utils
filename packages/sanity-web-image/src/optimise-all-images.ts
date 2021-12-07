@@ -2,7 +2,7 @@ import { SanityClient, SanityImageAssetDocument } from '@sanity/client'
 
 import { generateImageBreakpoints } from './generate-image-breakpoints'
 import { optimiseSvg } from './optimise-svg'
-import { WebImage } from './web-image'
+import { OptimisedSanityImage } from './web-image'
 
 const IMAGE_TYPE = 'sanity.imageAsset'
 const SVG_EXTENSION = 'svg'
@@ -14,7 +14,8 @@ export async function optimiseAllImages(
 ) {
   const images = await client.fetch<SanityImageAssetDocument>(`*[_type == "${IMAGE_TYPE}"]`)
   const imagesToOptimise = images.filter(
-    (image: WebImage) => image.label === 'optimised' || image.metadata?.breakpoints?.length > 0
+    (image: OptimisedSanityImage) =>
+      !(image.label === 'optimised' || image.metadata?.breakpoints?.length > 0)
   )
 
   for (const image of imagesToOptimise) {
