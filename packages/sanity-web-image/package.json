@@ -1,6 +1,6 @@
 {
   "name": "@james-camilleri/sanity-web-image",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Definition and tools for automatically optimising Sanity web images",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -24,11 +24,13 @@
     "@sanity/client": "^2.19.0",
     "@sanity/image-url": "^1.0.1",
     "@types/node": "^16.7.13",
+    "@types/svgo": "^2.6.0",
     "fix-esm-import-path": "^1.1.0",
     "typescript": "^4.4.2"
   },
   "dependencies": {
     "@james-camilleri/slack-logger": "^1.2.0",
-    "cloudinary": "^1.26.3"
+    "cloudinary": "^1.26.3",
+    "svgo": "^2.8.0"
   }
 }
