@@ -78,25 +78,26 @@ async function replaceAllReferences(
   newId: string
 ): Promise<void> {
   const documents = await getReferencedDocuments(client, oldId)
-  await deepMap(documents, (input) => {
-    if (!isWebImage(input)) return
+  const updatedDocuments = documents.map((document) =>
+    deepMap(document, (input) => {
+      if (!isWebImage(input)) return
+      if (input.asset._ref !== oldId) return
 
-    input.asset._ref = newId
-    log.debug(`Replaced reference in ${input._id}`)
-    return input
-  })
+      input.asset._ref = newId
+      log.debug(`Replaced reference in ${document._id}`)
+      return input
+    })
+  )
 
   await Promise.all(
-    documents.map((document) => {
-      return client.patch(document._id).set(document)
-    })
+    updatedDocuments.map((document) => client.patch(document._id).set(document).commit())
   )
 
   log.debug('Updated all references')
 }
 
 function isWebImage(document: WebImage | SanityDocument): document is WebImage {
-  return document._type !== 'webImage'
+  return document._type === 'webImage'
 }
 
 async function getReferencedDocuments(client: SanityClient, id: string): Promise<SanityDocument[]> {
