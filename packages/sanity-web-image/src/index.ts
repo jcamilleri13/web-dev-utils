@@ -1,3 +1,4 @@
+export { optimiseAllImages } from './optimise-all-images'
 export { optimiseImage } from './optimise-image'
 export { updateImageMetadata } from './update-image-metadata'
 

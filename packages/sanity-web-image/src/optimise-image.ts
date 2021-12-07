@@ -21,15 +21,6 @@ export async function optimiseImage(
 
   if (extension === SVG_EXTENSION) return optimiseSvg(payload, client)
 
-  const notificationUrl = createNotificationUrl(event, breakpointNotificationFunction)
-  return generateImageBreakpoints(payload, notificationUrl)
-}
-
-function createNotificationUrl(event: HandlerEvent, breakpointNotificationFunction: string) {
   const { rawUrl } = event
-
-  const baseUrl = rawUrl.split('/').slice(0, -1).join('/')
-  const notificationUrl = `${baseUrl}/${breakpointNotificationFunction}`
-
-  return notificationUrl
+  return generateImageBreakpoints(payload, rawUrl, breakpointNotificationFunction)
 }

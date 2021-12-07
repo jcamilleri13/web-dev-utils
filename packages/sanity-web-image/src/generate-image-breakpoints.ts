@@ -8,7 +8,8 @@ const BYTE_STEP = 20000
 
 export async function generateImageBreakpoints(
   payload: SanityImageAssetDocument,
-  notificationUrl: string
+  rawUrl: string,
+  breakpointNotificationFunction: string
 ): Promise<HandlerResponse> {
   try {
     const { _id, url } = payload
@@ -16,10 +17,9 @@ export async function generateImageBreakpoints(
     log.setHeader(`Generating breakpoints for image ${_id}`)
 
     const width = payload.metadata.dimensions.width
-    const notificationUrlWithId = `${notificationUrl}?id=${_id}`
-    log.debug(`Generated Cloudinary notification URL: ${notificationUrlWithId}`)
+    const notificationUrl = createNotificationUrl(rawUrl, breakpointNotificationFunction, _id)
 
-    await queueBreakpointGeneration(url, width, notificationUrlWithId)
+    await queueBreakpointGeneration(url, width, notificationUrl)
   } catch (error) {
     log.error(error)
     await log.flushAll()
@@ -31,6 +31,14 @@ export async function generateImageBreakpoints(
   await log.flush()
 
   return { statusCode: 200 }
+}
+
+function createNotificationUrl(rawUrl: string, breakpointNotificationFunction: string, id: string) {
+  const baseUrl = rawUrl.split('/').slice(0, -1).join('/')
+  const notificationUrl = `${baseUrl}/${breakpointNotificationFunction}?id=${id}`
+  log.debug(`Generated Cloudinary notification URL: ${notificationUrl}`)
+
+  return notificationUrl
 }
 
 async function queueBreakpointGeneration(
