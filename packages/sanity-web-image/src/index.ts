@@ -1,4 +1,4 @@
-export { generateImageBreakpoints } from './generate-image-breakpoints'
+export { optimiseImage } from './optimise-image'
 export { updateImageMetadata } from './update-image-metadata'
 
 export type { WebImage } from './web-image'
