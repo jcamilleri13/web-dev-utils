@@ -8,7 +8,7 @@
   "scripts": {
     "clear": "rimraf dist",
     "build": "npm run clear && tsc && fix-esm-import-path dist/index.js",
-    "prepublish": "npm run clear && tsc && fix-esm-import-path dist/index.js",
+    "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
