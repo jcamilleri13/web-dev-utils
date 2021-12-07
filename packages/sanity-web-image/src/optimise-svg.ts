@@ -54,7 +54,6 @@ function optimiseSvgString(svg: string): string {
         name: 'preset-default',
         params: {
           overrides: {
-            removeTitle: false,
             removeViewBox: false
           }
         }
