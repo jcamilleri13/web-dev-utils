@@ -27,14 +27,12 @@ export function deepMap(input: any, fn: (input: any) => undefined | any): any {
   if (result !== undefined) return result
 
   if (Array.isArray(input)) {
-    return input.map((item) => asyncDeepMap(item, fn))
+    return input.map((item) => deepMap(item, fn))
   }
 
   if (typeof input === 'object') {
     return Object.entries(input)
-      .map(async ([key, value]) => ({
-        [key]: await asyncDeepMap(value, fn)
-      }))
+      .map(([key, value]) => ({ [key]: deepMap(value, fn) }))
       .reduce((combinedObject, object) => ({ ...combinedObject, ...object }), {})
   }
 
