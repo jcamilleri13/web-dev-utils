@@ -47,6 +47,10 @@ function setHeader(text) {
 
 async function pushToSlack(logs) {
   if (logs.length === 0) return
+  if (!SLACK_WEBHOOK) {
+    log.warning('Webhook URL not found, skipping Slack notification')
+    return
+  }
 
   await got(SLACK_WEBHOOK, {
     method: 'POST',
