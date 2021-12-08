@@ -90,6 +90,8 @@ log.error = (...logs) => log('error', ...logs)
 log.success = (...logs) => log('success', ...logs)
 
 // Set log level from environment variable if it is defined.
-setLogLevel(process.env.LOG_LEVEL)
+if (process.env.LOG_LEVEL) {
+  setLogLevel(process.env.LOG_LEVEL)
+}
 
 export default log
