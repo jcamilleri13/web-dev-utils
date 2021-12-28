@@ -8,6 +8,7 @@
 // Typography.
 $font-family: '';
 $base-font-size: 16px;
+$base-font-weight: 300; // For variable fonts.
 $line-height: 1.5;
 
 // Typographic ratio.
@@ -16,36 +17,40 @@ $line-height: 1.5;
 // 'minor-third', 'major-second', 'minor-second', 'cinema', and 'golden'.
 $ratio: '';
 
-// Colours.
-$light: rgb(255, 255, 255);
-$dark: rgb(0, 0, 0);
-
-$primary: rgb(0, 0, 0);
-$secondary: rgb(0, 0, 0);
-$neutral: rgb(0, 0, 0);
-
-$info: rgb(0, 0, 0);
-$warning: rgb(0, 0, 0);
-$error: rgb(0, 0, 0);
-$success: rgb(0, 0, 0);
-
-// Borders.
-$border-thickness: 0px;
-$border-radius: 0px;
-
-// Animation.
-$transition-fast: 0.15s;
-$transition-medium: 0.3s;
-
 // Breakpoints.
 $breakpoint-sm: 30rem;
 $breakpoint-md: 50rem;
 $breakpoint-lg: 70rem;
 
-
 :root {
+  // Colours
+  --light: rgb(255, 255, 255);
+  --dark: rgb(0, 0, 0);
   --foreground: var(--dark);
   --background: var(--light);
 
+  --primary: rgb(0, 0, 0);
+  --secondary: rgb(0, 0, 0);
+  --neutral: rgb(0, 0, 0);
+
+  --info: rgb(0, 0, 0);
+  --warning: rgb(0, 0, 0);
+  --error: rgb(0, 0, 0);
+  --success: rgb(0, 0, 0);
+
+  // Spacing
   --gutter: var(--xl);
+
+  // Borders
+  --border-thickness: 0px;
+  --border-colour: none;
+  --border-radius: 1px;
+
+  // Animation
+  --transition-fast: 0.15s;
+  --transition-medium: 0.3s;
+
+  // Forms
+  --form-control-padding: var(--xs) var(--sm);
+  --form-control-background: var(--secondary);
 }
