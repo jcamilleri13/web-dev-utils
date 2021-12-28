@@ -1,0 +1,16 @@
+{
+  "name": "optimise-all-images",
+  "version": "1.0.0",
+  "description": "Optimise all images on a given Sanity site",
+  "main": "index.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@james-camilleri/sanity-web-image": "^0.3.7",
+    "@sanity/client": "^2.23.0",
+    "cloudinary": "^1.27.1"
+  }
+}
