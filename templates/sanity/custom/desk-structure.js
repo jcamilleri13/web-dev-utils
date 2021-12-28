@@ -24,9 +24,9 @@ export default () =>
                   S.document()
                     .title('Placeholder Page')
                     .schemaType('pagePlaceholder')
-                    .documentId('pagePlaceholder')
+                    .documentId('pagePlaceholder'),
                 ),
-            ])
+            ]),
         ),
       S.divider(),
       //
@@ -81,8 +81,8 @@ export default () =>
       //   .child(
       //     S.documentList()
       //       .title('Contact Form Submissions')
-      //       .filter('_type == "contactFormSubmission"')
-      //       .schemaType('contactFormSubmission')
+      //       .filter('_type == "formContact"')
+      //       .schemaType('formContact')
       //   ),
       // S.divider()
     ])
