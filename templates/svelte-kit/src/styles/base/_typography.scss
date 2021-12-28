@@ -61,3 +61,5 @@ pre {
     font-size: list.nth(size.$heading-sizes, $i);
   }
 }
+
+mark, ::selection { background-color: var(--primary); }
