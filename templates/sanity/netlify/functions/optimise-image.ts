@@ -1,8 +1,9 @@
-import { onImageUploadHook } from '@jcamilleri/sanity-web-image'
+import { optimiseImage } from '@james-camilleri/sanity-web-image'
 import { Handler } from '@netlify/functions'
 import sanityClient from '@sanity/client'
 
 const { SANITY_API_KEY } = process.env
+const UPDATE_FUNCTION = 'update-image-metadata'
 
 const client = sanityClient({
   projectId: '',
@@ -12,4 +13,4 @@ const client = sanityClient({
   useCdn: false
 })
 
-export const handler: Handler = async event => onImageUploadHook(client, event)
+export const handler: Handler = async (event) => optimiseImage(event, client, UPDATE_FUNCTION)
