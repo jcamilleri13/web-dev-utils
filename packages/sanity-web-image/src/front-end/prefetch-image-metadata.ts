@@ -16,12 +16,14 @@ export async function prefetchImageMetadata(
     // Return block content as is to prevent unnecessary recursion.
     if (input._type === 'block') return input
     if (!isWebImage(input)) return
+    if (!input.asset) return input
 
     const url = metadataUrl(input.asset._ref, sanityConfig)
-
-    return fetch(url, { mode: 'cors' })
+    const metadata = await fetch(url, { mode: 'cors' })
       .then((response) => response.json())
       .then((payload) => payload.result[0])
+
+    return { ...input, metadata }
   }
 
   return asyncDeepMap(input, fetchMetadata)
