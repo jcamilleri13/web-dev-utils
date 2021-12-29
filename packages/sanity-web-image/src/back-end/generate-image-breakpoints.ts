@@ -9,7 +9,7 @@ const BYTE_STEP = 20000
 export async function generateImageBreakpoints(
   payload: SanityImageAssetDocument,
   rawUrl: string,
-  breakpointNotificationFunction: string
+  breakpointNotificationFunction: string,
 ): Promise<HandlerResponse> {
   try {
     const { _id, url } = payload
@@ -44,7 +44,7 @@ function createNotificationUrl(rawUrl: string, breakpointNotificationFunction: s
 async function queueBreakpointGeneration(
   url: string,
   width: number,
-  notificationUrl: string
+  notificationUrl: string,
 ): Promise<void> {
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(
@@ -57,9 +57,9 @@ async function queueBreakpointGeneration(
             create_derived: false,
             bytes_step: BYTE_STEP,
             min_width: MIN_WIDTH,
-            max_width: width
-          }
-        ]
+            max_width: width,
+          },
+        ],
       },
       (error) => {
         if (error) {
@@ -68,7 +68,7 @@ async function queueBreakpointGeneration(
         }
 
         resolve()
-      }
+      },
     )
   })
 }

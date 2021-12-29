@@ -4,7 +4,7 @@ import { SanityClient } from '@sanity/client'
 
 export async function updateImageMetadata(
   event: HandlerEvent,
-  client: SanityClient
+  client: SanityClient,
 ): Promise<HandlerResponse> {
   try {
     const id = event.queryStringParameters?.id

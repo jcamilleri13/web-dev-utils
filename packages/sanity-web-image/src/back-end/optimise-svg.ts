@@ -6,13 +6,12 @@ import { SanityClient, SanityDocument, SanityImageAssetDocument } from '@sanity/
 import got from 'got'
 import { optimize } from 'svgo'
 
-import { deepMap } from './deep-map'
-import { isWebImage } from './type-guards'
-import { WebImage } from './web-image'
+import { deepMap } from '../utils/deep-map'
+import { isWebImage } from '../utils/type-guards'
 
 export async function optimiseSvg(
   payload: SanityImageAssetDocument,
-  client: SanityClient
+  client: SanityClient,
 ): Promise<HandlerResponse> {
   const { _id, label, url } = payload
 
@@ -55,11 +54,11 @@ function optimiseSvgString(svg: string): string {
         name: 'preset-default',
         params: {
           overrides: {
-            removeViewBox: false
-          }
-        }
-      }
-    ]
+            removeViewBox: false,
+          },
+        },
+      },
+    ],
   }).data
 }
 
@@ -68,7 +67,7 @@ async function uploadSvg(client: SanityClient, svg: string): Promise<string> {
   const { _id } = await client.assets.upload(
     'image',
     readable as unknown as ReadableStream<any>, // Node streams and web streams aren't quite compatible
-    { label: 'optimised' }
+    { label: 'optimised' },
   )
 
   log.info(`Optimised SVG ${_id} uploaded`)
@@ -79,7 +78,7 @@ async function uploadSvg(client: SanityClient, svg: string): Promise<string> {
 async function replaceAllReferences(
   client: SanityClient,
   oldId: string,
-  newId: string
+  newId: string,
 ): Promise<void> {
   const documents = await getReferencedDocuments(client, oldId)
   const updatedDocuments = documents.map((document) =>
@@ -93,11 +92,11 @@ async function replaceAllReferences(
       input.asset._ref = newId
       log.debug(`Replaced reference in ${document._id}`)
       return input
-    })
+    }),
   )
 
   await Promise.all(
-    updatedDocuments.map((document) => client.patch(document._id).set(document).commit())
+    updatedDocuments.map((document) => client.patch(document._id).set(document).commit()),
   )
 
   log.debug('Updated all references')

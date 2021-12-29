@@ -10,7 +10,7 @@ const SVG_EXTENSION = 'svg'
 export async function optimiseImage(
   event: HandlerEvent,
   client: SanityClient,
-  breakpointNotificationFunction: string
+  breakpointNotificationFunction: string,
 ): Promise<HandlerResponse> {
   if (!event.body) return { statusCode: 400 }
 

@@ -1,1 +1,1 @@
-export { imageMetadataQuery } from './image-metadata-query'
+export { prefetchImageMetadata } from './front-end/prefetch-image-metadata'

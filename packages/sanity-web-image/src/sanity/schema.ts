@@ -9,8 +9,8 @@ export const WebImageSchema = {
       name: 'alt',
       type: 'string',
       options: {
-        isHighlighted: true
-      }
-    }
-  ]
+        isHighlighted: true,
+      },
+    },
+  ],
 }
