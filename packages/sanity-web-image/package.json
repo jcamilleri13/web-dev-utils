@@ -1,6 +1,6 @@
 {
   "name": "@james-camilleri/sanity-web-image",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "Definition and tools for automatically optimising Sanity web images",
   "main": "dist/index.js",
   "browser": "dist/browser.js",
@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "clear": "rimraf dist",
-    "build": "npm run clear && tsc && fix-esm-import-path dist/index.js",
+    "build": "npm run clear && tsc && fix-esm-import-path dist/index.js && fix-esm-import-path dist/browser.js",
     "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
