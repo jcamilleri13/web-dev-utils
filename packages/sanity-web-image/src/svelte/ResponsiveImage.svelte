@@ -3,7 +3,7 @@
 
   import { decode } from 'blurhash'
   import { getContext, onMount } from 'svelte'
-  import imageUrlBuilder from '@sanity/image-url'
+  import imageUrlBuilder from '@sanity/image-url/lib/browser/image-url.mjs'
   import InlineSVG from 'svelte-inline-svg'
 
   interface Sizes {
