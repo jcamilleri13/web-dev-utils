@@ -1,6 +1,6 @@
 {
   "name": "@james-camilleri/sanity-web-image",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Definition and tools for automatically optimising Sanity web images",
   "main": "dist/index.js",
   "browser": "dist/browser.js",
@@ -24,8 +24,6 @@
   "license": "ISC",
   "devDependencies": {
     "@netlify/functions": "^0.7.2",
-    "@sanity/client": "^2.19.0",
-    "@sanity/image-url": "^1.0.1",
     "@types/node": "^16.7.13",
     "@types/svgo": "^2.6.0",
     "fix-esm-import-path": "^1.1.0",
@@ -34,6 +32,8 @@
   },
   "dependencies": {
     "@james-camilleri/slack-logger": "^1.2.0",
+    "@sanity/client": "^2.19.0",
+    "@sanity/image-url": "^1.0.1",
     "blurhash": "^1.1.4",
     "cloudinary": "^1.26.3",
     "svelte-inline-svg": "^1.0.8",
