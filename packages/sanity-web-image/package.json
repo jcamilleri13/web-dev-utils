@@ -1,9 +1,10 @@
 {
   "name": "@james-camilleri/sanity-web-image",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Definition and tools for automatically optimising Sanity web images",
   "main": "dist/index.js",
   "browser": "dist/browser.js",
+  "svelte": "src/svelte/WebImage.svelte",
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
