@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { WebImage } from '../types/web-image'
+  import type { WebImage } from '../src/types/web-image'
 
   import { decode } from 'blurhash'
   import { getContext, onMount } from 'svelte'
@@ -11,10 +11,6 @@
   }
 
   interface ConfigContext {
-    BREAKPOINTS: {
-      [key: string]: number
-    }
-
     SANITY: {
       projectId: string
       dataset: string
@@ -43,7 +39,7 @@
   const sizesString = generateSizesString(sizes)
   const croppedHeight = cropRatio ? width * cropRatio : height
 
-  let canvas
+  let canvas: HTMLCanvasElement | undefined
   let loaded = false
   const onLoad = () => {
     loaded = true
@@ -115,7 +111,7 @@
     {#if extension === SVG}
       <InlineSVG
         {src}
-        transformSrc={(svg) => addTitleToSvg(svg, alt)}
+        transformSrc={(svg: SVGElement) => addTitleToSvg(svg, alt)}
         style={cropRatio ? `aspect-ratio: ${cropRatio}` : ''}
       />
     {:else}
