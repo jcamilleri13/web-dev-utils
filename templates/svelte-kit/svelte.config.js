@@ -8,38 +8,36 @@ import preprocess from 'svelte-preprocess'
 const config = {
   // Consult https://github.com/sveltejs/svelte-preprocess
   // for more information about preprocessors
-  preprocess: preprocess({
-    postcss: true
-  }),
+  preprocess: preprocess(),
 
   kit: {
     adapter: adapter(),
     // hydrate the <div id="svelte"> element in src/app.html
     target: '#svelte',
     vite: {
-      plugins: [svg({
-        svgoOptions: {
-          plugins: [
-            {
-              name: 'preset-default',
-              params: {
-                overrides: {
-                  removeViewBox: false,
+      plugins: [
+        svg({
+          svgoOptions: {
+            plugins: [
+              {
+                name: 'preset-default',
+                params: {
+                  overrides: {
+                    removeViewBox: false,
+                  },
                 },
               },
-            }],
-          }
-      })],
+            ],
+          },
+        }),
+      ],
       resolve: {
         alias: {
-          $assets: path.resolve('./src/assets')
-        }
+          $assets: path.resolve('./src/assets'),
+        },
       },
-      optimizeDeps: {
-        include: []
-      }
-    }
-  }
+    },
+  },
 }
 
-export default config;
+export default config
