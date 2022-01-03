@@ -4,6 +4,8 @@ import fs from 'fs'
 
 import inquirer from 'inquirer'
 
+import { copyDir, mkdirp } from './utils/file.mjs'
+
 async function initialise() {
   const defaultName = process.argv[2]
   const cwd = defaultName || '.'
@@ -11,15 +13,14 @@ async function initialise() {
   await createProjectDir(cwd)
   const { name, cms } = await getProjectInfo(defaultName)
 
-  if (cms !== 'none') {
-    copyTemplate('svelte-kit', '.')
+  if (cms === 'none') {
+    await copyTemplate('svelte-kit', cwd)
   } else {
-    copyTemplate('svelte-kit', './front-end')
-    copyTemplate(cms, './cms')
+    await Promise.all([copyTemplate('svelte-kit', `${cwd}/web`), copyTemplate(cms, `${cwd}/cms`)])
   }
 }
 
-async function createProjectDir(cwd) {
+export async function createProjectDir(cwd) {
   if (fs.existsSync(cwd)) {
     if (fs.readdirSync(cwd).length > 0) {
       const response = await inquirer.prompt([
@@ -36,16 +37,7 @@ async function createProjectDir(cwd) {
       }
     }
   } else {
-    // mkdirp(cwd)
-  }
-}
-
-function mkdirp(dir) {
-  try {
-    fs.mkdirSync(dir, { recursive: true })
-  } catch (e) {
-    if (e.code === 'EEXIST') return
-    throw e
+    await mkdirp(cwd)
   }
 }
 
@@ -61,13 +53,15 @@ function getProjectInfo(name) {
       type: 'list',
       name: 'cms',
       message: 'Content management system:',
-      choices: ['sanity.io', 'none'],
-      default: 'sanity.io',
+      choices: ['sanity', 'none'],
+      default: 'sanity',
     },
   ])
 }
 
-function copyTemplate(template, dest) {}
+async function copyTemplate(template, dest) {
+  return copyDir(`./templates/${template}`, dest)
+}
 
 function replacePlaceholders(fileString, replacements) {
   for (const [key, value] of Object.entries(replacements)) {
