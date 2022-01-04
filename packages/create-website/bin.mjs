@@ -26,8 +26,11 @@ async function initialise() {
 
   console.log('Installing dependencies.')
   await installDependencies(config)
+  console.log()
   // await updatePackageJson()
-  // await configureGit(config)
+
+  console.log('Initialising git repository.')
+  await configureGit(cwd)
   // await configureNetlify() ?
 }
 

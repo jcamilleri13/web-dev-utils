@@ -1,8 +1,8 @@
 import * as childProcess from 'child_process'
 
-export async function exec(command) {
+export async function exec(command, cwd) {
   return new Promise((resolve, reject) => {
-    childProcess.exec(command, (err, stdout, stderr) => {
+    childProcess.exec(command, { cwd }, (err, stdout, stderr) => {
       if (err) {
         reject(err)
         return
