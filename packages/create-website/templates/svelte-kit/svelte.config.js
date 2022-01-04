@@ -1,8 +1,19 @@
 import path from 'path'
 
 import svg from '@poppanator/sveltekit-svg'
-import adapter from '@sveltejs/adapter-auto'
+import replace from '@rollup/plugin-replace'
+import adapter from '@sveltejs/adapter-netlify'
 import preprocess from 'svelte-preprocess'
+
+import CONFIG from './src/config.js'
+
+const BREAKPOINT_STRINGS = Object.entries(CONFIG.BREAKPOINTS).reduce(
+  (replaceConfig, [breakpoint, width]) => ({
+    ...replaceConfig,
+    [`__breakpoint-${breakpoint}__`]: width,
+  }),
+  {},
+)
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -12,9 +23,14 @@ const config = {
 
   kit: {
     adapter: adapter(),
+    // hydrate the <div id="svelte"> element in src/app.html
     target: '#svelte',
     vite: {
       plugins: [
+        replace({
+          values: BREAKPOINT_STRINGS,
+          preventAssignment: true,
+        }),
         svg({
           svgoOptions: {
             plugins: [
@@ -22,6 +38,7 @@ const config = {
                 name: 'preset-default',
                 params: {
                   overrides: {
+                    removeTitle: false,
                     removeViewBox: false,
                   },
                 },

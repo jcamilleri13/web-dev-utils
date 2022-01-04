@@ -1,5 +1,5 @@
 import sanityClient from '@sanity/client'
-import CONFIG from '$lib/_config'
+import CONFIG from '$lib/config'
 import nodemailer from 'nodemailer'
 
 import type { ContactPayload, ContactRequest, ContactResponse } from './types'
@@ -25,7 +25,9 @@ async function sendEmail(emailPayload: ContactPayload) {
   const { host, port, destination } = CONFIG.CONTACT_EMAIL
   const { EMAIL_USERNAME, EMAIL_PASSWORD } = process.env
 
-  const subjectText = subject ? `Contact form submission: ${subject}` : 'Contact form submission'
+  const subjectText = subject
+    ? `Contact form submission: ${subject}`
+    : 'Contact form submission'
 
   const transport = nodemailer.createTransport({
     name: destination,
