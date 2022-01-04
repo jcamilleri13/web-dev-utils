@@ -11,6 +11,8 @@ export default {
     packageManager: 'npm',
     dependencies: ['@sanity/client', 'nodemailer'],
     devDependencies: [
+      '@beyonk/gdpr-cookie-consent-banner',
+      '@james-camilleri/sanity-web-image',
       '@poppanator/sveltekit-svg',
       '@portabletext/svelte',
       '@rollup/plugin-replace',
