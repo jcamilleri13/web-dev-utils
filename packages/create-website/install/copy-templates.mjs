@@ -1,3 +1,4 @@
+import { promises as fs } from 'fs'
 import { fileURLToPath } from 'url'
 
 import degit from 'degit'
@@ -19,7 +20,12 @@ export async function copyTemplates(config) {
         ),
         dest,
       )
+
       await deleteFiles(remove, dest)
+
+      // npm won't publish .gitignore, so we need to save
+      // it under a different name and then rename it.
+      await fs.rename(`${dest}/gitignore`, `${dest}/.gitignore`)
     }),
   )
 }
