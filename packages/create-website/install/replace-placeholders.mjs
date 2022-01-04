@@ -3,8 +3,8 @@ import { promises as fs } from 'fs'
 export async function replacePlaceholders(config) {
   await Promise.all(
     config.map(async (config) => {
-      const { dest, name, replace } = config
-      const dictionary = { name }
+      const { dest, name, packageName, replace } = config
+      const dictionary = { name, packageName }
 
       if (config.sanityProjectId) {
         dictionary.sanityProjectId = config.sanityProjectId
