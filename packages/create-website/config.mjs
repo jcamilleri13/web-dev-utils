@@ -8,13 +8,14 @@ export default {
       '/static/favicon.png',
     ],
     replace: ['package.json', 'src/config.js'],
+    packageManager: 'npm',
     dependencies: ['@sanity/client', 'nodemailer'],
     devDependencies: [
       '@poppanator/sveltekit-svg',
       '@portabletext/svelte',
       '@rollup/plugin-replace',
-      '@sveltejs/adapter-auto',
-      '@sveltejs/kit',
+      '@sveltejs/adapter-auto@next',
+      '@sveltejs/kit@next',
       '@typescript-eslint/eslint-plugin',
       '@typescript-eslint/parser',
       'env-cmd',
@@ -34,6 +35,7 @@ export default {
   },
   sanity: {
     replace: ['package.json'],
+    packageManager: 'yarn',
     dependencies: [
       '@james-camilleri/replace-sanity-favicon',
       '@james-camilleri/sanity-web-image',

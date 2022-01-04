@@ -1,10 +1,28 @@
-import { exec } from '../utils/process.mjs'
+import { spawn } from '../utils/process.mjs'
 
-export async function installDependencies(cwd, config, projectInfo) {
-  console.info('Installing dependencies')
+export async function installDependencies(config) {
+  for (const template of config) {
+    const { dest, dependencies, devDependencies, packageManager } = template
+    const command = packageManager === 'npm' ? 'install' : 'add'
 
-  // if (proje)
+    if (dependencies) {
+      await spawn(
+        crossPlatform(packageManager),
+        [command, ...dependencies],
+        dest,
+      )
+    }
 
-  const args = ['install', '-D', ...Project.settings.lintPkgs, ...this.testPackages]
-  await utils.process.spawnp('npm', args, this.path)
+    if (devDependencies) {
+      await spawn(
+        crossPlatform(packageManager),
+        [command, '-D', ...devDependencies],
+        dest,
+      )
+    }
+  }
+}
+
+function crossPlatform(command) {
+  return /^win/.test(process.platform) ? `${command}.cmd` : command
 }

@@ -11,7 +11,6 @@ export async function copyTemplates(config) {
         await degit(githubSrc, { force: true }).clone(dest)
       }
 
-      // TODO: Enable overwrites.
       await copyDir(`./templates/${template}`, dest)
       await deleteFiles(remove, dest)
     }),

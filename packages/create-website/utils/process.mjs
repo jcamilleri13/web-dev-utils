@@ -12,3 +12,27 @@ export async function exec(command) {
     })
   })
 }
+
+export async function spawn(command, args, cwd) {
+  const proc = childProcess.spawn(command, args, {
+    stdio: 'inherit',
+    cwd,
+  })
+
+  await new Promise((resolve, reject) => {
+    proc.on('error', reject)
+    proc.on('exit', (exitCode) => {
+      if (exitCode !== 0) {
+        reject(
+          new Error(
+            `The command "${command} ${args.join(
+              ' ',
+            )}" exited with status code ${exitCode}`,
+          ),
+        )
+      } else {
+        resolve()
+      }
+    })
+  })
+}

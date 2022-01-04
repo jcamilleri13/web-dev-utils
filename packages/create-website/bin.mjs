@@ -18,10 +18,14 @@ async function initialise() {
 
   const projectInfo = await getProjectInfo(defaults)
   const config = processConfig(baseConfig, projectInfo, cwd)
+  console.log()
 
+  console.log('Copying templates.')
   await copyTemplates(config)
   await replacePlaceholders(config)
-  // await installDependencies(config)
+
+  console.log('Installing dependencies.')
+  await installDependencies(config)
   // await updatePackageJson()
   // await configureGit(config)
   // await configureNetlify() ?
