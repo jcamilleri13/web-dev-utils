@@ -7,7 +7,7 @@ export default {
       'package.template.json',
       '/static/favicon.png',
     ],
-    replace: ['package.json'],
+    replace: ['package.json', 'src/config.js'],
     dependencies: ['@sanity/client', 'nodemailer'],
     devDependencies: [
       '@poppanator/sveltekit-svg',

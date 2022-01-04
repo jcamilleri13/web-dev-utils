@@ -8,7 +8,7 @@ export async function copyTemplates(config) {
       const { dest, githubSrc, remove, template } = config
 
       if (githubSrc) {
-        await degit(githubSrc).clone(dest)
+        await degit(githubSrc, { force: true }).clone(dest)
       }
 
       // TODO: Enable overwrites.

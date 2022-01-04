@@ -1,7 +1,23 @@
-export async function replacePlaceholders(fileString, replacements) {
-  for (const [key, value] of Object.entries(replacements)) {
-    fileString = fileString.replace(`{{${key}}}`, value)
-  }
+import { promises as fs } from 'fs'
 
-  return fileString
+export async function replacePlaceholders(config) {
+  await Promise.all(
+    config.map(async (config) => {
+      const { dest, name, replace } = config
+      const dictionary = { name }
+
+      await Promise.all(
+        replace.map(async (file) => {
+          const filePath = `${dest}/${file}`
+          let contents = await fs.readFile(filePath, 'utf8')
+
+          for (const [key, value] of Object.entries(dictionary)) {
+            contents = contents.replace(`{{${key}}}`, value)
+          }
+
+          await fs.writeFile(filePath, contents)
+        }),
+      )
+    }),
+  )
 }

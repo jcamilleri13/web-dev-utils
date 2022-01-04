@@ -20,7 +20,7 @@ async function initialise() {
   const config = processConfig(baseConfig, projectInfo, cwd)
 
   await copyTemplates(config)
-  // await replacePlaceholders(config)
+  await replacePlaceholders(config)
   // await installDependencies(config)
   // await updatePackageJson()
   // await configureGit(config)
