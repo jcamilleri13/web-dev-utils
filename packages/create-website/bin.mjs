@@ -36,11 +36,18 @@ async function initialise() {
 
 function processConfig(baseConfig, projectInfo, cwd) {
   const { name, cms } = projectInfo
+  const packageName = name
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/^[._]/, '')
+    .replace(/[^a-z0-9~.-]+/g, '-')
 
   const config = [
     {
       ...baseConfig['svelte-kit'],
       name,
+      packageName,
       dest: cwd,
       template: 'svelte-kit',
     },
@@ -51,7 +58,8 @@ function processConfig(baseConfig, projectInfo, cwd) {
 
     config.push({
       ...baseConfig[cms],
-      name: `${name}-cms`,
+      name,
+      packageName: `${packageName}-cms`,
       dest: `${cwd}/cms`,
       template: cms,
       sanityProjectId: projectInfo.sanityProjectId,

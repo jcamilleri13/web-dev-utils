@@ -5,7 +5,7 @@ export function getProjectInfo(defaults) {
     {
       type: 'input',
       name: 'name',
-      message: 'Website/client name:',
+      message: 'Website/client name (use the correct case & punctuation):',
       default: defaults.name,
     },
     {
