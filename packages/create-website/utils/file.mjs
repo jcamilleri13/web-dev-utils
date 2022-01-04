@@ -36,3 +36,11 @@ export async function mkdirp(dir) {
     throw e
   }
 }
+
+export async function deleteFiles(fileList, dest) {
+  if (!fileList) return
+
+  for (const file of fileList) {
+    await fs.unlink(`${dest}/${file}`)
+  }
+}

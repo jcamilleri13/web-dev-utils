@@ -1,0 +1,19 @@
+import inquirer from 'inquirer'
+
+export function getProjectInfo(defaults) {
+  return inquirer.prompt([
+    {
+      type: 'input',
+      name: 'name',
+      message: 'Website/client name:',
+      default: defaults.name,
+    },
+    {
+      type: 'list',
+      name: 'cms',
+      message: 'Content management system:',
+      choices: ['sanity', 'none'],
+      default: 'sanity',
+    },
+  ])
+}

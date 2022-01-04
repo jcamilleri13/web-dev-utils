@@ -1,0 +1,6 @@
+export { copyTemplates } from './copy-templates.mjs'
+export { createProjectDir } from './create-project-dir.mjs'
+export { getProjectInfo } from './get-project-info.mjs'
+export { installDependencies } from './install-dependencies.mjs'
+export { replacePlaceholders } from './replace-placeholders.mjs'
+export { configureGit } from './configure-git.mjs'

@@ -1,108 +1,56 @@
 #!/usr/bin/env node
 
-import fs from 'fs'
-
-import inquirer from 'inquirer'
-
-import { copyDir, mkdirp } from './utils/file.mjs'
+import baseConfig from './config.mjs'
+import {
+  configureGit,
+  copyTemplates,
+  createProjectDir,
+  getProjectInfo,
+  installDependencies,
+  replacePlaceholders,
+} from './install/index.mjs'
 
 async function initialise() {
-  const defaultName = process.argv[2]
-  const cwd = defaultName || '.'
+  const defaults = { name: process.argv[2] }
+  const cwd = defaults.name || '.'
 
   await createProjectDir(cwd)
-  const { name, cms } = await getProjectInfo(defaultName)
 
-  if (cms === 'none') {
-    await copyTemplate('svelte-kit', cwd)
-  } else {
-    await Promise.all([copyTemplate('svelte-kit', `${cwd}/web`), copyTemplate(cms, `${cwd}/cms`)])
-  }
+  const projectInfo = await getProjectInfo(defaults)
+  const config = processConfig(baseConfig, projectInfo, cwd)
+
+  await copyTemplates(config)
+  // await replacePlaceholders(config)
+  // await installDependencies(config)
+  // await updatePackageJson()
+  // await configureGit(config)
+  // await configureNetlify() ?
 }
 
-export async function createProjectDir(cwd) {
-  if (fs.existsSync(cwd)) {
-    if (fs.readdirSync(cwd).length > 0) {
-      const response = await inquirer.prompt([
-        {
-          type: 'confirm',
-          name: 'value',
-          message: 'Directory not empty. Continue?',
-          initial: false,
-        },
-      ])
+function processConfig(baseConfig, projectInfo, cwd) {
+  const { name, cms } = projectInfo
 
-      if (!response.value) {
-        process.exit(1)
-      }
-    }
-  } else {
-    await mkdirp(cwd)
-  }
-}
-
-function getProjectInfo(name) {
-  return inquirer.prompt([
+  const config = [
     {
-      type: 'input',
-      name: 'name',
-      message: 'Website/client name:',
-      default: name,
+      ...baseConfig['svelte-kit'],
+      name,
+      dest: cwd,
+      template: 'svelte-kit',
     },
-    {
-      type: 'list',
-      name: 'cms',
-      message: 'Content management system:',
-      choices: ['sanity', 'none'],
-      default: 'sanity',
-    },
-  ])
-}
+  ]
 
-async function copyTemplate(template, dest) {
-  return copyDir(`./templates/${template}`, dest)
-}
+  if (cms !== 'none') {
+    config[0].dest = `${cwd}/web`
 
-function replacePlaceholders(fileString, replacements) {
-  for (const [key, value] of Object.entries(replacements)) {
-    fileString = fileString.replace(`{{${key}}}`, value)
+    config.push({
+      ...baseConfig[cms],
+      name: `${name}-cms`,
+      dest: `${cwd}/cms`,
+      template: cms,
+    })
   }
 
-  return fileString
+  return config
 }
-
-// try {
-//   const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'))
-
-//   doThings(packageJson)
-
-//   fs.writeFileSync('./package.json', JSON.stringify(packageJson, null, 2))
-
-//   installDependencies()
-
-//   // Delete setup script after execution.
-//   fs.unlinkSync('./_setup.mjs')
-// } catch (err) {
-//   console.error(err)
-// }
-
-// // TODO: Figure out how to cleanly install the latest version of the dependencies.
-// function installDependencies() {
-//   const devDependencies = [
-//     '@james-camilleri/svelte-portable-text',
-//     '@poppanator/sveltekit-svg',
-//     '@sveltejs/adapter-netlify',
-//     'env-cmd',
-//     'lodash',
-//     'sanitize.css',
-//     'sass',
-//   ]
-
-//   const dependencies = ['@sanity/client', 'nodemailer']
-// }
-
-// function updatePackageJson() {
-//   // TODO: Add env-cmd to dev scripts.
-// }
 
 initialise()
