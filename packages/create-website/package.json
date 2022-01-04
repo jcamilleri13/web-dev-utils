@@ -1,6 +1,6 @@
 {
   "name": "create-website",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "NPM initialiser for small website projects",
   "main": "bin.js",
   "scripts": {
