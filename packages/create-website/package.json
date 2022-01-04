@@ -1,5 +1,5 @@
 {
-  "name": "create-website",
+  "name": "@james-camilleri/create-website",
   "version": "0.0.1",
   "description": "NPM initialiser for small website projects",
   "main": "bin.js",
