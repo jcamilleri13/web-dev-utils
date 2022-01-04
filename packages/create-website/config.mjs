@@ -34,7 +34,11 @@ export default {
     ],
   },
   sanity: {
-    replace: ['package.json'],
+    replace: [
+      'package.json',
+      'netlify/functions/optimise-image.ts',
+      'netlify/functions/update-image-metadata.ts',
+    ],
     packageManager: 'yarn',
     dependencies: [
       '@james-camilleri/replace-sanity-favicon',

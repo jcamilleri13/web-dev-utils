@@ -43,7 +43,7 @@ function processConfig(baseConfig, projectInfo, cwd) {
     },
   ]
 
-  if (cms !== 'none') {
+  if (cms === 'sanity') {
     config[0].dest = `${cwd}/web`
 
     config.push({
@@ -51,7 +51,11 @@ function processConfig(baseConfig, projectInfo, cwd) {
       name: `${name}-cms`,
       dest: `${cwd}/cms`,
       template: cms,
+      sanityProjectId: projectInfo.sanityProjectId,
     })
+
+    // The front-end also needs the Sanity details if we're using a CMS.
+    config[0].sanityProjectId = projectInfo.sanityProjectId
   }
 
   return config

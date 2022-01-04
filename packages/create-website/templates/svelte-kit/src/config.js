@@ -10,7 +10,7 @@ export default {
   },
 
   SANITY: {
-    projectId: '{{sanityId}}',
+    projectId: '{{sanityProjectId}}',
     dataset: 'production',
     apiVersion: '{{sanityApiVersion}}',
   },

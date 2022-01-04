@@ -6,6 +6,12 @@ export async function replacePlaceholders(config) {
       const { dest, name, replace } = config
       const dictionary = { name }
 
+      if (config.sanityProjectId) {
+        dictionary.sanityProjectId = config.sanityProjectId
+        dictionary.sanityApiVersion =
+          new Date().toISOString().slice(0, 8) + '01'
+      }
+
       await Promise.all(
         replace.map(async (file) => {
           const filePath = `${dest}/${file}`

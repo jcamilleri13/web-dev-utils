@@ -6,11 +6,12 @@ const { SANITY_API_KEY } = process.env
 const UPDATE_FUNCTION = 'update-image-metadata'
 
 const client = sanityClient({
-  projectId: '',
-  apiVersion: '',
+  projectId: '{{sanityProjectId}}',
+  apiVersion: '{{sanityApiVersion}}',
   dataset: 'production',
   token: SANITY_API_KEY,
-  useCdn: false
+  useCdn: false,
 })
 
-export const handler: Handler = async (event) => optimiseImage(event, client, UPDATE_FUNCTION)
+export const handler: Handler = async (event) =>
+  optimiseImage(event, client, UPDATE_FUNCTION)
