@@ -29,8 +29,10 @@ async function initialise() {
   console.log()
   // await updatePackageJson()
 
-  console.log('Initialising git repository.')
-  await configureGit(cwd)
+  if (projectInfo.initGit) {
+    console.log('Initialising git repository.')
+    await configureGit(cwd, projectInfo.pushToGitHub, config[0].packageName)
+  }
   // await configureNetlify() ?
 }
 

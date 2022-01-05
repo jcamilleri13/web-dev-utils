@@ -21,5 +21,16 @@ export function getProjectInfo(defaults) {
       message: 'Sanity project ID:',
       when: ({ cms }) => cms === 'sanity',
     },
+    {
+      type: 'confirm',
+      name: 'initGit',
+      message: 'Initialise git repository:',
+    },
+    {
+      type: 'confirm',
+      name: 'pushToGitHub',
+      message: 'Push project to GitHub:',
+      when: ({ initGit }) => initGit,
+    },
   ])
 }
