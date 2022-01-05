@@ -2,7 +2,7 @@ import path from 'path'
 
 import svg from '@poppanator/sveltekit-svg'
 import replace from '@rollup/plugin-replace'
-import adapter from '@sveltejs/adapter-netlify'
+import adapter from '@sveltejs/adapter-auto'
 import preprocess from 'svelte-preprocess'
 
 import CONFIG from './src/config.js'
