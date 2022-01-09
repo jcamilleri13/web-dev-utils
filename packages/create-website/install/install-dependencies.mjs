@@ -1,4 +1,4 @@
-import { spawn } from '../utils/process.mjs'
+import { crossPlatform, spawn } from '../utils/process.mjs'
 
 export async function installDependencies(config) {
   for (const template of config) {
@@ -21,8 +21,4 @@ export async function installDependencies(config) {
       )
     }
   }
-}
-
-function crossPlatform(command) {
-  return /^win/.test(process.platform) ? `${command}.cmd` : command
 }

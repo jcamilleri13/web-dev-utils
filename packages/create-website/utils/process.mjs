@@ -36,3 +36,7 @@ export async function spawn(command, args, cwd) {
     })
   })
 }
+
+export function crossPlatform(command) {
+  return /^win/.test(process.platform) ? `${command}.cmd` : command
+}

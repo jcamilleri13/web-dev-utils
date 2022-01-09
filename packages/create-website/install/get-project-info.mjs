@@ -32,5 +32,11 @@ export function getProjectInfo(defaults) {
       message: 'Push project to GitHub:',
       when: ({ initGit }) => initGit,
     },
+    {
+      type: 'confirm',
+      name: 'configNetlify',
+      message: 'Configure Netlify:',
+      when: ({ pushToGitHub }) => pushToGitHub,
+    },
   ])
 }

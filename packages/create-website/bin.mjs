@@ -3,6 +3,7 @@
 import baseConfig from './config.mjs'
 import {
   configureGit,
+  configureNetlify,
   copyTemplates,
   createProjectDir,
   getProjectInfo,
@@ -18,22 +19,29 @@ async function initialise() {
 
   const projectInfo = await getProjectInfo(defaults)
   const config = processConfig(baseConfig, projectInfo, cwd)
-  console.log()
 
+  console.log()
   console.log('Copying templates.')
   await copyTemplates(config)
   await replacePlaceholders(config)
 
+  console.log()
   console.log('Installing dependencies.')
   await installDependencies(config)
-  console.log()
-  // await updatePackageJson()
 
   if (projectInfo.initGit) {
+    console.log()
     console.log('Initialising git repository.')
+    console.log()
     await configureGit(cwd, projectInfo.pushToGitHub, config[0].packageName)
   }
-  // await configureNetlify() ?
+
+  if (projectInfo.configNetlify) {
+    console.log()
+    console.log('Configuring Netlify.')
+    console.log()
+    await configureNetlify(config)
+  }
 }
 
 function processConfig(baseConfig, projectInfo, cwd) {
@@ -43,7 +51,7 @@ function processConfig(baseConfig, projectInfo, cwd) {
     .toLowerCase()
     .replace(/\s+/g, '-')
     .replace(/^[._]/, '')
-    .replace(/[^a-z0-9~.-]+/g, '-')
+    .replace(/[^a-z0-9~.-]+/g, '')
 
   const config = [
     {
