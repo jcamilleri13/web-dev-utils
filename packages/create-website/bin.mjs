@@ -6,6 +6,7 @@ import {
   configureNetlify,
   copyTemplates,
   createProjectDir,
+  generateReadme,
   getProjectInfo,
   installDependencies,
   replacePlaceholders,
@@ -32,16 +33,16 @@ async function initialise() {
   if (projectInfo.initGit) {
     console.log()
     console.log('Initialising git repository.')
-    console.log()
     await configureGit(cwd, projectInfo.pushToGitHub, config[0].packageName)
   }
 
   if (projectInfo.configNetlify) {
     console.log()
     console.log('Configuring Netlify.')
-    console.log()
     await configureNetlify(config)
   }
+
+  generateReadme(projectInfo, cwd)
 }
 
 function processConfig(baseConfig, projectInfo, cwd) {
