@@ -1,12 +1,5 @@
 {
   "root": true,
-  "project": {
-    "name": "{{packageName}}"
-  },
-  "api": {
-    "projectId": "{{sanityProjectId}}",
-    "dataset": "production"
-  },
   "plugins": [
     "@sanity/base",
     "@sanity/components",

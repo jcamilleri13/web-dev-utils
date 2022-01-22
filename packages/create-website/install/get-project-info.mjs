@@ -16,12 +16,6 @@ export function getProjectInfo(defaults) {
       default: 'sanity',
     },
     {
-      type: 'input',
-      name: 'sanityProjectId',
-      message: 'Sanity project ID:',
-      when: ({ cms }) => cms === 'sanity',
-    },
-    {
       type: 'confirm',
       name: 'initGit',
       message: 'Initialise git repository:',

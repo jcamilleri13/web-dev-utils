@@ -44,3 +44,18 @@ export async function deleteFiles(fileList, dest) {
     await fs.unlink(`${dest}/${file}`)
   }
 }
+
+export async function readJson(file) {
+  const contents = await fs.readFile(file, 'utf8')
+  return JSON.parse(contents)
+}
+
+export async function replacePlaceholdersInFile(filePath, dictionary) {
+  let contents = await fs.readFile(filePath, 'utf8')
+
+  for (const [key, value] of Object.entries(dictionary)) {
+    contents = contents.replace(`{{${key}}}`, value)
+  }
+
+  await fs.writeFile(filePath, contents)
+}

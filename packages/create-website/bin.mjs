@@ -4,6 +4,7 @@ import baseConfig from './config.mjs'
 import {
   configureGit,
   configureNetlify,
+  configureSanity,
   copyTemplates,
   createProjectDir,
   generateReadme,
@@ -29,6 +30,12 @@ async function initialise() {
   console.log()
   console.log('Installing dependencies.')
   await installDependencies(config)
+
+  if (projectInfo.cms === 'sanity') {
+    console.log()
+    console.log('Initialising Sanity project.')
+    await configureSanity(config)
+  }
 
   if (projectInfo.initGit) {
     console.log()
@@ -73,7 +80,6 @@ function processConfig(baseConfig, projectInfo, cwd) {
       packageName: `${packageName}-cms`,
       dest: `${cwd}/cms`,
       template: cms,
-      sanityProjectId: projectInfo.sanityProjectId,
     })
 
     // The front-end also needs the Sanity details if we're using a CMS.

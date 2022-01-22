@@ -1,5 +1,6 @@
 export { configureGit } from './configure-git.mjs'
 export { configureNetlify } from './configure-netlify.mjs'
+export { configureSanity } from './configure-sanity.mjs'
 export { copyTemplates } from './copy-templates.mjs'
 export { createProjectDir } from './create-project-dir.mjs'
 export { generateReadme } from './generate-readme.mjs'
