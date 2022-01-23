@@ -37,7 +37,6 @@ export async function generatePages(cwd, config, apiKey) {
 
   try {
     for (const { schemaName, id } of pages) {
-      console.log(`Creating page "${id}"`)
       await client.create({
         _type: schemaName,
         _id: id,
