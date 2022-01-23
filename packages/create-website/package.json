@@ -1,6 +1,6 @@
 {
   "name": "@james-camilleri/create-website",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "NPM initialiser for small website projects",
   "main": "bin.mjs",
   "bin": "bin.mjs",
@@ -10,6 +10,7 @@
   "author": "James Camilleri",
   "license": "ISC",
   "dependencies": {
+    "@james-camilleri/sanity-schema-setup": "^1.0.0",
     "degit": "^2.8.4",
     "inquirer": "^8.2.0"
   }

@@ -1,3 +1,4 @@
+import sanityPrompts from '@james-camilleri/sanity-schema-setup/prompts.mjs'
 import inquirer from 'inquirer'
 
 export function getProjectInfo(defaults) {
@@ -15,6 +16,10 @@ export function getProjectInfo(defaults) {
       choices: ['sanity', 'none'],
       default: 'sanity',
     },
+    ...sanityPrompts.map((prompt) => ({
+      ...prompt,
+      when: ({ cms }) => cms === 'sanity',
+    })),
     {
       type: 'confirm',
       name: 'initGit',

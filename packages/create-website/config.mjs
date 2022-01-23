@@ -7,7 +7,7 @@ export default {
       'package.template.json',
       'static/favicon.png',
     ],
-    replace: ['package.json', 'src/config.js'],
+    replace: ['.env', 'package.json', 'src/config.js'],
     packageManager: 'npm',
     dependencies: ['@sanity/client', 'nodemailer'],
     devDependencies: [
@@ -37,6 +37,7 @@ export default {
   },
   sanity: {
     replace: [
+      '.env',
       'package.json',
       'sanity.json',
       'netlify/functions/optimise-image.ts',

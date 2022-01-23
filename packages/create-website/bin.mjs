@@ -34,7 +34,7 @@ async function initialise() {
   if (projectInfo.cms === 'sanity') {
     console.log()
     console.log('Initialising Sanity project.')
-    await configureSanity(config)
+    await configureSanity(config, projectInfo)
   }
 
   if (projectInfo.initGit) {
