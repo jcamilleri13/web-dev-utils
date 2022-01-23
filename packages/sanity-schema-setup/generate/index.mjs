@@ -5,16 +5,22 @@ import { generateSchema } from './schema.mjs'
 
 const DEFAULT_CONFIGS = {
   blog: {
+    feature: 'blog',
     deskTitle: 'Blog',
     schemaName: 'post',
+    id: 'post',
   },
   portfolio: {
+    feature: 'portfolio',
     deskTitle: 'Portfolio',
     schemaName: 'portfolioItem',
+    id: 'portfolio-item',
   },
   store: {
+    feature: 'store',
     deskTitle: 'Products',
     schemaName: 'product',
+    id: 'product',
   },
 }
 
@@ -31,7 +37,7 @@ function createConfig({ features, pages, collections, forms }) {
     features: features.map((name) => createConfigItem(name)),
     pages: split(pages).map((name) => createConfigItem(name, 'page')),
     collections: split(collections).map((name) => createConfigItem(name)),
-    forms: split(forms).map((name) => createConfigItem(name, 'form')),
+    forms: split(forms).map((name) => createConfigItem(name, 'submission')),
   }
 }
 
@@ -40,7 +46,7 @@ function createConfigItem(name, type) {
     DEFAULT_CONFIGS[name] ?? {
       deskTitle: deskTitle(name, !type), // Only pluralise collections.
       schemaName: schemaName(name, type),
-      id: id(name), // These are only used for pages.
+      id: id(name), // Used for page IDs and filenames.
     }
   )
 }

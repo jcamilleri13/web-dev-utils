@@ -1,8 +1,8 @@
-import fs from 'fs/promises'
+import { promises as fs } from 'fs'
+
 import prettier from 'prettier'
 
 const DEFAULT_ICONS = {
-  form: 'RiDownload2Line',
   pageAbout: 'RiInformationLine',
   pageAboutUs: 'RiInformationLine',
   pageContact: 'RiMailLine',
@@ -12,6 +12,7 @@ const DEFAULT_ICONS = {
   portfolioItem: 'RiImage2Line',
   post: 'RiDraftLine',
   product: 'RiShoppingCartLine',
+  submissions: 'RiDownload2Line',
 }
 
 export async function generateDeskStructure(cwd, config) {
@@ -82,7 +83,7 @@ function generateForms(forms) {
       ({ schemaName, deskTitle }) => `
       S.listItem()
         .title('${deskTitle} Submissions')
-        .icon(${DEFAULT_ICONS.form})
+        .icon(${DEFAULT_ICONS.submissions})
         .child(
           S.documentList()
             .title('${deskTitle}')
