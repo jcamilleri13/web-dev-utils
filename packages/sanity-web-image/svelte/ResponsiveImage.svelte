@@ -60,7 +60,10 @@
   }
 
   function addTitleToSvg(svg: SVGElement, title: string) {
-    const titleElement = document.createElementNS('http://www.w3.org/2000/svg', 'title')
+    const titleElement = document.createElementNS(
+      'http://www.w3.org/2000/svg',
+      'title',
+    )
     titleElement.textContent = title
     svg.insertAdjacentElement('afterbegin', titleElement)
 
@@ -91,8 +94,12 @@
     ctx.putImageData(imageData, 0, 0)
   })
 
-  const srcset = breakpoints?.map((breakpoint) => breakpointUrl(breakpoint)).join(', ')
-  const webpSrscset = breakpoints?.map((breakpoint) => breakpointUrl(breakpoint, 'webp')).join(', ')
+  const srcset = breakpoints
+    ?.map((breakpoint) => breakpointUrl(breakpoint))
+    .join(', ')
+  const webpSrscset = breakpoints
+    ?.map((breakpoint) => breakpointUrl(breakpoint, 'webp'))
+    .join(', ')
 
   const imgAtttributes = {
     class: contain ? 'contain' : 'cover',
@@ -111,7 +118,7 @@
     {#if extension === SVG}
       <InlineSVG
         {src}
-        transformSrc={(svg: SVGElement) => addTitleToSvg(svg, alt)}
+        transformSrc={(svg) => addTitleToSvg(svg, alt)}
         style={cropRatio ? `aspect-ratio: ${cropRatio}` : ''}
       />
     {:else}
@@ -119,7 +126,9 @@
         bind:this={canvas}
         width={CANVAS_SIZE}
         height={CANVAS_SIZE}
-        style={contain ? `aspect-ratio: ${cropRatio || aspectRatio}` : 'height: 100%'}
+        style={contain
+          ? `aspect-ratio: ${cropRatio || aspectRatio}`
+          : 'height: 100%'}
       />
       <picture>
         <source type="image/webp" srcset={webpSrscset} sizes={sizesString} />
