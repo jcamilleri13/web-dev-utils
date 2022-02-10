@@ -6,3 +6,6 @@ export { prefetchImageMetadata } from './front-end/prefetch-image-metadata'
 export type { WebImage } from './types/web-image'
 
 export { WebImageSchema } from './sanity/schema'
+
+// @ts-expect-error
+export { default as ResponsiveImage } from '../svelte/ResponsiveImage.svelte'
