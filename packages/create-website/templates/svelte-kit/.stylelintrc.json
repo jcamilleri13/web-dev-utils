@@ -1,0 +1,12 @@
+{
+  "extends": [
+    "stylelint-config-standard-scss",
+    "stylelint-config-sass-guidelines",
+    "stylelint-config-prettier-scss",
+    "stylelint-config-recess-order",
+    "stylelint-config-html/svelte"
+  ],
+  "rules": {
+    "order/properties-alphabetical-order": null
+  }
+}
