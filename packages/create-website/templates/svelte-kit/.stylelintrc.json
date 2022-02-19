@@ -7,6 +7,7 @@
     "stylelint-config-html/svelte"
   ],
   "rules": {
-    "order/properties-alphabetical-order": null
+    "order/properties-alphabetical-order": null,
+    "declaration-empty-line-before": null
   }
 }
