@@ -1,21 +1,11 @@
-@use 'sass:list';
-@use 'sass:math';
+@use "sass:list";
+@use "sass:math";
 
-@use 'size';
-@use '../setup/config';
+@use "size";
+@use "../setup/config";
 
-$system-defaults: system-ui,
-  -apple-system,
-  'Segoe UI',
-  'Roboto',
-  'Ubuntu',
-  'Cantarell',
-  'Noto Sans',
-  sans-serif,
-  'Apple Color Emoji',
-  'Segoe UI Emoji',
-  'Segoe UI Symbol',
-  'Noto Color Emoji';
+$system-defaults: system-ui, -apple-system, "Segoe UI", "Roboto", "Ubuntu", "Cantarell", "Noto Sans", sans-serif,
+  "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
 html {
   font-size: math.div(config.$base-font-size, 16px) * 100%;
@@ -23,11 +13,16 @@ html {
   overflow-wrap: normal;
 }
 
-html, input, textarea, button {
+html,
+input,
+textarea,
+button {
   font-family: #{config.$font-family}, $system-defaults;
 }
 
-input, textarea, button {
+input,
+textarea,
+button {
   font-size: 1rem;
 }
 
@@ -36,25 +31,14 @@ code,
 kbd,
 samp,
 pre {
-  font-family:
-    'Menlo',
-    'Consolas',
-    'Roboto Mono',
-    'Ubuntu Monospace',
-    'Noto Mono',
-    'Oxygen Mono',
-    'Liberation Mono',
-    monospace,
-    'Apple Color Emoji',
-    'Segoe UI Emoji',
-    'Segoe UI Symbol',
-    'Noto Color Emoji';
+  font-family: "Menlo", "Consolas", "Roboto Mono", "Ubuntu Monospace", "Noto Mono", "Oxygen Mono", "Liberation Mono",
+    monospace, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 // Heading styles.
 // Generate font-size and margins according to typographic scale.
 @for $i from 1 through 5 {
-  $heading: 'h#{$i}';
+  $heading: "h#{$i}";
 
   #{$heading} {
     margin: list.nth(size.$heading-sizes, $i) 0 size.$sm;
@@ -62,4 +46,7 @@ pre {
   }
 }
 
-mark, ::selection { background-color: var(--primary); }
+mark,
+::selection {
+  background-color: var(--primary);
+}

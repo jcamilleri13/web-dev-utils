@@ -6,7 +6,7 @@
 // [5] Add custom styles as required.
 
 // Typography.
-$font-family: '';
+$font-family: "";
 $base-font-size: 16px;
 $base-font-weight: 300; // For variable fonts.
 $line-height: 1.5;
@@ -15,12 +15,7 @@ $line-height: 1.5;
 // Select from: 'octave', 'major-seventh', 'minor-seventh', 'major-sixth',
 // 'minor-sixth', fifth', 'augmented-fourth', 'fourth', 'major-third',
 // 'minor-third', 'major-second', 'minor-second', 'cinema', and 'golden'.
-$ratio: '';
-
-// Breakpoints.
-$breakpoint-sm: 30rem;
-$breakpoint-md: 50rem;
-$breakpoint-lg: 70rem;
+$ratio: "fourth";
 
 :root {
   // Colours
@@ -42,9 +37,10 @@ $breakpoint-lg: 70rem;
   --gutter: var(--xl);
 
   // Borders
-  --border-thickness: 0px;
-  --border-colour: none;
+  --border-width: 5px;
+  --border-colour: var(--foreground);
   --border-radius: 1px;
+  --border: solid var(--border-colour) var(--border-width);
 
   // Animation
   --transition-fast: 0.15s;

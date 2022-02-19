@@ -1,34 +1,12 @@
-@use '../setup/config';
-@use 'size';
+@use "../setup/config";
+@use "size";
 
 :root {
-  --light: #{config.$light};
-  --dark: #{config.$dark};
-
-  --primary: #{config.$primary};
-  --secondary: #{config.$secondary};
-  --neutral: #{config.$neutral};
-
-  --info: #{config.$info};
-  --warning: #{config.$warning};
-  --error: #{config.$error};
-  --success: #{config.$success};
-
   --xxs: #{size.$xxs};
-  --xs:  #{size.$xs};
-  --sm:  #{size.$sm};
-  --md:  #{size.$md};
-  --lg:  #{size.$lg};
-  --xl:  #{size.$xl};
+  --xs: #{size.$xs};
+  --sm: #{size.$sm};
+  --md: #{size.$md};
+  --lg: #{size.$lg};
+  --xl: #{size.$xl};
   --xxl: #{size.$xxl};
-
-  --border-radius: #{config.$border-radius};
-  --border-thickness: #{config.$border-thickness};
-
-  --transition-fast: #{config.$transition-fast};
-  --transition-medium: #{config.$transition-medium};
-
-  --breakpoint-sm: #{config.$breakpoint-sm};
-  --breakpoint-md: #{config.$breakpoint-md};
-  --breakpoint-lg: #{config.$breakpoint-lg};
 }

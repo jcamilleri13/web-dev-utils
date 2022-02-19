@@ -1,15 +1,12 @@
-// v13 of this currently blows up the <scss global> tag,
-// so stick to v12 until it gets fixed.
-@forward '../../node_modules/sanitize.css/sanitize.css';
-@forward '../../node_modules/sanitize.css/reduce-motion.css';
+@forward "../../node_modules/sanitize.css";
 
-@forward './setup/fonts';
+@forward "./setup/fonts";
 
-@forward './base/accessibility';
-@forward './base/colour';
-@forward './base/custom-properties';
-@forward './base/forms';
-@forward './base/layout';
-@forward './base/typography';
+@forward "./base/accessibility";
+@forward "./base/colour";
+@forward "./base/custom-properties";
+@forward "./base/forms";
+@forward "./base/layout";
+@forward "./base/typography";
 
-@forward './custom/typography';
+@forward "./custom/typography";
