@@ -19,19 +19,19 @@ $ratio: "fourth";
 
 :root {
   // Colours
-  --light: rgb(255, 255, 255);
-  --dark: rgb(0, 0, 0);
+  --light: rgb(255 255 255);
+  --dark: rgb(0 0 0);
   --foreground: var(--dark);
   --background: var(--light);
 
-  --primary: rgb(0, 0, 0);
-  --secondary: rgb(0, 0, 0);
-  --neutral: rgb(0, 0, 0);
+  --primary: rgb(127 127 127);
+  --secondary: rgb(200 200 200);
+  --neutral: rgb(0 0 0);
 
-  --info: rgb(0, 0, 0);
-  --warning: rgb(0, 0, 0);
-  --error: rgb(0, 0, 0);
-  --success: rgb(0, 0, 0);
+  --info: rgb(0 0 0);
+  --warning: rgb(0 0 0);
+  --error: rgb(0 0 0);
+  --success: rgb(0 0 0);
 
   // Spacing
   --gutter: var(--xl);

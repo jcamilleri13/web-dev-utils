@@ -1,15 +1,7 @@
 html {
-  overflow-y: scroll;
-}
-
-#svelte {
-  min-height: 100vh;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-}
-
-main {
-  margin: 0 var(--gutter);
+  // Handle scrolling in the main grid, to avoid double
+  // scrollbars with large nav menus in mobile mode.
+  overflow-y: hidden;
 }
 
 img {
