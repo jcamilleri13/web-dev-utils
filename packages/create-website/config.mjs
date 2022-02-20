@@ -16,6 +16,7 @@ export default {
       '@james-camilleri/sanity-web-image',
       '@poppanator/sveltekit-svg',
       '@portabletext/svelte',
+      '@portabletext/types',
       '@rollup/plugin-replace',
       '@sveltejs/adapter-auto@next',
       '@sveltejs/kit@next',
