@@ -25,6 +25,8 @@
   }
 </script>
 
-{#each text as paragraph}
-  <p>{paragraph}</p>
-{/each}
+<div>
+  {#each text as paragraph}
+    <p>{paragraph}</p>
+  {/each}
+</div>

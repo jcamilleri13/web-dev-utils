@@ -26,7 +26,6 @@
 
     display: grid;
     gap: var(--space);
-    margin-bottom: var(--space);
 
     &.sm {
       @media (min-width: breakpoints.$md) {
@@ -40,6 +39,7 @@
       }
     }
 
+    // Increase spacing on desktop sizes.
     @media (min-width: breakpoints.$lg) {
       --space: var(--xl);
     }

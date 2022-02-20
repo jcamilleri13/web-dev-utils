@@ -1,11 +1,11 @@
 <script lang="ts">
   import CONFIG from '$lib/config'
 
-  const prefix = CONFIG.GENERAL.siteTitle
-
   export let text: string
   export let subtitle: string = null
   export let hidden: boolean = false
+
+  const prefix = CONFIG.GENERAL.siteTitle
 </script>
 
 <svelte:head>

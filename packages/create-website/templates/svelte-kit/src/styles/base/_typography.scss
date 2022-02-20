@@ -26,6 +26,14 @@ button {
   font-size: 1rem;
 }
 
+p:first-child {
+  margin-top: 0;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
 // Specific font families for code or pre-formatted blocks.
 code,
 kbd,

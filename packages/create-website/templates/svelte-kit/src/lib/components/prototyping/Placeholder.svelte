@@ -1,11 +1,13 @@
 <script lang="ts">
   export let height = 250
-  export let caption
+  export let caption = ''
 </script>
 
 <div class="placeholder" style="--height: {height}px">
   <div class="diagonals" />
-  <strong>{caption}</strong>
+  {#if caption}
+    <strong>{caption}</strong>
+  {/if}
 </div>
 
 <style lang="scss">
@@ -20,7 +22,6 @@
     width: 100%;
     height: var(--height);
     border: var(--border);
-    border-width: var(--border-width) var(--border-width) 0 var(--border-width);
   }
 
   .diagonals {
@@ -53,5 +54,6 @@
     color: var(--background);
     text-transform: uppercase;
     background: var(--foreground);
+    border-top: var(--border);
   }
 </style>

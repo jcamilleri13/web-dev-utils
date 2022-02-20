@@ -194,10 +194,13 @@
 
   .snipcart-icons {
     display: flex;
+    align-content: center;
+    align-items: center;
     justify-content: center;
-    margin-top: var(--lg);
+    margin-top: var(--xxl);
 
     @media (min-width: breakpoints.$md) {
+      margin-inline-start: var(--lg);
       margin-top: 0;
     }
 
@@ -205,7 +208,7 @@
       width: var(--xxl);
       height: var(--xxl);
       padding: 0; // Safari fix. The icons are tiny otherwise.
-      margin: var(--sm);
+      margin: 0 var(--sm);
 
       cursor: pointer;
       background: none;
