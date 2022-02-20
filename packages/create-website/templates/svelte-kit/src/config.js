@@ -1,5 +1,5 @@
 export default {
-  SVELTE: {
+  GENERAL: {
     siteTitle: '{{name}}',
   },
 
@@ -7,6 +7,10 @@ export default {
     sm: '30em',
     md: '70em',
     lg: '100em',
+  },
+
+  SNIPCART: {
+    enabled: false,
   },
 
   SANITY: {
