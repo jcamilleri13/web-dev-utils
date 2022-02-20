@@ -3,13 +3,13 @@
 
 @use "size";
 @use "../setup/config";
+@use "../breakpoints";
 
 $system-defaults: system-ui, -apple-system, "Segoe UI", "Roboto", "Ubuntu", "Cantarell", "Noto Sans", sans-serif,
   "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
 html {
   font-size: math.div(config.$base-font-size, 16px) * 100%;
-  line-height: config.$line-height;
   overflow-wrap: normal;
 }
 
@@ -18,6 +18,17 @@ input,
 textarea,
 button {
   font-family: #{config.$font-family}, $system-defaults;
+  line-height: config.$line-height;
+
+  @if (config.$base-font-weight) {
+    font-variation-settings: "wght" config.$base-font-weight;
+
+    // Increase the weight of the base font
+    // ever so slightly for lower-DPI screens.
+    @media (max-resolution: 1.5dppx) {
+      font-variation-settings: "wght" config.$base-font-weight * 1.2;
+    }
+  }
 }
 
 input,
@@ -56,5 +67,6 @@ pre {
 
 mark,
 ::selection {
+  color: var(--foreground);
   background-color: var(--primary);
 }
