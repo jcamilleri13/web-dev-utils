@@ -9,7 +9,10 @@
   import CONFIG from '$lib/config'
 
   const links = [
-    '/internal-link',
+    {
+      text: 'home',
+      link: '/',
+    },
     {
       text: 'external link',
       link: 'https://james.mt',
@@ -29,14 +32,15 @@
   {#if links?.length > 0}
     <div class="links">
       {#each normaliseNavItems(links) as { text, link, external }}
-        <a
-          href={link}
-          rel={external ? 'noopener' : null}
-          target={external ? '_blank' : null}
-          sveltekit:prefetch
-        >
-          {text}
-        </a>
+        {#if external}
+          <a href={link} rel="noopener" target="_blank">
+            {text}
+          </a>
+        {:else}
+          <a href={link} sveltekit:prefetch>
+            {text}
+          </a>
+        {/if}
       {/each}
     </div>
   {/if}
@@ -65,6 +69,7 @@
     flex-direction: column;
     align-items: center;
     padding: var(--md);
+    margin-top: var(--gutter);
     font-size: var(--sm);
     background: var(--background);
     border-top: var(--border);
@@ -92,6 +97,7 @@
   .icons a {
     height: var(--xl);
     color: var(--foreground);
+    transition: color var(--transition-fast) ease-in-out;
 
     &:hover,
     &:focus {
