@@ -8,6 +8,7 @@
   ],
   "rules": {
     "order/properties-alphabetical-order": null,
-    "declaration-empty-line-before": null
+    "declaration-empty-line-before": null,
+    "selector-no-qualifying-type": null
   }
 }
