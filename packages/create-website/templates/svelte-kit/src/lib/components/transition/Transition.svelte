@@ -3,8 +3,8 @@
 
   export let order = 0
 
-  const duration = 500
-  const delay = 200 * order
+  const duration = 300
+  const delay = 100 * order
 </script>
 
 <div in:fade={{ duration, delay }}>
