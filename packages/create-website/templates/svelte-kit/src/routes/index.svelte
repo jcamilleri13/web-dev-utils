@@ -1,3 +1,7 @@
+<script context="module">
+  export const prerender = true
+</script>
+
 <script lang="ts">
   import Title from '$lib/components/global/Title.svelte'
   import FullWidth from '$lib/components/layout/FullWidth.svelte'
@@ -11,23 +15,31 @@
 
 <Title text={CONFIG.GENERAL.siteTitle} />
 <Grid>
-  <Transition order={1}>
+  <Transition order={0}>
     <LoremIpsum sentences={2} />
   </Transition>
   <FullWidth>
-    <Transition order={0}>
+    <Transition order={1}>
       <Placeholder height={400} />
     </Transition>
   </FullWidth>
   <Grid columns={2}>
-    <LoremIpsum paragraphs={5} />
-    <Placeholder caption="An image" />
+    <Transition order={2}>
+      <LoremIpsum paragraphs={5} />
+    </Transition>
+    <Transition order={3}>
+      <Placeholder caption="An image" />
+    </Transition>
   </Grid>
   <Grid columns={[3, 2, 1]}>
     {#each new Array(3) as _, i}
       <Grid>
-        <Placeholder caption="Another image" height={350} />
-        <LoremIpsum paragraphs={3 - i} />
+        <Transition order={4 + i}>
+          <Placeholder caption="Another image" height={350} />
+        </Transition>
+        <Transition order={5 + i}>
+          <LoremIpsum paragraphs={3 - i} />
+        </Transition>
       </Grid>
     {/each}
   </Grid>
