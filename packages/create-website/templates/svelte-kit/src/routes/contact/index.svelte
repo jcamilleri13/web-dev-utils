@@ -1,133 +1,128 @@
-<script context="module">
-	export const prerender = true;
+<script lang="ts" context="module">
+  import { get } from '$lib/utils/get'
+  import { PAGES } from '$lib/types/pages'
+
+  export const prerender = true
+
+  // export async function load({ fetch }) {
+  //   return {
+  //     props: {
+  //       page: await get.page(PAGES.CONTACT, fetch),
+  //     },
+  //   }
+  // }
 </script>
 
 <script lang="ts">
-  import Alert from '$lib/components/forms/Alert.svelte'
-  import Button from '$lib/components/forms/Button.svelte'
-  import Input from '$lib/components/forms/Input.svelte'
-  import PageTransition from '$lib/components/PageTransition.svelte'
-  import Telephone from '$lib/components/Telephone.svelte'
-  import TextArea from '$lib/components/forms/TextArea.svelte'
-  import Title from '$lib/components/Title.svelte'
+  import { tick } from 'svelte'
 
-  let name: string
-  let email: string
-  let subject: string
-  let message: string
+  import Button from '$lib/components/form/Button.svelte'
+  import Grid from '$lib/components/layout/Grid.svelte'
+  import Input from '$lib/components/form/Input.svelte'
+  import Title from '$lib/components/global/Title.svelte'
+  import Transition from '$lib/components/transition/Transition.svelte'
 
-  let form
-  let alertVisible = false
-  let alertState
+  // Taken from https://stackoverflow.com/questions/201323/how-can-i-validate-an-email-address-using-a-regular-expression.
+  const EMAIL_REGEX =
+    /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
 
-  let disabled
-  $: disabled = !(email !== '' && subject !== '' && message !== '')
+  const STATUS = {
+    IDLE: 'idle',
+    SUBMITTING: 'submitting',
+    ERROR: 'error',
+    SUCCESS: 'success',
+  } as const
 
-  async function submit (e) {
+  let form: HTMLFormElement
+  let submitStatus: typeof STATUS[keyof typeof STATUS]
+  let submitted
+
+  let fields = [
+    {
+      name: 'name',
+      value: '',
+      valid: undefined,
+    },
+    {
+      name: 'email',
+      type: 'email',
+      value: '',
+      validations: [
+        (value) => !EMAIL_REGEX.test(value) && 'Enter a valid email address',
+      ],
+      valid: undefined,
+    },
+    {
+      name: 'subject',
+      value: '',
+      valid: undefined,
+    },
+    {
+      name: 'message',
+      type: 'textarea',
+      value: '',
+      valid: undefined,
+    },
+  ]
+
+  async function submit(e) {
     e.preventDefault()
 
-    const formData = new FormData(form)
+    // Stop multiple submissions.
+    if (submitStatus === STATUS.SUBMITTING) return
 
-    const response = await fetch('/contact-us/submit', {
+    submitted = true
+    await tick() // Await validation before attempting submit.
+    if (fields.filter(({ valid }) => !valid).length) return
+
+    submitStatus = STATUS.SUBMITTING
+    const response = await fetch('/contact/submit', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      // FormData.entries() is not in Typescript definitions.
-      body: JSON.stringify(Object.fromEntries((formData as any).entries()))
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(new FormData(form).entries())),
     })
 
-    alertState = response.ok ? 'success' : 'error'
-    alertVisible = true
+    submitStatus = response.ok ? STATUS.SUCCESS : STATUS.ERROR
 
     if (response.ok) {
-      name = ''
-      email = ''
-      subject = ''
-      message = ''
+      fields = fields.map((field) => ({ ...field, value: '' }))
+      submitted = false
     }
-
-    setTimeout(() => { alertVisible = false }, 5000)
   }
 </script>
 
-<PageTransition>
-  <Title titlePrefix="The Voice Explained" text="Get in Touch" />
+<Title text="Contact us" />
 
-  <div class="grid">
-    <form bind:this={form} class="contact-form" name="contact">
-      <Input name="name" bind:value={name} />
-      <Input name="email" type="email" required bind:value={email} />
-      <Input name="subject" required bind:value={subject} />
-      <TextArea name="message" required bind:value={message} />
-      <p><small>Fields marked with an asterisk (*) are required.</small></p>
-      <div class="flex">
-        <Button {disabled} input="button" on:click={submit}>submit</Button>
-        <Alert
-          state={alertState}
-          visible={alertVisible}
-          messages={{
-            success: 'Your message was submitted successfully',
-            error: 'There was an issue submitting your message, please try again',
-            warning: null,
-            info: null
-          }}
-        />
-      </div>
+<div class="grid">
+  <Transition order={0}>
+    <form bind:this={form} name="contact">
+      <Grid>
+        {#each fields as field}
+          <Input
+            {...field}
+            validate={submitted}
+            bind:value={field.value}
+            bind:valid={field.valid}
+          />
+        {/each}
+        <Button on:click={submit}>Submit</Button>
+        <div>
+          <Button>Submit</Button>
+          <Button linkTo="/">Submit</Button>
+        </div>
+        <div>
+          <Button primary>Submit</Button>
+          <Button primary linkTo="/">Submit</Button>
+        </div>
+        <div>
+          <Button danger>Submit</Button>
+          <Button danger linkTo="/">Submit</Button>
+        </div>
+        <div>
+          <Button disabled>Submit</Button>
+          <Button disabled linkTo="/">Submit</Button>
+        </div>
+      </Grid>
     </form>
-    <div class="contact-details">
-      <a href="tel:+44 (0) 7957 272554">+44 (0) 7957 272554</a>
-    </div>
-  </div>
-
-  <div class="telephone">
-    <Telephone seed={message} />
-  </div>
-</PageTransition>
-
-<style lang="scss">
-  @use '../../styles/config';
-
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: var(--gutter);
-
-    @media (min-width: config.$breakpoint-md) {
-      margin: 0 auto;
-      max-width: 1000px;
-      grid-gap: calc(var(--xxl) * 2);
-
-      > * { margin: 0 var(--xxl) }
-    }
-  }
-
-  .contact-details {
-    margin-bottom: var(--lg);
-
-    font-size: var(--xxl);
-    font-weight: 600;
-    text-align: center;
-
-    > a { text-decoration: none; }
-  }
-
-  .telephone {
-    &::before {
-      position: absolute;
-      width: var(--border-thickness);
-      height: 100vh;
-      top: -99vh;
-      right: 15px;
-      background: var(--primary);
-      content: "";
-    }
-
-    position: fixed;
-    bottom: 7rem;
-    right: var(--xxl);
-    width: 100px;
-    opacity: 0.8;
-    z-index: -1;
-  }
-</style>
+  </Transition>
+</div>
