@@ -2,11 +2,18 @@ import sanityClient from '@sanity/client'
 import CONFIG from '$lib/config'
 import nodemailer from 'nodemailer'
 
-import type { ContactPayload, ContactRequest, ContactResponse } from './types'
+import type {
+  ContactPayload,
+  ContactRequestEvent,
+  ContactResponse,
+} from './types'
 
-export async function post(request: ContactRequest): Promise<ContactResponse> {
+export async function post(
+  request: ContactRequestEvent,
+): Promise<ContactResponse> {
   try {
-    await Promise.all([sendEmail(request.body), postToSanity(request.body)])
+    const payload = await request.json()
+    await Promise.all([sendEmail(payload), postToSanity(payload)])
   } catch (e) {
     return {
       status: 500,
@@ -24,6 +31,10 @@ async function sendEmail(emailPayload: ContactPayload) {
   const { name, email, subject, message } = emailPayload
   const { host, port, destination } = CONFIG.CONTACT_EMAIL
   const { EMAIL_USERNAME, EMAIL_PASSWORD } = process.env
+
+  if (!name || !email || !subject || !message) {
+    throw new Error('Missing required fields')
+  }
 
   const subjectText = subject
     ? `Contact form submission: ${subject}`
