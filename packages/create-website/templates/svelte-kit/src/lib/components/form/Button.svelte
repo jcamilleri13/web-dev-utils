@@ -2,6 +2,7 @@
   import { createEventDispatcher } from 'svelte'
 
   export let primary = false
+  export let info = false
   export let success = false
   export let danger = false
   export let error = false
@@ -20,6 +21,7 @@
   <a
     class:disabled
     class:primary
+    class:info
     class:success
     class:danger={danger || error}
     href={disabled ? '' : linkTo}
@@ -32,6 +34,7 @@
     {disabled}
     class:disabled
     class:primary
+    class:info
     class:success
     class:danger={danger || error}
     on:click={onClick}
@@ -51,7 +54,7 @@
     --active-colour: var(--foreground);
     --active-background-colour: var(--background);
 
-    display: inline-block;
+    display: flex;
     padding: var(--sm) var(--md);
 
     // The button should be in a grid, so this
@@ -69,11 +72,6 @@
     transition: color var(--transition-fast) ease-in-out,
       background-color var(--transition-fast) ease-in-out,
       box-shadow var(--transition-fast) ease-in-out;
-
-    // Automatatically space multiple sibling buttons.
-    &:not(:first-child) {
-      margin-inline-start: var(--sm);
-    }
 
     // TODO: Remember to always style hover, active, and focus styles!
 
@@ -111,6 +109,12 @@
       --colour: var(--background);
       --active-colour: var(--primary);
       --background-colour: var(--primary);
+    }
+
+    &.info {
+      --colour: var(--background);
+      --active-colour: var(--info);
+      --background-colour: var(--info);
     }
 
     &.success {

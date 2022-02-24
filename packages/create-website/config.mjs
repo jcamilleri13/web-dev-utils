@@ -41,6 +41,7 @@ export default {
       'stylelint',
       'svelte-check',
       'svelte-inline-svg',
+      'svelte-loading-spinners',
       'svelte-preprocess',
       'svelte',
       'tslib',

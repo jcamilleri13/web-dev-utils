@@ -1,7 +1,7 @@
 <script lang="ts">
   import { fade } from 'svelte/transition'
   import uniqueId from 'lodash/uniqueId'
-  import CircleExclamation from '@fortawesome/fontawesome-free/svgs/solid/circle-exclamation.svg'
+  import Exclamation from '@fortawesome/fontawesome-free/svgs/solid/circle-exclamation.svg'
   import FormGroup from './FormGroup.svelte'
 
   type Validation = (value: string) => string | undefined
@@ -57,7 +57,7 @@
   {#if errorText}
     <span class="error">
       <span class="error-icon">
-        <CircleExclamation />
+        <Exclamation />
       </span>
       <span in:fade class="error-text">{errorText}</span>
     </span>
