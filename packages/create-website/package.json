@@ -1,6 +1,6 @@
 {
   "name": "@james-camilleri/create-website",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "NPM initialiser for small website projects",
   "main": "bin.mjs",
   "bin": "bin.mjs",
