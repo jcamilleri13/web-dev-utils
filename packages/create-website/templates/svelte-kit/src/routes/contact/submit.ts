@@ -8,9 +8,11 @@ import type {
   ContactResponse,
 } from './types'
 
-export async function post(
-  request: ContactRequestEvent,
-): Promise<ContactResponse> {
+export async function post({
+  request,
+}: {
+  request: ContactRequestEvent
+}): Promise<ContactResponse> {
   try {
     const payload = await request.json()
     await Promise.all([sendEmail(payload), postToSanity(payload)])
