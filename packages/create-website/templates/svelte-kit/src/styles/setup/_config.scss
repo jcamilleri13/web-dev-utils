@@ -26,12 +26,12 @@ $ratio: "fourth";
 
   --primary: rgb(127 127 127);
   --secondary: rgb(200 200 200);
-  --neutral: rgb(0 0 0);
+  --neutral: rgb(80 80 80);
 
-  --info: rgb(0 0 0);
-  --warning: rgb(0 0 0);
-  --error: rgb(0 0 0);
-  --success: rgb(0 0 0);
+  --info: rgb(0 0 255);
+  --warning: rgb(255 255 0);
+  --error: rgb(255 0 0);
+  --success: rgb(0 255 0);
 
   // Spacing
   --gutter: var(--xl);
