@@ -1,8 +1,8 @@
 import pluralize from 'pluralize'
 
 export function schemaName(name, prefix) {
-  if (prefix) return `${prefix}${pascalCase(name)}`
-  return camelCase(pluralize.singular(name))
+  if (prefix) return `${prefix}${safeChars(pascalCase(name))}`
+  return safeChars(camelCase(pluralize.singular(name)))
 }
 
 export function deskTitle(name, pluralise = false) {
@@ -10,7 +10,7 @@ export function deskTitle(name, pluralise = false) {
 }
 
 export function id(name) {
-  return kebabCase(name)
+  return safeChars(kebabCase(name))
 }
 
 function titleCase(text) {
@@ -40,5 +40,22 @@ function camelCase(text) {
 }
 
 function kebabCase(text) {
-  return text.toLowerCase().split(' ').join('-')
+  return text.toLowerCase().split(' ').join('-').replace(/\-\-+/g, '-')
+}
+
+function safeChars(text) {
+  const from =
+    'ÃÀÁÄÂÇĊẼÈÉËÊĠĦÌÍÏÎÕÒÓÖÔÙÚÜÛÑŻãàáäâçċẽèéëêġħìíïîõòóöôùúüûñż·/_,:;'
+  const to = 'AAAAACCEEEEEGHIIIIOOOOOUUUUNZaaaaacceeeeeghiiiiooooouuuunz------'
+
+  return text
+    .split('')
+    .map((letter) => {
+      const index = from.indexOf(letter)
+      return index > -1 ? to[index] : letter
+    })
+    .join('')
+    .replace(/&/g, 'and') // Replace & with 'and'
+    .replace(/[^\w\-]+/g, '') // Remove all non-word chars
+    .replace(/\-\-+/g, '-') // Replace multiple - with single -
 }
