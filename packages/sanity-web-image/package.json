@@ -1,15 +1,22 @@
 {
   "name": "@james-camilleri/sanity-web-image",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Definition and tools for automatically optimising Sanity web images",
-  "main": "dist/index.js",
-  "browser": "dist/browser.js",
-  "svelte": "dist/browser.js",
-  "types": "dist/index.d.ts",
   "type": "module",
+  "types": "dist/index.d.ts",
+  "svelte": "dist/browser.js",
+  "exports": {
+    ".": {
+      "node": "./dist/index.js",
+      "default": "./dist/browser.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "comment": "Sanity runs on Webpack 3, so it ignores the `exports` field.",
+  "main": "dist/sanity/schema.js",
   "scripts": {
     "clear": "rimraf dist",
-    "build": "npm run clear && tsc && fix-esm-import-path dist/index.js && fix-esm-import-path dist/browser.js",
+    "build": "npm run clear && svelte-check && tsc",
     "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,10 +26,10 @@
     "@netlify/functions": "^0.7.2",
     "@types/node": "^16.7.13",
     "@types/svgo": "^2.6.0",
-    "fix-esm-import-path": "^1.1.0",
     "rimraf": "^3.0.2",
     "sass": "^1.45.2",
     "svelte": "^3.44.3",
+    "svelte-check": "^2.4.5",
     "typescript": "^4.4.2"
   },
   "dependencies": {

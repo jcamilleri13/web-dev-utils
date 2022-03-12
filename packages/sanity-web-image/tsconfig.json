@@ -4,11 +4,14 @@
     "target": "es2020",
     "declaration": true,
     "outDir": "./dist",
-
     "strict": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "types": [
+      "node",
+      "svelte"
+    ],
   }
 }
