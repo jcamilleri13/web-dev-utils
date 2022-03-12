@@ -17,7 +17,11 @@ export async function generateImageBreakpoints(
     log.setHeader(`Generating breakpoints for image ${_id}`)
 
     const width = payload.metadata.dimensions.width
-    const notificationUrl = createNotificationUrl(rawUrl, breakpointNotificationFunction, _id)
+    const notificationUrl = createNotificationUrl(
+      rawUrl,
+      breakpointNotificationFunction,
+      _id,
+    )
 
     await queueBreakpointGeneration(url, width, notificationUrl)
   } catch (error) {
@@ -33,7 +37,11 @@ export async function generateImageBreakpoints(
   return { statusCode: 200 }
 }
 
-function createNotificationUrl(rawUrl: string, breakpointNotificationFunction: string, id: string) {
+function createNotificationUrl(
+  rawUrl: string,
+  breakpointNotificationFunction: string,
+  id: string,
+) {
   const baseUrl = rawUrl.split('/').slice(0, -1).join('/')
   const notificationUrl = `${baseUrl}/${breakpointNotificationFunction}?id=${id}`
   log.debug(`Generated Cloudinary notification URL: ${notificationUrl}`)

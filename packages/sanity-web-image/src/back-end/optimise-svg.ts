@@ -2,12 +2,16 @@ import { Readable } from 'stream'
 
 import log from '@james-camilleri/slack-logger'
 import { HandlerResponse } from '@netlify/functions'
-import { SanityClient, SanityDocument, SanityImageAssetDocument } from '@sanity/client'
+import {
+  SanityClient,
+  SanityDocument,
+  SanityImageAssetDocument,
+} from '@sanity/client'
 import got from 'got'
 import { optimize } from 'svgo'
 
-import { deepMap } from '../utils/deep-map'
-import { isWebImage } from '../utils/type-guards'
+import { deepMap } from '../utils/deep-map.js'
+import { isWebImage } from '../utils/type-guards.js'
 
 export async function optimiseSvg(
   payload: SanityImageAssetDocument,
@@ -23,7 +27,9 @@ export async function optimiseSvg(
   try {
     const originalSvg = await fetchSvg(url)
     const optimisedSvg = optimiseSvgString(originalSvg)
-    log.info(`Optimised SVG (from ${originalSvg.length} to ${optimisedSvg.length})`)
+    log.info(
+      `Optimised SVG (from ${originalSvg.length} to ${optimisedSvg.length})`,
+    )
     const newId = await uploadSvg(client, optimisedSvg)
 
     await replaceAllReferences(client, _id, newId)
@@ -96,13 +102,18 @@ async function replaceAllReferences(
   )
 
   await Promise.all(
-    updatedDocuments.map((document) => client.patch(document._id).set(document).commit()),
+    updatedDocuments.map((document) =>
+      client.patch(document._id).set(document).commit(),
+    ),
   )
 
   log.debug('Updated all references')
 }
 
-async function getReferencedDocuments(client: SanityClient, id: string): Promise<SanityDocument[]> {
+async function getReferencedDocuments(
+  client: SanityClient,
+  id: string,
+): Promise<SanityDocument[]> {
   const query = `*[references("${id}")]`
   const result = await client.fetch(query)
   log.info(`Found ${result.length} documents referencing ${id}`)

@@ -1,5 +1,8 @@
 import { SanityImageAssetDocument } from '@sanity/client'
-import { SanityImageDimensions, SanityReference } from '@sanity/image-url/lib/types/types'
+import {
+  SanityImageDimensions,
+  SanityReference,
+} from '@sanity/image-url/lib/types/types'
 
 type SanityMetadata = SanityImageAssetDocument['metadata']
 type BreakpointMetadata = {

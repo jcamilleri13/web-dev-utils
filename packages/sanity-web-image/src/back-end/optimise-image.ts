@@ -1,8 +1,8 @@
 import { HandlerEvent, HandlerResponse } from '@netlify/functions'
 import { SanityClient } from '@sanity/client'
 
-import { generateImageBreakpoints } from './generate-image-breakpoints'
-import { optimiseSvg } from './optimise-svg'
+import { generateImageBreakpoints } from './generate-image-breakpoints.js'
+import { optimiseSvg } from './optimise-svg.js'
 
 const IMAGE_TYPE = 'sanity.imageAsset'
 const SVG_EXTENSION = 'svg'
@@ -22,5 +22,9 @@ export async function optimiseImage(
   if (extension === SVG_EXTENSION) return optimiseSvg(payload, client)
 
   const { rawUrl } = event
-  return generateImageBreakpoints(payload, rawUrl, breakpointNotificationFunction)
+  return generateImageBreakpoints(
+    payload,
+    rawUrl,
+    breakpointNotificationFunction,
+  )
 }

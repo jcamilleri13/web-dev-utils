@@ -1,6 +1,6 @@
 export async function asyncDeepMap(
   input: any,
-  fn: (input: any) => Promise<undefined | any>
+  fn: (input: any) => Promise<undefined | any>,
 ): Promise<any> {
   const result = await fn(input)
   if (result !== undefined) return result
@@ -13,8 +13,8 @@ export async function asyncDeepMap(
     return (
       await Promise.all(
         Object.entries(input).map(async ([key, value]) => ({
-          [key]: await asyncDeepMap(value, fn)
-        }))
+          [key]: await asyncDeepMap(value, fn),
+        })),
       )
     ).reduce((combinedObject, object) => ({ ...combinedObject, ...object }), {})
   }
@@ -33,7 +33,10 @@ export function deepMap(input: any, fn: (input: any) => undefined | any): any {
   if (typeof input === 'object') {
     return Object.entries(input)
       .map(([key, value]) => ({ [key]: deepMap(value, fn) }))
-      .reduce((combinedObject, object) => ({ ...combinedObject, ...object }), {})
+      .reduce(
+        (combinedObject, object) => ({ ...combinedObject, ...object }),
+        {},
+      )
   }
 
   return input

@@ -1,5 +1,5 @@
-import { asyncDeepMap } from '../utils/deep-map'
-import { isWebImage } from '../utils/type-guards'
+import { asyncDeepMap } from '../utils/deep-map.js'
+import { isWebImage } from '../utils/type-guards.js'
 
 interface SanityConfig {
   apiVersion: string
