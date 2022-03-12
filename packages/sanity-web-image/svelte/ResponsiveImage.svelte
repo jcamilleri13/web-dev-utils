@@ -3,8 +3,13 @@
 
   import { decode } from 'blurhash'
   import { getContext, onMount } from 'svelte'
-  import imageUrlBuilder from '@sanity/image-url/lib/browser/image-url.mjs'
   import InlineSVG from 'svelte-inline-svg'
+
+  // Sanity's "browser" field points to a UMD (IIFE) version of the library
+  // which blows up SvelteKit rendering, since Vite tries to import something
+  // that isn't actually a module.
+  // Types are added via a module declaration in /types/image-url.d.ts.
+  import imageUrlBuilder from '@sanity/image-url/lib/browser/image-url.mjs'
 
   interface Sizes {
     [key: string]: string
@@ -59,7 +64,9 @@
     return queryList.join(', ')
   }
 
-  function addTitleToSvg(svg: SVGElement, title: string) {
+  function addTitleToSvg(svg: SVGElement, title?: string) {
+    if (!title) return svg
+
     const titleElement = document.createElementNS(
       'http://www.w3.org/2000/svg',
       'title',
@@ -88,10 +95,12 @@
     if (extension === SVG || !image) return
 
     const pixels = decode(blurHash, CANVAS_SIZE, CANVAS_SIZE)
-    const ctx = canvas.getContext('2d')
+    const ctx = canvas?.getContext('2d')
+
+    if (!ctx) return
     const imageData = ctx.createImageData(CANVAS_SIZE, CANVAS_SIZE)
     imageData.data.set(pixels)
-    ctx.putImageData(imageData, 0, 0)
+    ctx?.putImageData(imageData, 0, 0)
   })
 
   const srcset = breakpoints
