@@ -1,24 +1,10 @@
-<script lang="ts" context="module">
-  export type Validation = (value: string) => string | undefined
-
-  export interface FieldInfo {
-    name: string
-    label?: string
-    hint?: string
-    type: typeof SvelteComponent | string
-    value: string | boolean | undefined
-    validations?: Validation[]
-    valid?: boolean
-  }
-</script>
-
 <script lang="ts">
-  import type { SvelteComponent } from 'svelte'
+  import type { Field } from '$lib/types/forms'
   import Checkbox from './Checkbox.svelte'
   import Input from './Input.svelte'
 
   export let validate = false
-  export let fieldInfo: FieldInfo[] = []
+  export let fieldInfo: Field[] = []
 </script>
 
 {#each fieldInfo as field}
