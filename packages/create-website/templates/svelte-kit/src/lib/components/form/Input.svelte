@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fade } from 'svelte/transition'
-  import uniqueId from 'lodash/uniqueId'
+  import uniqueId from 'lodash/uniqueId.js'
   import Exclamation from '@fortawesome/fontawesome-free/svgs/solid/circle-exclamation.svg'
   import FormGroup from './FormGroup.svelte'
 
@@ -19,7 +19,7 @@
   export let valid = true
   let errorText
 
-  // Default validation for required fields
+  // Default validation for required fields.
   const requiredValidation = (value) =>
     !optional && value == '' && `${label ?? capitalise(name)} is required`
 
@@ -28,7 +28,7 @@
       validate &&
       [requiredValidation, ...validations]
         .map((validation) => validation(value))
-        .filter((error) => typeof error === 'string')[0] // Show the firt error if multiple exist.
+        .filter((error) => typeof error === 'string')[0] // Show the first error if multiple exist.
 
     valid = !errorText
   }
@@ -93,6 +93,7 @@
   textarea {
     padding: var(--xxs) var(--xs);
     border: 0;
+    border-radius: var(--border-radius);
     outline: none;
     box-shadow: 0 0 0 var(--border-width) var(--border-colour);
     transition: box-shadow var(--transition-fast) ease-in-out;

@@ -3,7 +3,7 @@
   export let caption = ''
 </script>
 
-<div class="placeholder" style="--height: {height}px">
+<div class="placeholder" style:--height={`${height}px`}>
   <div class="diagonals" />
   {#if caption}
     <strong>{caption}</strong>
@@ -13,8 +13,8 @@
 <style lang="scss">
   .placeholder {
     --gradient: rgb(0 0 0 / 0%) calc(50% - (var(--border-width) / 2)),
-      var(--foreground) calc(50% - (var(--border-width) / 2) + 1px),
-      var(--foreground) calc(50% + (var(--border-width) / 2) - 1px),
+      var(--border-colour) calc(50% - (var(--border-width) / 2) + 1px),
+      var(--border-colour) calc(50% + (var(--border-width) / 2) - 1px),
       rgb(0 0 0 / 0%) calc(50% + (var(--border-width) / 2));
 
     display: flex;
@@ -42,7 +42,7 @@
     }
 
     &::before {
-      background: var(--foreground);
+      background: var(--border-colour);
       opacity: 0.05;
     }
   }
@@ -53,7 +53,7 @@
     font-style: normal;
     color: var(--background);
     text-transform: uppercase;
-    background: var(--foreground);
+    background: var(--border-colour);
     border-top: var(--border);
   }
 </style>

@@ -2,6 +2,7 @@
   export let columns: number | Array<number | string> = 1
   export let repeat: number | string = null
   export let stackAt = 'sm'
+  export let gap = 'var(--gutter)'
 
   if (!Array.isArray(columns)) columns = Array(columns).fill(1)
 
@@ -14,7 +15,7 @@
         .join(' ')
 </script>
 
-<div class={`grid ${stackAt}`} style="--columns: {cssColumns}">
+<div class={`grid ${stackAt}`} style:--columns={cssColumns} style:--gap={gap}>
   <slot />
 </div>
 
@@ -22,10 +23,8 @@
   @use '../../../styles/breakpoints';
 
   .grid {
-    --space: var(--gutter);
-
     display: grid;
-    gap: var(--space);
+    gap: var(--gap);
 
     &.sm {
       @media (min-width: breakpoints.$md) {
@@ -41,7 +40,7 @@
 
     // Increase spacing on desktop sizes.
     @media (min-width: breakpoints.$lg) {
-      --space: var(--xl);
+      --gap: var(--xl);
     }
   }
 </style>

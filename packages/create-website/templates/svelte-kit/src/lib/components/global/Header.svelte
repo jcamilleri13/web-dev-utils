@@ -9,7 +9,12 @@
     <!-- TODO: Uncomment this when the logo asset has been added. -->
     <!-- <Logo /> -->
   </a>
-  <Navigation items={[{ text: 'home', link: '/' }]} />
+  <Navigation
+    items={[
+      { text: 'home', link: '/' },
+      { text: '(typography test)', link: '/typography' },
+    ]}
+  />
 </header>
 
 <style lang="scss">
@@ -21,6 +26,7 @@
     align-items: center;
     justify-content: space-between;
     padding: var(--md);
+    margin-bottom: var(--lg);
     background: var(--background);
     border-bottom: var(--border);
 

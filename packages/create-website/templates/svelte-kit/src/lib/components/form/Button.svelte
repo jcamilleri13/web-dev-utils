@@ -1,24 +1,33 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
+  let _class = ''
+  export { _class as class }
 
   export let primary = false
   export let info = false
   export let success = false
   export let danger = false
   export let error = false
+  export let big = false
 
   // Avoid using disabled buttons.
   // https://gerireid.com/forms.html#buttons
   export let disabled = false
 
   export let linkTo: string = null
-
-  const dispatch = createEventDispatcher()
-  const onClick = (e) => dispatch('click', e)
+  export let dataAttributes: { [key: string]: string | number } = {}
+  dataAttributes = Object.entries(dataAttributes).reduce(
+    (dataAttributes, [key, value]) => {
+      const attribute = key.includes('data-') ? key : `data-${key}`
+      return { ...dataAttributes, [attribute]: value }
+    },
+    {},
+  )
 </script>
 
 {#if linkTo}
   <a
+    class={_class ?? ''}
+    class:big
     class:disabled
     class:primary
     class:info
@@ -26,19 +35,23 @@
     class:danger={danger || error}
     href={disabled ? '' : linkTo}
     tabindex={disabled ? -1 : null}
+    {...dataAttributes}
   >
     <slot />
   </a>
 {:else}
   <button
     {disabled}
+    class={_class ?? ''}
+    class:big
     class:disabled
     class:primary
     class:info
     class:success
     class:danger={danger || error}
-    on:click={onClick}
+    on:click
     type="button"
+    {...dataAttributes}
   >
     <slot />
   </button>
@@ -55,23 +68,35 @@
     --active-background-colour: var(--background);
 
     display: flex;
+    justify-content: center;
+    justify-self: start;
     padding: var(--sm) var(--md);
-
-    // The button should be in a grid, so this
-    // ensures it doesn't fill the entire width.
-    margin-inline-end: auto;
+    margin-inline-end: var(--xs);
 
     font-weight: bold;
     color: var(--colour);
     text-decoration: none;
+    text-transform: inherit;
     cursor: pointer;
     background-color: var(--background-colour);
     border: 0;
+    border-radius: var(--border-radius);
     outline: none;
     box-shadow: none;
     transition: color var(--transition-fast) ease-in-out,
       background-color var(--transition-fast) ease-in-out,
       box-shadow var(--transition-fast) ease-in-out;
+
+    &:not(:last-child) {
+      margin-inline-end: var(--xs);
+    }
+
+    &:hover,
+    &:visited,
+    &:active,
+    &:focus {
+      text-decoration: none;
+    }
 
     // TODO: Remember to always style hover, active, and focus styles!
 
@@ -127,6 +152,13 @@
       --colour: var(--background);
       --active-colour: var(--error);
       --background-colour: var(--error);
+    }
+
+    &.big {
+      width: 100%;
+      padding: var(--md);
+      font-size: var(--xl);
+      text-align: center;
     }
   }
 </style>
