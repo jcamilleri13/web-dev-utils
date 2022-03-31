@@ -62,6 +62,10 @@ pre {
   #{$heading} {
     margin: list.nth(size.$heading-sizes, $i) 0 size.$sm;
     font-size: list.nth(size.$heading-sizes, $i);
+
+    &:first-child {
+      margin-top: 0;
+    }
   }
 }
 
