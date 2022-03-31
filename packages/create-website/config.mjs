@@ -18,6 +18,7 @@ export default {
       '@portabletext/svelte',
       '@portabletext/types',
       '@rollup/plugin-replace',
+      '@sanity/image-url', // TODO: Make this dependent on cms option.
       '@sveltejs/adapter-auto@next',
       '@sveltejs/kit@next',
       '@typescript-eslint/eslint-plugin',
