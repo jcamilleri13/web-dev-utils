@@ -21,7 +21,7 @@ export default {
 
   CONTACT_EMAIL: {
     destination: 'info@__________.___',
-    host: 'mail.__________.___',
+    host: 'in-v3.mailjet.com',
     port: 465,
   },
 }
