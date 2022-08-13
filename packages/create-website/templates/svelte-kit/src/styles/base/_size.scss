@@ -6,8 +6,8 @@
 // https://github.com/oddbird/accoutrement/blob/master/sass/core/_ratios.scss
 $ratios: (
   "octave": 2,
-  "major-seventh": math.div(1, 8),
-  "minor-seventh": math.div(1, 9),
+  "major-seventh": math.div(15, 8),
+  "minor-seventh": math.div(16, 9),
   "major-sixth": math.div(5, 3),
   "minor-sixth": math.div(8, 5),
   "fifth": math.div(3, 2),
@@ -16,7 +16,7 @@ $ratios: (
   "major-third": math.div(5, 4),
   "minor-third": math.div(6, 5),
   "major-second": math.div(9, 8),
-  "minor-second": math.div(1, 15),
+  "minor-second": math.div(16, 15),
   "cinema": 2.39,
   "golden": 1.618,
 );
