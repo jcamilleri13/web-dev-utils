@@ -15,6 +15,7 @@ export async function updateImageMetadata(
     log.setHeader(`Updating breakpoints for image ${id}`)
 
     const payload = JSON.parse(event.body)
+    log.debug(`PAYLOAD:\n--------\n\n${JSON.stringify(payload, null, 2)}`)
     const breakpoints = payload.responsive_breakpoints[0].breakpoints
     if (!breakpoints) return { statusCode: 400 }
 
