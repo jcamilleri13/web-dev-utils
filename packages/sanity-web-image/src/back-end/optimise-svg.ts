@@ -53,7 +53,7 @@ async function fetchSvg(url: string): Promise<string> {
 }
 
 function optimiseSvgString(svg: string): string {
-  return optimize(svg, {
+  const optimised = optimize(svg, {
     multipass: true,
     plugins: [
       {
@@ -65,7 +65,13 @@ function optimiseSvgString(svg: string): string {
         },
       },
     ],
-  }).data
+  })
+
+  if (optimised.error !== undefined) {
+    return ''
+  }
+
+  return optimised.data
 }
 
 async function uploadSvg(client: SanityClient, svg: string): Promise<string> {

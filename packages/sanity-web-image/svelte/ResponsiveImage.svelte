@@ -4,12 +4,7 @@
   import { decode } from 'blurhash'
   import { getContext, onMount } from 'svelte'
   import InlineSVG from 'svelte-inline-svg'
-
-  // Sanity's "browser" field points to a UMD (IIFE) version of the library
-  // which blows up SvelteKit rendering, since Vite tries to import something
-  // that isn't actually a module.
-  // Types are added via a module declaration in /types/image-url.d.ts.
-  import imageUrlBuilder from '@sanity/image-url/lib/browser/image-url.mjs'
+  import imageUrlBuilder from '@sanity/image-url'
 
   interface Sizes {
     [key: string]: string
@@ -39,8 +34,8 @@
   const { blurHash, breakpoints, dimensions, extension } = metadata ?? {}
   const { aspectRatio, width, height } = dimensions ?? {}
 
-  const urlBuilder = imageUrlBuilder(sanityConfig).image(image)
-  const src = urlBuilder.url()
+  const urlBuilder = image && imageUrlBuilder(sanityConfig).image(image)
+  const src = image && urlBuilder.url()
   const sizesString = generateSizesString(sizes)
   const croppedHeight = cropRatio ? width * cropRatio : height
 
