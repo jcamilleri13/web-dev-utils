@@ -46,8 +46,8 @@ function setHeader(text) {
 }
 
 function clearLogs() {
-  _log = []
-  _verboseLog = []
+  _log.length = 0
+  _verboseLog.length = 0
 }
 
 async function pushToSlack(logs) {
