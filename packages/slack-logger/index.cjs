@@ -13,7 +13,7 @@ const LOG_PREFIX = {
   info: '🔵 ',
   warning: '🟡 ',
   error: '🔴 ',
-  success: '🟢 '
+  success: '🟢 ',
 }
 
 const LOG_LEVEL = {
@@ -21,7 +21,7 @@ const LOG_LEVEL = {
   warning: 2,
   success: 2,
   info: 3,
-  debug: 4
+  debug: 4,
 }
 
 function log(level, ...logs) {
@@ -45,6 +45,11 @@ function setHeader(text) {
   _header = text
 }
 
+function clearLogs() {
+  _log = []
+  _verboseLog = []
+}
+
 async function pushToSlack(logs) {
   if (logs.length === 0) return
   if (!SLACK_WEBHOOK) {
@@ -61,25 +66,31 @@ async function pushToSlack(logs) {
           type: 'header',
           text: {
             type: 'plain_text',
-            text: _header
-          }
+            text: _header,
+          },
         },
         {
           type: 'section',
           text: {
             type: 'mrkdwn',
-            text: logs.join('\n')
-          }
-        }
-      ]
-    }
+            text: logs.join('\n'),
+          },
+        },
+      ],
+    },
   })
-
-  logs = []
 }
 
-log.flush = () => pushToSlack(_log)
-log.flushAll = () => pushToSlack(_verboseLog)
+log.flush = async () => {
+  await pushToSlack(_log)
+  clearLogs()
+}
+
+log.flushAll = async () => {
+  await pushToSlack(_verboseLog)
+  clearLogs()
+}
+
 log.setHeader = setHeader
 log.setLogLevel = setLogLevel
 
