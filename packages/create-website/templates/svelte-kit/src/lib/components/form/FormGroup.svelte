@@ -15,6 +15,7 @@
   div {
     display: flex;
     flex-direction: column;
+    min-width: 0;
 
     > :global(:last-child) {
       display: block;
