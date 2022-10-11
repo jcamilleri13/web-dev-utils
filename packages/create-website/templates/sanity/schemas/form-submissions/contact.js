@@ -9,39 +9,39 @@ export default {
       name: 'name',
       title: 'Name',
       type: 'string',
-      readonly: true
+      readonly: true,
     },
     {
       name: 'email',
       title: 'Email',
       type: 'string',
-      readonly: true
+      readonly: true,
     },
     {
       name: 'subject',
       title: 'Subject',
       type: 'string',
-      readonly: true
+      readonly: true,
     },
     {
       name: 'message',
       title: 'Message',
       type: 'text',
-      readonly: true
-    }
+      readonly: true,
+    },
   ],
 
   preview: {
     select: {
-      _createdAt: 'createdAt',
+      createdAt: '_createdAt',
       name: 'name',
-      subject: 'subject'
+      subject: 'subject',
     },
     prepare({ name, subject, createdAt }) {
       return {
         title: subject ? `${subject} (${name})` : name,
-        subtitle: new Date(createdAt).toLocaleString()
+        subtitle: new Date(createdAt).toLocaleString(),
       }
-    }
-  }
+    },
+  },
 }
