@@ -2,6 +2,8 @@ import { promises as fs } from 'fs'
 
 import prettier from 'prettier'
 
+import PRETTIER_SETTINGS from './prettier-settings.mjs'
+
 const DEFAULT_ICONS = {
   pageAbout: 'RiInformationLine',
   pageAboutUs: 'RiInformationLine',
@@ -21,7 +23,7 @@ export async function generateDeskStructure(cwd, config) {
   const deskStructure = `
     ${imports(config)}
 
-    export default () =>
+    export default (S: StructureBuilder, context: ConfigContext) =>
       S.list()
         .title('Content')
         .items([${[
@@ -34,16 +36,9 @@ export async function generateDeskStructure(cwd, config) {
           .join('S.divider(),')}])
   `
 
-  const formatted = prettier.format(deskStructure, {
-    semi: false,
-    singleQuote: true,
-    trailingComma: 'all',
-    useTabs: false,
-    parser: 'babel',
-  })
+  const formatted = prettier.format(deskStructure, PRETTIER_SETTINGS)
 
-  await fs.mkdir(`${cwd}/custom`, { recursive: true })
-  await fs.writeFile(`${cwd}/custom/desk-structure.js`, formatted)
+  await fs.writeFile(`${cwd}/structure.ts`, formatted)
 }
 
 function imports(config) {
@@ -54,8 +49,8 @@ function imports(config) {
     .sort()
 
   return `
-    import S from '@sanity/desk-tool/structure-builder'
-    import { ${icons.join(',')} } from 'react-icons/ri';
+    import { ConfigContext, StructureBuilder } from 'sanity/desk'
+    import { ${icons.join(',')} } from 'react-icons/ri'
   `
 }
 

@@ -2,13 +2,7 @@ import { promises as fs } from 'fs'
 
 import prettier from 'prettier'
 
-const PRETTIER_SETTINGS = {
-  semi: false,
-  singleQuote: true,
-  trailingComma: 'all',
-  useTabs: false,
-  parser: 'babel',
-}
+import PRETTIER_SETTINGS from './prettier-settings.mjs'
 
 export async function generateSchema(cwd, config) {
   const { features, pages, collections, forms } = config
@@ -28,55 +22,56 @@ export async function generateSchema(cwd, config) {
 
   const rootSchema = `
     import { WebImageSchema as webImage } from '@james-camilleri/sanity-web-image'
-    import schemaTypes from 'all:part:@sanity/base/schema-type'
-    import createSchema from 'part:@sanity/base/schema-creator'
 
     ${filesWritten
       .sort((a, b) => a.filePath.localeCompare(b.filePath))
       .map(
         ({ filePath, schemaName }) =>
-          `import ${schemaName} from '${filePath.replace('cms/schemas/', '')}'`,
+          `import ${schemaName} from './${filePath
+            .split('/')
+            .slice(-2)
+            .join('/')
+            .replace('.ts', '')}'`,
       )
       .join('\n')}
 
-    export default createSchema({
-      name: 'default',
-      types: schemaTypes.concat([
-        ${filesWritten
-          .sort((a, b) => a.schemaName.localeCompare(b.schemaName))
-          .map(({ schemaName }) => `${schemaName},`)
-          .join('\n')}
-        webImage,
-      ]),
-    })
+    export const schemaTypes = [
+      ${filesWritten
+        .sort((a, b) => a.schemaName.localeCompare(b.schemaName))
+        .map(({ schemaName }) => `${schemaName},`)
+        .join('\n')}
+      webImage,
+    ]
   `
 
   await fs.writeFile(
-    `${cwd}/schemas/schema.js`,
+    `${cwd}/schemas/index.ts`,
     prettier.format(rootSchema, PRETTIER_SETTINGS),
   )
 }
 
 function createPageSchemas(pages) {
   return pages.map(({ schemaName, deskTitle, id }) => {
-    const filename = `${id}.js`
+    const filename = `${id}.ts`
     const schema = `
-      export default {
+      import { defineField, defineType } from 'sanity'
+
+      export default defineType({
         name: '${schemaName}',
         type: 'document',
         title: '${deskTitle}',
         __experimental_actions: ['update', 'publish'],
         fields: [
-          {
+          defineField({
             name: 'title',
             type: 'string'
-          },
-          {
+          }),
+          defineField({
             name: 'subtitle',
             type: 'string'
-          }
+          })
         ]
-      }
+      })
     `
 
     return { filename, schema, schemaName }
@@ -85,14 +80,22 @@ function createPageSchemas(pages) {
 
 function createSchemas(config) {
   return config.map(({ schemaName, deskTitle, id }) => {
-    const filename = `${id}.js`
+    const filename = `${id}.ts`
     const schema = `
-      export default {
+      import { defineField, defineType } from 'sanity'
+
+      export default defineType({
         name: '${schemaName}',
         type: 'document',
         title: '${deskTitle}',
-        fields: [],
-      }
+        fields: [
+          defineField({
+            name: 'fieldName',
+            title: 'Field Title',
+            type: 'string',
+          }),
+        ],
+      })
     `
 
     return { filename, schema, schemaName }

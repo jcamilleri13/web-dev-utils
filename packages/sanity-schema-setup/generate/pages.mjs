@@ -3,19 +3,27 @@ import { promises as fs } from 'fs'
 import sanityClient from '@sanity/client'
 import inquirer from 'inquirer'
 
+const ERROR = 'Error reading sanity.config.ts, cannot pre-create pages.'
+
 export async function generatePages(cwd, config, apiKey) {
   const { pages } = config
 
-  let sanityJson
+  let sanityConfig
   try {
-    sanityJson = await fs.readFile(`${cwd}/sanity.json`, 'utf8')
+    sanityConfig = await fs.readFile(`${cwd}/sanity.config.ts`, 'utf8')
   } catch (e) {
-    console.log('Error reading sanity.json, cannot pre-create pages.')
+    console.log(ERROR)
     return
   }
 
-  const sanityConfig = JSON.parse(sanityJson)
-  const { projectId, dataset } = sanityConfig.api
+  const [_, projectId, dataset] = sanityConfig.match(
+    /export default createConfig\({[\s\S]+projectId:\s+'(.*)',\s+dataset:\s+'(.*)'/m,
+  )
+
+  if (!projectId || !dataset) {
+    console.log(ERROR)
+    return
+  }
 
   if (!apiKey) {
     apiKey = (
