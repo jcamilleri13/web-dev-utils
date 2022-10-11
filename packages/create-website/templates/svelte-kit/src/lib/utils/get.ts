@@ -10,9 +10,14 @@ type Fetch = (input: RequestInfo, init?: RequestInit) => Promise<Response>
 
 const { apiVersion, dataset, projectId } = CONFIG.SANITY
 
+function url(query: string, useCdn = true) {
+  const api = useCdn ? 'apicdn' : 'api'
+  return `https://${projectId}.${api}.sanity.io/v${apiVersion}/data/query/${dataset}?query=${encodeURIComponent(
+    query,
+  )}`
+}
+
 const imgBuilder = imageUrlBuilder({ projectId, dataset })
-const url = (query: string) =>
-  `https://${projectId}.apicdn.sanity.io/v${apiVersion}/data/query/${dataset}?query=${query}`
 
 export async function getPage(page: PageId, fetch: Fetch): Promise<Page> {
   const query = `*[_type == "${page}"]`

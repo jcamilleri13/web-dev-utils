@@ -4,7 +4,7 @@ interface NavItem {
   external?: boolean
 }
 
-type RawNavItem = string | NavItem
+export type RawNavItem = string | NavItem
 
 export function normaliseNavItems(items: RawNavItem[]): NavItem[] {
   return items.map((item) => {

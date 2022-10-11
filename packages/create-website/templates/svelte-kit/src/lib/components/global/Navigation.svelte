@@ -2,8 +2,10 @@
   import Cart from '@fortawesome/fontawesome-free/svgs/solid/cart-shopping.svg'
   import User from '@fortawesome/fontawesome-free/svgs/solid/user.svg'
 
+  import type { RawNavItem } from '$lib/utils/urls'
+
   import { page } from '$app/stores'
-  import { normaliseNavItems, RawNavItem } from '$lib/utils/urls'
+  import { normaliseNavItems } from '$lib/utils/urls'
   import CONFIG from '$lib/config'
 
   export let items: RawNavItem[] = []
