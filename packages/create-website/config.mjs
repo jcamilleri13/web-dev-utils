@@ -56,6 +56,8 @@ export default {
       'sanity.json',
       'netlify/functions/optimise-image.ts',
       'netlify/functions/update-image-metadata.ts',
+      'scripts/clean-assets.js',
+      'scripts/generate-breakpoints.js',
     ],
     packageManager: 'yarn',
     dependencies: [
@@ -72,6 +74,7 @@ export default {
       '@sanity/default-login',
       '@sanity/desk-tool',
       '@sanity/vision',
+      'env-cmd',
       'prop-types',
       'react',
       'react-dom',

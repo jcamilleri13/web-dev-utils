@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "start": "sanity start",
-    "build": "sanity build && node ./node_modules/@james-camilleri/replace-sanity-favicon"
+    "build": "sanity build && node ./node_modules/@james-camilleri/replace-sanity-favicon",
+    "data:clean-assets": "env-cmd node ./scripts/clean-assets.js",
+    "data:generate-breakpoints": "env-cmd node ./scripts/generate-breakpoints.js"
   },
   "author": "James Camilleri",
   "license": "ISC"
