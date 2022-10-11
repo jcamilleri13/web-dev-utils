@@ -9,8 +9,14 @@ $system-defaults: system-ui, -apple-system, "Segoe UI", "Roboto", "Ubuntu", "Can
   "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
 html {
-  font-size: math.div(config.$base-font-size, 16px) * 100%;
-  overflow-wrap: normal;
+  // Shrink font size and break text anywhere on mobile.
+  font-size: math.div(config.$base-font-size, 16px) * 90%;
+  overflow-wrap: anywhere;
+
+  @media (min-width: breakpoints.$sm) {
+    font-size: math.div(config.$base-font-size, 16px) * 100%;
+    overflow-wrap: normal;
+  }
 }
 
 html,
@@ -56,15 +62,30 @@ pre {
 
 // Heading styles.
 // Generate font-size and margins according to typographic scale.
+// Bump mobile font sizes down a level.
+
+// Mobile sizes.
 @for $i from 1 through 5 {
   $heading: "h#{$i}";
 
   #{$heading} {
-    margin: list.nth(size.$heading-sizes, $i) 0 size.$sm;
-    font-size: list.nth(size.$heading-sizes, $i);
+    margin: list.nth(size.$heading-sizes, $i) 0 var(--sm);
+    font-size: list.nth(size.$heading-sizes, $i + 1);
 
     &:first-child {
       margin-top: 0;
+    }
+  }
+}
+
+// Larger than mobile size, "standard sizing".
+@media (min-width: breakpoints.$sm) {
+  @for $i from 1 through 5 {
+    $heading: "h#{$i}";
+
+    #{$heading} {
+      margin: list.nth(size.$heading-sizes, $i) 0 var(--sm);
+      font-size: list.nth(size.$heading-sizes, $i);
     }
   }
 }
@@ -73,4 +94,12 @@ mark,
 ::selection {
   color: var(--foreground);
   background-color: var(--primary);
+}
+
+a {
+  color: var(--primary);
+
+  &:hover {
+    color: var(--secondary);
+  }
 }
