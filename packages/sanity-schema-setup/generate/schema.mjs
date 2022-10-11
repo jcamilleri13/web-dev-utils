@@ -34,7 +34,8 @@ export async function generateSchema(cwd, config) {
     ${filesWritten
       .sort((a, b) => a.filePath.localeCompare(b.filePath))
       .map(
-        ({ filePath, schemaName }) => `import ${schemaName} from '${filePath}'`,
+        ({ filePath, schemaName }) =>
+          `import ${schemaName} from '${filePath.replace('cms/schemas/', '')}'`,
       )
       .join('\n')}
 
