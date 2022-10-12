@@ -23,7 +23,7 @@ export async function generateDeskStructure(cwd, config) {
   const deskStructure = `
     ${imports(config)}
 
-    export default (S: StructureBuilder, context: ConfigContext) =>
+    export const structure = (S: StructureBuilder, context: ConfigContext) =>
       S.list()
         .title('Content')
         .items([${[
@@ -33,7 +33,7 @@ export async function generateDeskStructure(cwd, config) {
           generatePages(pages),
         ]
           .filter(Boolean)
-          .join('S.divider(),')}])
+          .join(',S.divider(),')}])
   `
 
   const formatted = prettier.format(deskStructure, PRETTIER_SETTINGS)
@@ -66,7 +66,7 @@ function generateCollections(collections) {
             .title('${deskTitle}')
             .filter('_type == "${schemaName}"')
             .schemaType('${schemaName}')
-        ),
+        )
       `,
     )
   }

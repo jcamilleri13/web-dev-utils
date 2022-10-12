@@ -1,6 +1,6 @@
 {
   "name": "@james-camilleri/sanity-schema-setup",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A prompt-based tool for setting up a skeleton Sanity scheme and desk structure",
   "main": "index.mjs",
   "scripts": {
