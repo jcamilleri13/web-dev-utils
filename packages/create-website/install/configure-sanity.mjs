@@ -1,16 +1,18 @@
+import { promises as fs } from 'fs'
+
 import { generate } from '@james-camilleri/sanity-schema-setup/generate/index.mjs'
 import inquirer from 'inquirer'
 
 import { replacePlaceholdersInFile } from '../utils/file.mjs'
-import { readJson } from '../utils/file.mjs'
 import { crossPlatform, spawn } from '../utils/process.mjs'
 
 export async function configureSanity(config, projectInfo) {
   const { name, dest } = config[1]
 
   await spawn(
-    crossPlatform('sanity'),
+    crossPlatform('npx'),
     [
+      'sanity@dev-preview',
       'init',
       '-y',
       '--create-project',
@@ -19,11 +21,23 @@ export async function configureSanity(config, projectInfo) {
       'production',
       '--output-path',
       '.',
+      '--typescript',
     ],
     dest,
   )
 
-  const sanityConfig = await readJson(`${dest}/sanity.json`)
+  let sanityConfig
+  try {
+    sanityConfig = await fs.readFile(`${dest}/sanity.config.ts`, 'utf8')
+  } catch (e) {
+    console.log('Could not read sanity.config.ts')
+    return
+  }
+
+  const [_, projectId] = sanityConfig.match(
+    /export default createConfig\({[\s\S]+projectId:\s+'(.*)',/m,
+  )
+
   const sanityApiKey = (
     await inquirer.prompt({
       type: 'input',
@@ -33,7 +47,7 @@ export async function configureSanity(config, projectInfo) {
   ).key
 
   const dictionary = {
-    sanityProjectId: sanityConfig.api.projectId,
+    sanityProjectId: projectId,
     sanityApiVersion: new Date().toISOString().slice(0, 8) + '01',
     sanityApiKey,
   }
@@ -49,6 +63,31 @@ export async function configureSanity(config, projectInfo) {
         }),
       )
     }),
+  )
+
+  console.log('Updating sanity.config.ts')
+  await fs.writeFile(
+    `${dest}/sanity.config.ts`,
+    `import { visionTool } from '@sanity/vision'
+import { createConfig } from 'sanity'
+import { deskTool } from 'sanity/desk'
+
+import { schemaTypes } from './schemas'
+import { structure } from './structure'
+
+export default createConfig({
+  name: 'default',
+  title: '${name}',
+
+  projectId: '${projectId}',
+  dataset: 'production',
+
+  plugins: [deskTool({ structure }), visionTool()],
+
+  schema: {
+    types: schemaTypes,
+  },
+})`,
   )
 
   console.log('Generating Sanity schema.')
