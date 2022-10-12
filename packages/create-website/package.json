@@ -10,7 +10,7 @@
   "author": "James Camilleri",
   "license": "ISC",
   "dependencies": {
-    "@james-camilleri/sanity-schema-setup": "^1.0.0",
+    "@james-camilleri/sanity-schema-setup": "^2.0.0",
     "degit": "^2.8.4",
     "inquirer": "^8.2.0"
   }
