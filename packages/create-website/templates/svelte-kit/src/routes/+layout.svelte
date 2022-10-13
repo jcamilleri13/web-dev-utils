@@ -1,17 +1,18 @@
-<script lang="ts" context="module">
-  import type { LoadInput } from '@sveltejs/kit'
-
-  export const load = async ({ url }: LoadInput) => ({ props: { url } })
-</script>
-
 <script lang="ts">
   import '../styles/global.scss'
 
+  import type { PageData } from './$types'
+
+  import { setContext } from 'svelte'
+  import CONFIG from '$lib/config'
   import Header from '$lib/components/global/Header.svelte'
   import Footer from '$lib/components/global/Footer.svelte'
   import PageTransition from '$lib/components/transition/PageTransition.svelte'
 
-  export let url: URL
+  setContext('CONFIG', CONFIG)
+
+  export let data: PageData
+  $: ({ url } = data)
 </script>
 
 <div class="grid">

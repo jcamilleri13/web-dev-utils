@@ -1,11 +1,11 @@
 <script lang="ts">
   import { fade } from 'svelte/transition'
 
-  export let url: URL = undefined
+  export let url: URL | undefined = undefined
   const duration = 70
 </script>
 
-{#key url.pathname}
+{#key url?.pathname}
   <div in:fade={{ duration }} out:fade={{ duration }}>
     <slot />
   </div>

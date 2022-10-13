@@ -1,7 +1,3 @@
-<script context="module">
-  export const prerender = true
-</script>
-
 <script lang="ts">
   import Title from '$lib/components/global/Title.svelte'
   import FullWidth from '$lib/components/layout/FullWidth.svelte'

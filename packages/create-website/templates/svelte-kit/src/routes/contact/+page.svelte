@@ -1,26 +1,8 @@
-<script lang="ts" context="module">
-  import { get } from '$lib/utils/get'
-  import { PAGES } from '$lib/types/pages'
-
-  export const prerender = true
-
-  // export async function load({ fetch }) {
-  //   return {
-  //     props: {
-  //       page: await get.page(PAGES.CONTACT, fetch),
-  //     },
-  //   }
-  // }
-</script>
-
 <script lang="ts">
   import { tick } from 'svelte'
 
   import Grid from '$lib/components/layout/Grid.svelte'
-  import StateButton, {
-    State,
-    STATE,
-  } from '$lib/components/form/StateButton.svelte'
+  import StateButton, { State, STATE } from '$lib/components/form/StateButton.svelte'
   import Title from '$lib/components/global/Title.svelte'
   import Transition from '$lib/components/transition/Transition.svelte'
   import Fields from '$lib/components/form/Fields.svelte'
@@ -43,9 +25,7 @@
       name: 'email',
       type: 'email',
       value: '',
-      validations: [
-        (value) => !EMAIL_REGEX.test(value) && 'Enter a valid email address',
-      ],
+      validations: [(value) => !EMAIL_REGEX.test(value) && 'Enter a valid email address'],
       valid: undefined,
     },
     {

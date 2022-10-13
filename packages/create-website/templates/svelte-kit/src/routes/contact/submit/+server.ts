@@ -2,13 +2,9 @@ import sanityClient from '@sanity/client'
 import CONFIG from '$lib/config'
 import nodemailer from 'nodemailer'
 
-import type {
-  ContactPayload,
-  ContactRequestEvent,
-  ContactResponse,
-} from './types'
+import type { ContactPayload, ContactRequestEvent, ContactResponse } from '../types'
 
-export async function post({
+export async function POST({
   request,
 }: {
   request: ContactRequestEvent
@@ -38,9 +34,7 @@ async function sendEmail(emailPayload: ContactPayload) {
     throw new Error('Missing required fields')
   }
 
-  const subjectText = subject
-    ? `Contact form submission: ${subject}`
-    : 'Contact form submission'
+  const subjectText = subject ? `Contact form submission: ${subject}` : 'Contact form submission'
 
   const transport = nodemailer.createTransport({
     name: destination,
