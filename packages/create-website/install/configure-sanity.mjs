@@ -26,6 +26,10 @@ export async function configureSanity(config, projectInfo) {
     dest,
   )
 
+  // `sanity init` seems to be auto-creating a git repository and screwing a
+  // bunch of things up. Delete the `.git` folder.
+  await fs.rmdir(`${dest}/.git`, { recursive: true, force: true })
+
   let sanityConfig
   try {
     sanityConfig = await fs.readFile(`${dest}/sanity.config.ts`, 'utf8')
