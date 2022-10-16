@@ -3,7 +3,7 @@ import { promises as fs } from 'fs'
 import { generate } from '@james-camilleri/sanity-schema-setup/generate/index.mjs'
 import inquirer from 'inquirer'
 
-import { replacePlaceholdersInFile } from '../utils/file.mjs'
+import { readJson, replacePlaceholdersInFile } from '../utils/file.mjs'
 import { crossPlatform, spawn } from '../utils/process.mjs'
 
 export async function configureSanity(config, projectInfo) {
@@ -28,13 +28,17 @@ export async function configureSanity(config, projectInfo) {
 
   // `sanity init` seems to be auto-creating a git repository and screwing a
   // bunch of things up. Delete the `.git` folder.
-  await fs.rmdir(`${dest}/.git`, { recursive: true, force: true })
+  try {
+    await fs.rmdir(`${dest}/.git`, { recursive: true, force: true })
+  } catch {
+    // Don't worry if the git repository hasn't actually been created.
+  }
 
   let sanityConfig
   try {
     sanityConfig = await fs.readFile(`${dest}/sanity.config.ts`, 'utf8')
   } catch (e) {
-    console.log('Could not read sanity.config.ts')
+    console.error('Could not read sanity.config.ts')
     return
   }
 
