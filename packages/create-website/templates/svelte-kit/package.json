@@ -6,6 +6,7 @@
     "dev": "env-cmd vite dev",
     "build": "vite build",
     "package": "svelte-kit package",
+    "sync": "svelte-kit sync",
     "start": "env-cmd vite dev --open",
     "preview": "env-cmd vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
