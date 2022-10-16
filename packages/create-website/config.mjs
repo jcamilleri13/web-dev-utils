@@ -63,6 +63,7 @@ export default {
       '@james-camilleri/replace-sanity-favicon',
       '@james-camilleri/sanity-web-image',
       '@james-camilleri/slack-logger',
+      '@sanity/client',
       '@sanity/vision@dev-preview',
       'react-dom',
       'react-icons',
