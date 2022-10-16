@@ -1,17 +1,21 @@
 {
   "name": "@james-camilleri/sanity-web-image",
-  "version": "1.0.12",
+  "version": "2.0.0",
   "description": "Definition and tools for automatically optimising Sanity web images",
   "type": "module",
+  "main": "dist/webhooks.js",
+  "browser": "dist/schema.js",
   "types": "dist/index.d.ts",
-  "svelte": "dist/svelte.js",
   "exports": {
-    ".": "./dist/index.js",
+    ".": {
+      "browser": "./dist/schema.js",
+      "default": "./dist/webhooks.js"
+    },
+    "./schema": "./dist/schema.js",
+    "./webhooks": "./dist/webhooks.js",
     "./svelte": "./dist/svelte.js",
     "./package.json": "./package.json"
   },
-  "comment": "Sanity runs on Webpack 3, so it ignores the `exports` field.",
-  "main": "dist/sanity/schema.js",
   "scripts": {
     "clear": "rimraf dist",
     "build": "npm run clear && svelte-check && tsc",

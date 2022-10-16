@@ -1,4 +1,6 @@
-import ResponsiveImage from '../svelte/ResponsiveImage.svelte'
+import ResponsiveImage from './svelte/ResponsiveImage.svelte'
 
+export { prefetchImageMetadata } from './front-end/prefetch-image-metadata'
 export { ResponsiveImage, ResponsiveImage as default }
-export { prefetchImageMetadata } from './front-end/prefetch-image-metadata.js'
+
+export type { WebImage } from './types/web-image'

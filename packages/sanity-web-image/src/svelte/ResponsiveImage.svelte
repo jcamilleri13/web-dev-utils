@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { WebImage } from '../src/types/web-image'
+  import type { WebImage } from '../types/web-image'
 
   import { decode } from 'blurhash'
   import { getContext, onMount } from 'svelte'
