@@ -128,6 +128,7 @@
     {:else}
       <canvas
         bind:this={canvas}
+        class:loaded
         width={CANVAS_SIZE}
         height={CANVAS_SIZE}
         style={contain
@@ -152,6 +153,11 @@
     position: absolute;
     width: 100%;
     z-index: -1;
+    transition: opacity var(--transition-speed-medium) ease-in;
+
+    &.loaded {
+      opacity: 0;
+    }
   }
 
   img {
