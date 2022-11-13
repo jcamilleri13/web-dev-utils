@@ -43,7 +43,7 @@ export async function configureSanity(config, projectInfo) {
   }
 
   const [_, projectId] = sanityConfig.match(
-    /export default createConfig\({[\s\S]+projectId:\s+'(.*)',/m,
+    /export default defineConfig\({[\s\S]+projectId:\s+'(.*)',/m,
   )
 
   const sanityApiKey = (
