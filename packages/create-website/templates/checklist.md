@@ -36,6 +36,7 @@
 # Sanity configuration
 - [ ] Copy Sanity API key from .env file to Netlify environment variables.
 - [ ] Add CORS origins to Sanity settings.
+- [ ] Add the "http://sveltekit-prerender" origin to Sanity for SvelteKit pre-rendering.
 - [ ] Add `netlify-build` hook to Sanity.io dashboard. (Get url from Netlify dashboard.)
 
 # Image optimisation
