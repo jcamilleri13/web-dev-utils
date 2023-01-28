@@ -1,11 +1,13 @@
 import got from 'got'
 
-import { LoggerPlugin } from '../index.js'
+import { BasePlugin } from './base-plugin.js'
 
-export class SlackPlugin implements LoggerPlugin {
+export class SlackPlugin extends BasePlugin {
   #webhook: string
 
   constructor(webhook: string) {
+    super()
+
     this.#webhook = webhook
   }
 

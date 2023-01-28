@@ -1,6 +1,6 @@
-import { afterEach, assert, describe, expect, test, vi } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 
-import { LOG_LEVEL, Logger } from '.'
+import { LOG_LEVEL, Logger } from './logger'
 
 function callLogs(log: Logger) {
   log.debug('debug')
@@ -32,7 +32,7 @@ describe('Logger', () => {
 
   test("Flushes logs to the logger's plugins", async () => {
     const push = vi.fn()
-    const log = new Logger([{ push }])
+    const log = new Logger([{ push, level: LOG_LEVEL.DEBUG }])
     log.setHeader('test header')
     callLogs(log)
 
@@ -48,7 +48,7 @@ describe('Logger', () => {
 
   test("Flushes verbose logs to the logger's plugins", async () => {
     const push = vi.fn()
-    const log = new Logger([{ push }])
+    const log = new Logger([{ push, level: LOG_LEVEL.DEBUG }])
     log.setHeader('test header')
     callLogs(log)
 
@@ -66,7 +66,7 @@ describe('Logger', () => {
 
   test("Flushes logs to the logger's plugins according to the set log level", async () => {
     const push = vi.fn()
-    const log = new Logger([{ push }])
+    const log = new Logger([{ push, level: LOG_LEVEL.DEBUG }])
     log.setHeader('test header')
     log.setLogLevel(LOG_LEVEL.ERROR)
     callLogs(log)

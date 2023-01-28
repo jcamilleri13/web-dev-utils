@@ -1,18 +1,23 @@
 import { Transporter } from 'nodemailer'
 import SMTPTransport from 'nodemailer/lib/smtp-transport'
 
-import { LoggerPlugin } from '../index.js'
+import { BasePlugin } from './base-plugin.js'
 
 interface EmailConfig {
   from: string
   to: string
 }
 
-export class EmailPlugin implements LoggerPlugin {
-  #transport: Transporter<SMTPTransport>
+export class EmailPlugin extends BasePlugin {
+  #transport: Transporter<SMTPTransport.Options>
   #emails: EmailConfig
 
-  constructor(transport: Transporter<SMTPTransport>, emails: EmailConfig) {
+  constructor(
+    transport: Transporter<SMTPTransport.Options>,
+    emails: EmailConfig,
+  ) {
+    super()
+
     this.#transport = transport
     this.#emails = emails
   }
