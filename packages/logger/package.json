@@ -5,11 +5,11 @@
   "type": "module",
   "main": "./dist/logger.cjs",
   "module": "./dist/logger.js",
-  "types": "./dist/types.d.ts",
+  "types": "./dist/index.ts",
   "exports": {
     "require": "./dist/logger.cjs",
     "default": "./dist/logger.js",
-    "types": "./dist/types.d.ts"
+    "types": "./dist/index.d.ts"
   },
   "source": "src/index.ts",
   "scripts": {
