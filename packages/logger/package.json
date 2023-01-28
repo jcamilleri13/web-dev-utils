@@ -1,0 +1,34 @@
+{
+  "name": "@james-camilleri/logger",
+  "version": "0.1.0",
+  "description": "Tool for logging to a variety of online endpoints",
+  "type": "module",
+  "main": "./dist/logger.cjs",
+  "module": "./dist/logger.js",
+  "types": "./dist/types.d.ts",
+  "exports": {
+    "require": "./dist/logger.cjs",
+    "default": "./dist/logger.js",
+    "types": "./dist/types.d.ts"
+  },
+  "source": "src/index.ts",
+  "scripts": {
+    "build": "vitest run && rimraf dist && tsc --noEmit && microbundle",
+    "prepublish": "pnpm build",
+    "test": "vitest"
+  },
+  "author": "James Camilleri",
+  "license": "ISC",
+  "dependencies": {
+    "got": "^12.5.3",
+    "nodemailer": "^6.9.1"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.7",
+    "microbundle": "^0.15.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.4.2",
+    "vite": "^4.0.4",
+    "vitest": "^0.28.3"
+  }
+}
