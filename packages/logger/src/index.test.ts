@@ -76,4 +76,16 @@ describe('Logger', () => {
     expect(push).toHaveBeenCalledOnce()
     expect(push).toHaveBeenCalledWith('test header', ['🔴  error'])
   })
+
+  test("will only flush logs to the logger's plugins if the minimum threshold is hit", async () => {
+    const push = vi.fn()
+    const log = new Logger([{ push, level: LOG_LEVEL.ERROR }])
+    log.setHeader('test header')
+    log.setLogLevel(LOG_LEVEL.DEBUG)
+    log.debug('debug')
+
+    await log.flush()
+
+    expect(push).not.toHaveBeenCalled()
+  })
 })

@@ -27,6 +27,7 @@ type Loggable = string | number | boolean | null | undefined
 
 export class Logger {
   #level: IntLogLevels = LOG_LEVEL_NUMERIC[LOG_LEVEL.WARN]
+  #highestLevelLogged: IntLogLevels = LOG_LEVEL_NUMERIC[LOG_LEVEL.DEBUG]
   #header = 'LOG OUTPUT'
   #filteredLog: string[] = []
   #verboseLog: string[] = []
@@ -54,8 +55,11 @@ export class Logger {
     this.#verboseLog.push([prefix, ...logs].join(' '))
 
     if (LOG_LEVEL_NUMERIC[level] <= this.#level) {
-      console.log('adding this to the filtered log', ...logs)
       this.#filteredLog.push([prefix, ...logs].join(' '))
+    }
+
+    if (LOG_LEVEL_NUMERIC[level] <= this.#highestLevelLogged) {
+      this.#highestLevelLogged = LOG_LEVEL_NUMERIC[level]
     }
   }
 
@@ -90,9 +94,13 @@ export class Logger {
 
   async flush() {
     await Promise.all(
-      this.#plugins.map((plugin) =>
-        plugin.push(this.#header, [...this.#filteredLog]),
-      ),
+      this.#plugins
+        .filter(
+          (plugin) =>
+            plugin.level == null ||
+            LOG_LEVEL_NUMERIC[plugin.level] >= this.#highestLevelLogged,
+        )
+        .map((plugin) => plugin.push(this.#header, [...this.#filteredLog])),
     )
     this.clear()
   }
@@ -113,6 +121,7 @@ export class Logger {
 }
 
 export interface LoggerPlugin {
+  level?: LOG_LEVEL
   push: (header: string, logs: string[]) => Promise<void>
 }
 
