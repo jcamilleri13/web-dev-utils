@@ -1,6 +1,6 @@
 {
   "name": "@james-camilleri/logger",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Tool for logging to a variety of online endpoints",
   "type": "module",
   "main": "./dist/logger.cjs",
