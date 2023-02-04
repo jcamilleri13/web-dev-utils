@@ -1,11 +1,11 @@
 {
   "name": "@james-camilleri/logger",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Tool for logging to a variety of online endpoints",
   "type": "module",
   "main": "./dist/logger.cjs",
   "module": "./dist/logger.js",
-  "types": "./dist/index.ts",
+  "types": "./dist/index.d.ts",
   "exports": {
     "require": "./dist/logger.cjs",
     "default": "./dist/logger.js",
@@ -20,7 +20,6 @@
   "author": "James Camilleri",
   "license": "ISC",
   "dependencies": {
-    "got": "^12.5.3",
     "nodemailer": "^6.9.1"
   },
   "devDependencies": {

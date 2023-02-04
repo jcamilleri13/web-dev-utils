@@ -1,5 +1,3 @@
-import got from 'got'
-
 import { BasePlugin } from './base-plugin.js'
 
 export class SlackPlugin extends BasePlugin {
@@ -15,9 +13,12 @@ export class SlackPlugin extends BasePlugin {
     if (logs.length === 0) return
 
     try {
-      await got(this.#webhook, {
+      await fetch(this.#webhook, {
         method: 'POST',
-        json: {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           text: logs.join('\n'),
           blocks: [
             {
@@ -35,7 +36,7 @@ export class SlackPlugin extends BasePlugin {
               },
             },
           ],
-        },
+        }),
       })
     } catch (e) {
       console.error(e)
