@@ -40,8 +40,8 @@ export class Logger {
 
     // Set log level from environment variable if it is defined.
     if (
-      process.env.LOG_LEVEL &&
-      Object.values(LOG_LEVEL).includes(process.env.LOG_LEVEL as LOG_LEVEL)
+      process?.env?.LOG_LEVEL &&
+      Object.values(LOG_LEVEL).includes(process?.env?.LOG_LEVEL as LOG_LEVEL)
     ) {
       this.setLogLevel(process.env.LOG_LEVEL as LOG_LEVEL)
     }
