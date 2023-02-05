@@ -1,6 +1,7 @@
 import { describe, expect, test, vi } from 'vitest'
 
-import { LOG_LEVEL, Logger } from './logger'
+import { Logger } from './logger.js'
+import { LOG_LEVEL } from './types.js'
 
 function callLogs(log: Logger) {
   log.debug('debug')

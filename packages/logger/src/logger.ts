@@ -1,12 +1,4 @@
-import { LoggerPlugin } from './plugins/index.js'
-
-export enum LOG_LEVEL {
-  ERROR = 'error',
-  WARN = 'warn',
-  SUCCESS = 'success',
-  INFO = 'info',
-  DEBUG = 'debug',
-}
+import { LOG_LEVEL, Loggable, LoggerPlugin } from './types.js'
 
 const LOG_LEVEL_NUMERIC = {
   [LOG_LEVEL.ERROR]: 1,
@@ -25,7 +17,6 @@ const LOG_PREFIX = {
 } as const
 
 type IntLogLevels = (typeof LOG_LEVEL_NUMERIC)[keyof typeof LOG_LEVEL_NUMERIC]
-type Loggable = string | number | boolean | null | undefined
 
 export class Logger {
   #level: IntLogLevels = LOG_LEVEL_NUMERIC[LOG_LEVEL.WARN]
