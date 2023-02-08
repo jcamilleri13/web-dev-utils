@@ -58,6 +58,14 @@ export class Logger {
     }
   }
 
+  loadPlugin(plugin: LoggerPlugin) {
+    this.#plugins.push(plugin)
+  }
+
+  loadPlugins(plugins: LoggerPlugin[]) {
+    this.#plugins.push(...plugins)
+  }
+
   setLogLevel(level: LOG_LEVEL) {
     this.#log(LOG_LEVEL.DEBUG, `Setting log level to "${level}"`)
     this.#level = LOG_LEVEL_NUMERIC[level]
