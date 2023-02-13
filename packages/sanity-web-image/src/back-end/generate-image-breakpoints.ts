@@ -1,4 +1,4 @@
-import log from '@james-camilleri/slack-logger'
+import { log } from '@james-camilleri/logger'
 import { HandlerResponse } from '@netlify/functions'
 import { SanityImageAssetDocument } from '@sanity/client'
 import { v2 as cloudinary } from 'cloudinary'
@@ -25,7 +25,7 @@ export async function generateImageBreakpoints(
 
     await queueBreakpointGeneration(url, width, notificationUrl)
   } catch (error) {
-    log.error(error)
+    log.error(`${error}`)
     await log.flushAll()
 
     return { statusCode: 500 }

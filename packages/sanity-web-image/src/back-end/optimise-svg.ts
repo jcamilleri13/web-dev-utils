@@ -1,6 +1,6 @@
 import { Readable } from 'stream'
 
-import log from '@james-camilleri/slack-logger'
+import { log } from '@james-camilleri/logger'
 import { HandlerResponse } from '@netlify/functions'
 import {
   SanityClient,
@@ -35,7 +35,7 @@ export async function optimiseSvg(
     await replaceAllReferences(client, _id, newId)
     await deleteAsset(client, _id)
   } catch (error) {
-    log.error(error)
+    log.error(`${error}`)
     await log.flushAll()
 
     return { statusCode: 500 }

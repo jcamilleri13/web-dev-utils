@@ -1,4 +1,4 @@
-import log from '@james-camilleri/slack-logger'
+import { log } from '@james-camilleri/logger'
 import { HandlerEvent, HandlerResponse } from '@netlify/functions'
 import { SanityClient } from '@sanity/client'
 
@@ -24,7 +24,7 @@ export async function updateImageMetadata(
 
     await client.patch(id).set({ 'metadata.breakpoints': widths }).commit()
   } catch (error) {
-    log.error(error)
+    log.error(`${error}`)
     await log.flushAll()
 
     return { statusCode: 500 }
