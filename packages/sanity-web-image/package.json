@@ -1,6 +1,6 @@
 {
   "name": "@james-camilleri/sanity-web-image",
-  "version": "2.0.4",
+  "version": "2.1.0",
   "description": "Definition and tools for automatically optimising Sanity web images",
   "type": "module",
   "main": "dist/webhooks.js",
@@ -46,7 +46,6 @@
     "@sanity/image-url": "^1.0.2",
     "blurhash": "^1.1.5",
     "cloudinary": "^1.34.0",
-    "svelte-inline-svg": "^1.2.0",
     "svgo": "^2.8.0"
   }
 }

@@ -3,7 +3,6 @@
 
   import { decode } from 'blurhash'
   import { getContext, onMount } from 'svelte'
-  import InlineSVG from 'svelte-inline-svg'
   import imageUrlBuilder from '@sanity/image-url'
 
   interface Sizes {
@@ -60,19 +59,6 @@
     return queryList.join(', ')
   }
 
-  function addTitleToSvg(svg: SVGElement, title?: string) {
-    if (!title) return svg
-
-    const titleElement = document.createElementNS(
-      'http://www.w3.org/2000/svg',
-      'title',
-    )
-    titleElement.textContent = title
-    svg.insertAdjacentElement('afterbegin', titleElement)
-
-    return svg
-  }
-
   function breakpointUrl(breakpoint: number, format?: 'webp') {
     let builder = urlBuilder.width(breakpoint)
 
@@ -86,6 +72,32 @@
 
     return `${builder.url()} ${breakpoint}w`
   }
+
+  async function fetchSvgSource(src: string, extension: string) {
+    if (extension !== SVG) {
+      return
+    }
+
+    try {
+      const response = await fetch(src)
+      if (!response.ok) {
+        throw response.statusText
+      }
+
+      const source = await response.text()
+      return alt
+        ? source.replace(
+            /(<.*?>)(.*)/,
+            (_, openingTag, svgContent) =>
+              `${openingTag}<title>${alt}</title>${svgContent}`,
+          )
+        : source
+    } catch (e) {
+      console.error('Error retrieving SVG source', e)
+    }
+  }
+
+  const svgSource = fetchSvgSource(src, extension)
 
   onMount(() => {
     if (extension === SVG || !image) return
@@ -124,12 +136,10 @@
     style={maxHeight ? `height: ${maxHeight}` : ''}
     style:--align={align}
   >
-    {#if extension === SVG}
-      <InlineSVG
-        {src}
-        transformSrc={(svg) => addTitleToSvg(svg, alt)}
-        style={cropRatio ? `aspect-ratio: ${cropRatio}` : ''}
-      />
+    {#if extension === SVG && svgSource}
+      {#await svgSource then src}
+        {@html src}
+      {/await}
     {:else}
       <canvas
         bind:this={canvas}

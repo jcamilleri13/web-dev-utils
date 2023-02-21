@@ -64,7 +64,6 @@ importers:
       shx: ^0.3.4
       svelte: ^3.55.1
       svelte-check: ^2.10.3
-      svelte-inline-svg: ^1.2.0
       svgo: ^2.8.0
       typescript: ^4.9.5
     dependencies:
@@ -73,7 +72,6 @@ importers:
       '@sanity/image-url': 1.0.2
       blurhash: 1.1.5
       cloudinary: 1.34.0
-      svelte-inline-svg: 1.2.0
       svgo: 2.8.0
     devDependencies:
       '@netlify/functions': 0.7.2
@@ -5312,10 +5310,6 @@ packages:
       - stylus
       - sugarss
     dev: true
-
-  /svelte-inline-svg/1.2.0:
-    resolution: {integrity: sha512-mYyvz7uddfaj/yXB5zyAyYSPUyE7vdK8En7dGJjZf3XImdAfOuDxhNn5OFF84BQeJFVZ7T8/rJU33emiHKdLhQ==}
-    dev: false
 
   /svelte-preprocess/4.10.7_cjyprvzu4kavkaguwtgkgx5cp4:
     resolution: {integrity: sha512-sNPBnqYD6FnmdBrUmBCaqS00RyCsCpj2BG58A1JBswNF7b0OKviwxqVrOL/CKyJrLSClrSeqQv5BXNg2RUbPOw==}
