@@ -28,6 +28,7 @@
   export let sizes: Sizes | undefined = undefined
   export let cropRatio: number | undefined = undefined
   export let contain = false
+  export let align: 'top' | 'center' | 'bottom' = 'top'
   export let maxHeight: string | undefined = undefined
 
   const { alt, metadata } = image ?? {}
@@ -118,7 +119,11 @@
 </script>
 
 {#if image}
-  <div class="image-wrapper" style={maxHeight ? `height: ${maxHeight}` : ''}>
+  <div
+    class="image-wrapper"
+    style={maxHeight ? `height: ${maxHeight}` : ''}
+    style:--align={align}
+  >
     {#if extension === SVG}
       <InlineSVG
         {src}
@@ -177,7 +182,7 @@
 
   .contain {
     object-fit: contain;
-    object-position: top;
+    object-position: var(--align);
   }
 
   :global(svg) {
