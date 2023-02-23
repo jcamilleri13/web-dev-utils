@@ -45,6 +45,7 @@ export default {
       'svelte',
       'tslib',
       'typescript',
+      'vite',
     ],
   },
   sanity: {
