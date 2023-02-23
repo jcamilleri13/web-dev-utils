@@ -5,7 +5,7 @@
   "main": "package.json",
   "type": "module",
   "scripts": {
-    "start": "sanity start",
+    "dev": "sanity dev",
     "build": "sanity build && node ./node_modules/@james-camilleri/replace-sanity-favicon",
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
