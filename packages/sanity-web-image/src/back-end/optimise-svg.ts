@@ -7,7 +7,6 @@ import {
   SanityDocument,
   SanityImageAssetDocument,
 } from '@sanity/client'
-import got from 'got'
 import { optimize } from 'svgo'
 
 import { deepMap } from '../utils/deep-map.js'
@@ -48,8 +47,8 @@ export async function optimiseSvg(
 }
 
 async function fetchSvg(url: string): Promise<string> {
-  const { body: svg } = await got(url)
-  return svg
+  const response = await fetch(url)
+  return response.text()
 }
 
 function optimiseSvgString(svg: string): string {
