@@ -21,7 +21,7 @@ export async function generateSchema(cwd, config) {
   ).flat(2)
 
   const rootSchema = `
-    import { WebImageSchema as webImage } from '@james-camilleri/sanity-web-image'
+    import { WebImage } from '@james-camilleri/sanity-web-image/schema'
 
     ${filesWritten
       .sort((a, b) => a.filePath.localeCompare(b.filePath))
@@ -40,7 +40,7 @@ export async function generateSchema(cwd, config) {
         .sort((a, b) => a.schemaName.localeCompare(b.schemaName))
         .map(({ schemaName }) => `${schemaName},`)
         .join('\n')}
-      webImage,
+        WebImage,
     ]
   `
 
