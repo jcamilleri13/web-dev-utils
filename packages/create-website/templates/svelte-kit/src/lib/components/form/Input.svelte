@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fade } from 'svelte/transition'
-  import uniqueId from 'lodash/uniqueId.js'
+  import { uniqueId } from './uniqueId.js'
   import Exclamation from '@fortawesome/fontawesome-free/svgs/solid/circle-exclamation.svg'
   import FormGroup from './FormGroup.svelte'
 
@@ -48,9 +48,7 @@
 
 <FormGroup {width}>
   <label for={id}
-    >{label ?? capitalise(name)}{#if optional}<span class="optional"
-        >optional</span
-      >{/if}</label
+    >{label ?? capitalise(name)}{#if optional}<span class="optional">optional</span>{/if}</label
   >
 
   {#if hint}<span class="hint">{hint}</span>{/if}
