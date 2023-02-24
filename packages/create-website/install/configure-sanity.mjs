@@ -23,13 +23,13 @@ export async function configureSanity(config, projectInfo) {
       '.',
       '--typescript',
     ],
-    dest,
+    dest
   )
 
   // `sanity init` seems to be auto-creating a git repository and screwing a
   // bunch of things up. Delete the `.git` folder.
   try {
-    await fs.rmdir(`${dest}/.git`, { recursive: true, force: true })
+    await fs.rm(`${dest}/.git`, { recursive: true, force: true })
   } catch {
     // Don't worry if the git repository hasn't actually been created.
   }
@@ -42,9 +42,7 @@ export async function configureSanity(config, projectInfo) {
     return
   }
 
-  const [_, projectId] = sanityConfig.match(
-    /export default defineConfig\({[\s\S]+projectId:\s+'(.*)',/m,
-  )
+  const [_, projectId] = sanityConfig.match(/export default defineConfig\({[\s\S]+projectId:\s+'(.*)',/m)
 
   const sanityApiKey = (
     await inquirer.prompt({
@@ -68,9 +66,9 @@ export async function configureSanity(config, projectInfo) {
         replace.map(async (file) => {
           const filePath = `${dest}/${file}`
           await replacePlaceholdersInFile(filePath, dictionary)
-        }),
+        })
       )
-    }),
+    })
   )
 
   console.log('Updating sanity.config.ts')
@@ -95,7 +93,7 @@ export default createConfig({
   schema: {
     types: schemaTypes,
   },
-})`,
+})`
   )
 
   console.log('Generating Sanity schema.')
