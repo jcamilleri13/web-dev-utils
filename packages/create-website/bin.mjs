@@ -5,6 +5,7 @@ import {
   configureGit,
   configureNetlify,
   configureSanity,
+  configureWorkspace,
   copyTemplates,
   createProjectDir,
   generateReadme,
@@ -26,6 +27,12 @@ async function initialise() {
   console.log('Copying templates.')
   await copyTemplates(config)
   await replacePlaceholders(config)
+
+  if (projectInfo.cms) {
+    console.log()
+    console.log('Setting up monorepo.')
+    await configureWorkspace(cwd)
+  }
 
   console.log()
   console.log('Installing dependencies.')
@@ -72,13 +79,13 @@ function processConfig(baseConfig, projectInfo, cwd) {
   ]
 
   if (cms === 'sanity') {
-    config[0].dest = `${cwd}/web`
+    config[0].dest = `${cwd}/sites/web`
 
     config.push({
       ...baseConfig[cms],
       name,
       packageName: `${packageName}-cms`,
-      dest: `${cwd}/cms`,
+      dest: `${cwd}/sites/cms`,
       template: cms,
     })
 
