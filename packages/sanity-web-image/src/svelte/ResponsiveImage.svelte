@@ -29,6 +29,7 @@
   export let contain = false
   export let align: 'top' | 'center' | 'bottom' = 'top'
   export let maxHeight: string | undefined = undefined
+  export let lazy = true
 
   const { alt, metadata } = image ?? {}
   const { blurHash, breakpoints, dimensions, extension } = metadata ?? {}
@@ -122,7 +123,7 @@
     class: contain ? 'contain' : 'cover',
     decoding: 'async' as const,
     height: croppedHeight,
-    loading: 'lazy',
+    loading: lazy ? 'lazy' : undefined,
     sizes: sizesString,
     src,
     srcset,
