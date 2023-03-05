@@ -31,14 +31,20 @@
   export let maxHeight: string | undefined = undefined
   export let lazy = true
 
-  const { alt, metadata } = image ?? {}
-  const { blurHash, breakpoints, dimensions, extension } = metadata ?? {}
-  const { aspectRatio, width, height } = dimensions ?? {}
+  $: alt = image.alt
+  $: metadata = image.metadata
+  $: blurHash = metadata.blurHash
+  $: breakpoints = metadata.breakpoints
+  $: dimensions = metadata.dimensions
+  $: extension = metadata.extension
+  $: aspectRatio = dimensions.aspectRatio
+  $: width = dimensions.width
+  $: height = dimensions.height
 
-  const urlBuilder = image && imageUrlBuilder(sanityConfig).image(image)
-  const src = image && urlBuilder.url()
-  const sizesString = generateSizesString(sizes)
-  const croppedHeight = cropRatio ? width * cropRatio : height
+  $: urlBuilder = image && imageUrlBuilder(sanityConfig).image(image)
+  $: src = image && urlBuilder.url()
+  $: sizesString = generateSizesString(sizes)
+  $: croppedHeight = cropRatio ? width * cropRatio : height
 
   let canvas: HTMLCanvasElement | undefined
   let loaded = false
@@ -98,7 +104,7 @@
     }
   }
 
-  const svgSource = fetchSvgSource(src, extension)
+  $: svgSource = fetchSvgSource(src, extension)
 
   onMount(() => {
     if (extension === SVG || !image) return
@@ -112,14 +118,14 @@
     ctx?.putImageData(imageData, 0, 0)
   })
 
-  const srcset = breakpoints
+  $: srcset = breakpoints
     ?.map((breakpoint) => breakpointUrl(breakpoint))
     .join(', ')
-  const webpSrscset = breakpoints
+  $: webpSrscset = breakpoints
     ?.map((breakpoint) => breakpointUrl(breakpoint, 'webp'))
     .join(', ')
 
-  const imgAtttributes = {
+  $: imgAtttributes = {
     class: contain ? 'contain' : 'cover',
     decoding: 'async' as const,
     height: croppedHeight,
