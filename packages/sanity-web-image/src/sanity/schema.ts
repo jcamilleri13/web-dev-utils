@@ -9,9 +9,6 @@ export const WebImageSchema = {
         'A textual description of the image for visually-impaired users',
       name: 'alt',
       type: 'string',
-      options: {
-        isHighlighted: true,
-      },
     },
   ],
 }
