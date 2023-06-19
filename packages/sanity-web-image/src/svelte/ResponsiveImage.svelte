@@ -44,7 +44,7 @@
   $: urlBuilder = image && imageUrlBuilder(sanityConfig).image(image)
   $: src = image && urlBuilder.url()
   $: sizesString = generateSizesString(sizes)
-  $: croppedHeight = cropRatio ? width * cropRatio : height
+  $: croppedHeight = cropRatio ? Math.floor(width * cropRatio) : height
 
   let canvas: HTMLCanvasElement | undefined
   let loaded = false
