@@ -70,7 +70,7 @@
     let builder = urlBuilder.width(breakpoint)
 
     if (cropRatio) {
-      builder = builder.height(breakpoint * cropRatio).fit('min')
+      builder = builder.height(Math.floor(breakpoint * cropRatio)).fit('min')
     }
 
     if (format) {
