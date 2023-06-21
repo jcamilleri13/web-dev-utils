@@ -1,6 +1,6 @@
 {
   "name": "@james-camilleri/sanity-web-image",
-  "version": "2.1.7",
+  "version": "2.1.8",
   "description": "Definition and tools for automatically optimising Sanity web images",
   "type": "module",
   "main": "dist/webhooks.js",
