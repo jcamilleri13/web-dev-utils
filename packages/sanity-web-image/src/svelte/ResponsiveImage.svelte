@@ -44,7 +44,7 @@
   $: urlBuilder = image && imageUrlBuilder(sanityConfig).image(image)
   $: src = image && urlBuilder.url()
   $: sizesString = generateSizesString(sizes)
-  $: croppedHeight = cropRatio ? Math.floor(width * cropRatio) : height
+  $: croppedHeight = cropRatio ? Math.floor(width / cropRatio) : height
 
   let canvas: HTMLCanvasElement | undefined
   let loaded = false
@@ -70,7 +70,7 @@
     let builder = urlBuilder.width(breakpoint)
 
     if (cropRatio) {
-      builder = builder.height(Math.floor(breakpoint * cropRatio)).fit('min')
+      builder = builder.height(Math.floor(breakpoint / cropRatio)).fit('min')
     }
 
     if (format) {
