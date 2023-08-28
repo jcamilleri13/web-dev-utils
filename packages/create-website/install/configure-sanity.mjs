@@ -10,7 +10,7 @@ export async function configureSanity(config, projectInfo) {
   const { name, dest } = config[1]
 
   await spawn(
-    crossPlatform('pnpm'),
+    'pnpm',
     [
       'create',
       'sanity@latest',

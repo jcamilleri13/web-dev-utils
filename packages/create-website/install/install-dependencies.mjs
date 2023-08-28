@@ -5,11 +5,11 @@ export async function installDependencies(config) {
     const { dest, dependencies, devDependencies } = template
 
     if (dependencies) {
-      await spawn(crossPlatform('pnpm'), ['i', ...dependencies], dest)
+      await spawn('pnpm', ['i', ...dependencies], dest)
     }
 
     if (devDependencies) {
-      await spawn(crossPlatform('pnpm'), ['i', '-D', ...devDependencies], dest)
+      await spawn('pnpm', ['i', '-D', ...devDependencies], dest)
     }
   }
 }
