@@ -1,5 +1,14 @@
 export default [
   {
+    type: 'input',
+    name: 'sanityUrl',
+    message: 'Sanity URL:',
+    default: (answers) => {
+      const url = answers.url ?? answers.frontEndUrl ?? sveltekitUrl
+      return url ? `manage.${url.replace('www.', '')}` : undefined
+    },
+  },
+  {
     type: 'checkbox',
     name: 'features',
     message: 'Enable features:',
