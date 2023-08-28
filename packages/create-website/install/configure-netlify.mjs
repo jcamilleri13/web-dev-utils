@@ -2,6 +2,7 @@ import { promises as fs } from 'fs'
 import { crossPlatform, exec, spawn } from '../utils/process.mjs'
 
 export async function configureNetlify(config) {
+  // TODO: This takes forever so it isn't really a solution.
   try {
     exec('netlify')
   } catch {
