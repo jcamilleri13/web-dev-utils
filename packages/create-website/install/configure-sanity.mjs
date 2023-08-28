@@ -4,7 +4,7 @@ import stripAnsi from 'strip-ansi'
 import { generate } from '@james-camilleri/sanity-schema-setup/generate/index.mjs'
 
 import { replacePlaceholdersInFile } from '../utils/file.mjs'
-import { crossPlatform, spawn } from '../utils/process.mjs'
+import { crossPlatform, spawn, exec } from '../utils/process.mjs'
 
 export async function configureSanity(config, projectInfo) {
   const { name, dest } = config[1]
