@@ -44,7 +44,7 @@ export async function configureSanity(config, projectInfo) {
 
   const [_, projectId] = sanityConfig.match(/export default defineConfig\({[\s\S]+projectId:\s+'(.*)',/m)
 
-  const sanityInfo = stripAnsi(await exec(crossPlatform('sanity debug --secrets'), dest))
+  const sanityInfo = stripAnsi(await exec(crossPlatform('sanity debug --secrets')), dest)
   const [, sanityAuthToken] = sanityInfo.match(/Auth token:\s+'(.*)'/)
 
   const sanityApiVersion = new Date().toISOString().slice(0, 8) + '01'
@@ -66,6 +66,7 @@ export async function configureSanity(config, projectInfo) {
     .then((response) => response.json())
     .then(({ key }) => key)
 
+  console.log()
   console.log('Adding Sanity.io CORS origins:')
   const corsOrigins = ['http://sveltekit-prerender', `https://${projectInfo.url}`, `https://${projectInfo.sanityUrl}`]
 
@@ -99,6 +100,7 @@ export async function configureSanity(config, projectInfo) {
     })
   )
 
+  console.log()
   console.log('Updating sanity.config.ts')
   await fs.writeFile(
     `${dest}/sanity.config.ts`,
@@ -124,6 +126,7 @@ export default createConfig({
 })`
   )
 
+  console.log()
   console.log('Generating Sanity schema.')
   await generate(dest, projectInfo, sanityApiKey)
 
