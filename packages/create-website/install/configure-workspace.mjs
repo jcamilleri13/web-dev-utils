@@ -24,6 +24,10 @@ package/
 *.tsbuildinfo
 \n\n`
 
+  const editorconfig = `[*]
+end_of_line = lf`
+
   await fs.writeFile(`${cwd}/pnpm-workspace.yaml`, workspace)
   await fs.writeFile(`${cwd}/.gitignore`, gitignore)
+  await fs.writeFile(`${cwd}/.editorconfig`, editorconfig)
 }
