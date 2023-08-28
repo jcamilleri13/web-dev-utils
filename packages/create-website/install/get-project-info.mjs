@@ -18,7 +18,7 @@ export function getProjectInfo(defaults) {
       type: 'input',
       name: 'EMAIL',
       message: 'Contact email address:',
-      default: (answers) => (answers.url ? `info@${url}` : undefined),
+      default: (answers) => (answers.url ? `info@${answers.url}` : undefined),
     },
     {
       type: 'list',
