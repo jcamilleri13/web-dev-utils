@@ -10,6 +10,12 @@ export function getProjectInfo(defaults) {
       default: defaults.name,
     },
     {
+      type: 'input',
+      name: 'url',
+      message: 'Website URL (front-end):',
+      default: defaults.name,
+    },
+    {
       type: 'list',
       name: 'cms',
       message: 'Content management system:',

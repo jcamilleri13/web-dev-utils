@@ -1,9 +1,9 @@
 import { promises as fs } from 'fs'
+import stripAnsi from 'strip-ansi'
 
 import { generate } from '@james-camilleri/sanity-schema-setup/generate/index.mjs'
-import inquirer from 'inquirer'
 
-import { readJson, replacePlaceholdersInFile } from '../utils/file.mjs'
+import { replacePlaceholdersInFile } from '../utils/file.mjs'
 import { crossPlatform, spawn } from '../utils/process.mjs'
 
 export async function configureSanity(config, projectInfo) {
@@ -44,17 +44,45 @@ export async function configureSanity(config, projectInfo) {
 
   const [_, projectId] = sanityConfig.match(/export default defineConfig\({[\s\S]+projectId:\s+'(.*)',/m)
 
-  const sanityApiKey = (
-    await inquirer.prompt({
-      type: 'input',
-      name: 'key',
-      message: 'Sanity read/write API key:',
+  const sanityInfo = stripAnsi(await exec(crossPlatform('sanity debug --secrets'), dest))
+  const [, sanityAuthToken] = sanityInfo.match(/Auth token:\s+'(.*)'/)
+
+  const sanityApiVersion = new Date().toISOString().slice(0, 8) + '01'
+
+  const headers = {
+    Authorization: `Bearer ${sanityAuthToken}`,
+    'Content-Type': 'application/json',
+  }
+
+  console.log('Creating Sanity.io API key.')
+  const sanityApiKey = await fetch(`https://api.sanity.io/v${sanityApiVersion}/projects/${projectId}/tokens`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({
+      label: 'website',
+      roleName: 'editor',
+    }),
+  })
+    .then((response) => response.json())
+    .then(({ key }) => key)
+
+  console.log('Adding Sanity.io CORS origins:')
+  const corsOrigins = ['http://sveltekit-prerender', `https://${projectInfo.url}`, `https://${projectInfo.sanityUrl}`]
+
+  await Promise.all(
+    corsOrigins?.map(async (origin) => {
+      console.log('>', origin)
+      return fetch(`https://api.sanity.io/v${sanityApiVersion}/projects/${projectId}/cors`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ origin }),
+      })
     })
-  ).key
+  )
 
   const dictionary = {
     sanityProjectId: projectId,
-    sanityApiVersion: new Date().toISOString().slice(0, 8) + '01',
+    sanityApiVersion,
     sanityApiKey,
   }
 
