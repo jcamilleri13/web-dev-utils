@@ -11,6 +11,7 @@ import {
   generateReadme,
   getProjectInfo,
   installDependencies,
+  populateEnvFile,
   replacePlaceholders,
 } from './install/index.mjs'
 
@@ -38,16 +39,38 @@ async function initialise() {
   console.log('Installing dependencies.')
   await installDependencies(config)
 
+  let sanityConfig
   if (projectInfo.cms === 'sanity') {
     console.log()
     console.log('Initialising Sanity project.')
-    await configureSanity(config, projectInfo)
+    sanityConfig = await configureSanity(config, projectInfo)
   }
 
   if (projectInfo.initGit) {
     console.log()
     console.log('Initialising git repository.')
     await configureGit(cwd, projectInfo.pushToGitHub, config[0].packageName)
+  }
+
+  console.log()
+  console.log('Writing environment variables to .env file.')
+  const environmentVariables = {
+    ...Object.entries(projectInfo)
+      .filter(([key]) => key[0] === key[0].toUpperCase())
+      .reduce((envVariables, [key, value]) => ({ ...envVariables, [key]: value }), []),
+
+    ORGANISATION_NAME: projectInfo.name,
+    FRONT_END_URL: projectInfo.sveltekitUrl,
+    SANITY_STUDIO_API_KEY: sanityConfig.sanityApiKey,
+    SANITY_STUDIO_API_VERSION: sanityConfig.sanityApiVersion,
+    SANITY_STUDIO_PROJECT_ID: sanityConfig.sanityProjectId,
+    SANITY_STUDIO_DATASET: 'production',
+    LOG_LEVEL: 'debug',
+  }
+
+  await populateEnvFile(`${cwd}/sites/web/.env`, environmentVariables)
+  if (projectInfo.cms === 'sanity') {
+    await populateEnvFile(`${cwd}/sites/cms/.env`, environmentVariables)
   }
 
   if (projectInfo.configNetlify) {

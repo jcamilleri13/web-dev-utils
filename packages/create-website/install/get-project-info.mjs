@@ -13,7 +13,12 @@ export function getProjectInfo(defaults) {
       type: 'input',
       name: 'url',
       message: 'Website URL (front-end):',
-      default: defaults.name,
+    },
+    {
+      type: 'input',
+      name: 'EMAIL',
+      message: 'Contact email address:',
+      default: (answers) => (answers.url ? `info@${url}` : undefined),
     },
     {
       type: 'list',
@@ -26,6 +31,21 @@ export function getProjectInfo(defaults) {
       ...prompt,
       when: ({ cms }) => cms === 'sanity',
     })),
+    {
+      type: 'input',
+      name: 'MAILJET_API_KEY',
+      message: 'Mailjet API key:',
+    },
+    {
+      type: 'input',
+      name: 'MAILJET_SECRET_KEY',
+      message: 'Mailjet secret key:',
+    },
+    {
+      type: 'input',
+      name: 'CLOUDINARY_URL',
+      message: 'Cloudinary URL:',
+    },
     {
       type: 'confirm',
       name: 'initGit',

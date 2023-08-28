@@ -126,4 +126,6 @@ export default createConfig({
 
   console.log('Generating Sanity schema.')
   await generate(dest, projectInfo, sanityApiKey)
+
+  return dictionary
 }
