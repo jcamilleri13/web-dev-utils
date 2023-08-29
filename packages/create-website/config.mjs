@@ -1,12 +1,7 @@
 export default {
   'svelte-kit': {
     githubSrc: 'sveltejs/kit/packages/create-svelte/templates/skeleton',
-    remove: [
-      '.ignore',
-      '.meta.json',
-      'package.template.json',
-      'static/favicon.png',
-    ],
+    remove: ['.ignore', '.meta.json', 'package.template.json', 'static/favicon.png'],
     replace: ['.env', 'package.json', 'src/config.js'],
     dependencies: ['@sanity/client', 'nodemailer'],
     devDependencies: [
@@ -41,7 +36,6 @@ export default {
       'svelte-check',
       'svelte-inline-svg',
       'svelte-loading-spinners',
-      'svelte-preprocess',
       'svelte',
       'tslib',
       'typescript',
