@@ -1,3 +1,5 @@
+import type { SanityDocument } from 'sanity'
+
 import { asyncDeepMap } from '../utils/deep-map.js'
 import { isWebImage } from '../utils/type-guards.js'
 
@@ -7,11 +9,13 @@ interface SanityConfig {
   projectId: string
 }
 
-export async function prefetchImageMetadata(
-  input: Record<string, any>,
+export async function prefetchImageMetadata<
+  T extends SanityDocument | SanityDocument[] = SanityDocument,
+>(
+  input: T,
   sanityConfig: SanityConfig,
   fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response>,
-) {
+): Promise<T> {
   const fetchMetadata = async (input: any) => {
     // Return block content as is to prevent unnecessary recursion.
     if (input._type === 'block') return input
@@ -21,7 +25,7 @@ export async function prefetchImageMetadata(
     const url = metadataUrl(input.asset._ref, sanityConfig)
     const metadata = await fetch(url, { mode: 'cors' })
       .then((response) => response.json())
-      .then((payload) => payload.result[0])
+      .then((payload) => payload.result)
 
     return { ...input, metadata }
   }
@@ -31,6 +35,6 @@ export async function prefetchImageMetadata(
 
 function metadataUrl(id: string, config: SanityConfig) {
   const { apiVersion, dataset, projectId } = config
-  const query = `*[_id == "${id}"]{ extension, ...metadata{ blurHash, breakpoints, dimensions }}`
+  const query = `*[_id == "${id}"]{ extension, ...metadata{ blurHash, breakpoints, dimensions }}[0]`
   return `https://${projectId}.apicdn.sanity.io/v${apiVersion}/data/query/${dataset}?query=${query}`
 }
