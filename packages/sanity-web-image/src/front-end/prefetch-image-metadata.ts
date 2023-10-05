@@ -18,9 +18,9 @@ export async function prefetchImageMetadata<
 ): Promise<T> {
   const fetchMetadata = async (input: any) => {
     // Return block content as is to prevent unnecessary recursion.
-    if (input._type === 'block') return input
+    if (input?._type === 'block') return input
     if (!isWebImage(input)) return
-    if (!input.asset) return input
+    if (!input?.asset) return input
 
     const url = metadataUrl(input.asset._ref, sanityConfig)
     const metadata = await fetch(url, { mode: 'cors' })
