@@ -9,7 +9,8 @@ export async function asyncDeepMap(
     return await Promise.all(input.map((item) => asyncDeepMap(item, fn)))
   }
 
-  if (typeof input === 'object') {
+  // typeof `null` is 'object' in JavaScript 🙃
+  if (typeof input === 'object' && input != null) {
     return (
       await Promise.all(
         Object.entries(input).map(async ([key, value]) => ({
@@ -30,7 +31,8 @@ export function deepMap(input: any, fn: (input: any) => undefined | any): any {
     return input.map((item) => deepMap(item, fn))
   }
 
-  if (typeof input === 'object') {
+  // typeof `null` is 'object' in JavaScript 🙃
+  if (typeof input === 'object' && input != null) {
     return Object.entries(input)
       .map(([key, value]) => ({ [key]: deepMap(value, fn) }))
       .reduce(
