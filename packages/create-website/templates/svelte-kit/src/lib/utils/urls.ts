@@ -13,8 +13,9 @@ export function normaliseNavItems(items: RawNavItem[]): NavItem[] {
     }
 
     return {
-      text: item.split('/').slice(-1)[0].replace('-', ' '),
+      text: item.split('/').slice(-1)[0].replaceAll('-', ' '),
       link: item,
+      external: item.startsWith('http'),
     }
   })
 }
