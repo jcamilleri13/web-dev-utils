@@ -121,15 +121,15 @@
   $: srcset = breakpoints
     ?.map((breakpoint) => breakpointUrl(breakpoint))
     .join(', ')
-  $: webpSrscset = breakpoints
+  $: webpSrcset = breakpoints
     ?.map((breakpoint) => breakpointUrl(breakpoint, 'webp'))
     .join(', ')
 
-  $: imgAtttributes = {
+  $: imgAttributes = {
     class: contain ? 'contain' : 'cover',
     decoding: 'async' as const,
     height: croppedHeight,
-    loading: lazy ? 'lazy' : undefined,
+    loading: lazy ? ('lazy' as const) : undefined,
     sizes: sizesString,
     src,
     srcset,
@@ -140,7 +140,7 @@
 {#if image}
   <div
     class="image-wrapper"
-    style={maxHeight ? `height: ${maxHeight}` : ''}
+    style="height: {maxHeight ?? '100%'};"
     style:--align={align}
   >
     {#if extension === SVG && svgSource}
@@ -158,8 +158,8 @@
           : 'height: 100%'}
       />
       <picture>
-        <source type="image/webp" srcset={webpSrscset} sizes={sizesString} />
-        <img {alt} {...imgAtttributes} on:load={onLoad} class:loaded />
+        <source type="image/webp" srcset={webpSrcset} sizes={sizesString} />
+        <img {alt} {...imgAttributes} on:load={onLoad} class:loaded />
       </picture>
     {/if}
   </div>
@@ -174,6 +174,7 @@
   canvas {
     position: absolute;
     width: 100%;
+    height: 100%;
     z-index: -1;
     transition: opacity var(--transition-speed-medium) ease-in;
 
