@@ -2,3 +2,5 @@ dist
 node_modules
 templates/**/package.json
 templates/**/package-lock.json
+
+*storybook.log
