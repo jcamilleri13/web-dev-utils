@@ -14,9 +14,10 @@ $system-defaults:
   'Cantarell',
   'Noto Sans',
   sans-serif;
-$system-defaults-mono: menlo, consolas, 'Roboto Mono', 'Ubuntu Monospace', 'Noto Mono', 'Oxygen Mono', 'Liberation Mono',
-  monospace;
-$emoji-fonts: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+$system-defaults-mono: menlo, consolas, 'Roboto Mono', 'Ubuntu Monospace',
+  'Noto Mono', 'Oxygen Mono', 'Liberation Mono', monospace;
+$emoji-fonts: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+  'Noto Color Emoji';
 
 // From Accoutrement.
 // https://github.com/oddbird/accoutrement/blob/master/sass/core/_ratios.scss
@@ -46,7 +47,11 @@ $named-ratios: (
   $scale: 'minor-third',
   $base-font-weight: false
 ) {
-  $ratio: if(meta.type-of($scale) == 'string', map.get($named-ratios, $scale), $scale);
+  $ratio: if(
+    meta.type-of($scale) == 'string',
+    map.get($named-ratios, $scale),
+    $scale
+  );
 
   @if meta.type-of($ratio) != number {
     @warn 'Typographic ratio not defined.';
@@ -62,11 +67,19 @@ $named-ratios: (
   $xxl: $xl * $ratio;
 
   // Sizes for h1 through 6.
-  $heading-sizes: ('var(--xxl)', 'var(--xl)', 'var(--lg)', 'var(--md)', 'var(--md)', 'var(--md)');
+  $heading-sizes: (
+    'var(--xxl)',
+    'var(--xl)',
+    'var(--lg)',
+    'var(--md)',
+    'var(--md)',
+    'var(--md)'
+  );
 
   // Full font family lists.
   $font-family-full: $font-family, $system-defaults, $emoji-fonts;
-  $font-family-heading-full: $font-family-heading, $system-defaults, $emoji-fonts;
+  $font-family-heading-full: $font-family-heading, $system-defaults,
+    $emoji-fonts;
   $font-family-mono-full: $font-family-mono, $system-defaults-mono, $emoji-fonts;
 
   :root {
@@ -74,7 +87,7 @@ $named-ratios: (
     --font-family-heading: #{$font-family-heading-full};
     --font-family-mono: #{$font-family-mono-full};
 
-    --line-height: $line-height;
+    --line-height: #{$line-height};
 
     // Set the font weight for variable fonts if supplied.
     @if $base-font-weight {
