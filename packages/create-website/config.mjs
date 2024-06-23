@@ -7,6 +7,7 @@ export default {
     devDependencies: [
       '@fortawesome/fontawesome-free',
       '@james-camilleri/sanity-web-image',
+      '@james-camilleri/type-scale',
       '@poppanator/sveltekit-svg',
       '@portabletext/svelte',
       '@portabletext/types',

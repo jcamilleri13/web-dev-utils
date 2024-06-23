@@ -1,0 +1,37 @@
+@use '@james-camilleri/type-scale' as *;
+
+// Font configuration instructions:
+// [1] Pick a base font.
+// [2] Select the best font-size and line-height.
+// [3] Select a typographic ratio based on that font.
+
+@include typography.type-scale(
+  $font-family: Inter,
+  $font-family-heading: Satoshi,
+  $base-font-size: 22px,
+  $line-height: 1.4,
+  $scale: 'augmented-fourth',
+  $base-font-weight: 350
+);
+
+p:first-child {
+  margin-top: 0;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+mark,
+::selection {
+  color: var(--foreground);
+  background-color: var(--primary);
+}
+
+a {
+  color: var(--primary);
+
+  &:hover {
+    color: var(--secondary);
+  }
+}

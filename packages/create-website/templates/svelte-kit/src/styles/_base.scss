@@ -1,0 +1,32 @@
+html {
+  // Handle scrolling in the main grid, to avoid double
+  // scrollbars with large nav menus in mobile mode.
+  overflow-y: hidden;
+
+  color: var(--foreground);
+  overflow-wrap: normal;
+  background: var(--background);
+}
+
+img {
+  max-width: 100%;
+}
+
+svg {
+  width: 100%;
+  height: 100%;
+
+  // Safari Fix.
+  max-height: 100%;
+}
+
+// https://www.scottohara.me/blog/2017/04/14/inclusively-hidden
+.screen-reader-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
