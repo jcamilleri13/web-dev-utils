@@ -12,6 +12,6 @@
     "@sanity/client": "^2.23.2",
     "inquirer": "^8.2.5",
     "pluralize": "^8.0.0",
-    "prettier": "^2.8.4"
+    "prettier": "^3.3.2"
   }
 }

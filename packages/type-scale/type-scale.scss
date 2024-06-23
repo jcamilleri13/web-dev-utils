@@ -1,0 +1,146 @@
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:meta';
+
+// TODO: Extract this into an npm package.
+
+$system-defaults:
+  system-ui,
+  -apple-system,
+  'Segoe UI',
+  'Roboto',
+  'Ubuntu',
+  'Cantarell',
+  'Noto Sans',
+  sans-serif;
+$system-defaults-mono: menlo, consolas, 'Roboto Mono', 'Ubuntu Monospace', 'Noto Mono', 'Oxygen Mono', 'Liberation Mono',
+  monospace;
+$emoji-fonts: 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+// From Accoutrement.
+// https://github.com/oddbird/accoutrement/blob/master/sass/core/_ratios.scss
+$named-ratios: (
+  'octave': 2,
+  'major-seventh': math.div(1, 8),
+  'minor-seventh': math.div(1, 9),
+  'major-sixth': math.div(5, 3),
+  'minor-sixth': math.div(8, 5),
+  'fifth': math.div(3, 2),
+  'augmented-fourth': math.div(45, 32),
+  'fourth': math.div(4, 3),
+  'major-third': math.div(5, 4),
+  'minor-third': math.div(6, 5),
+  'major-second': math.div(9, 8),
+  'minor-second': math.div(1, 15),
+  'cinema': 2.39,
+  'golden': 1.618,
+);
+
+@mixin type-scale(
+  $font-family,
+  $font-family-heading,
+  $font-family-mono: consolas,
+  $base-font-size: 16px,
+  $line-height: 1.2,
+  $scale: 'minor-third',
+  $base-font-weight: false
+) {
+  $ratio: if(meta.type-of($scale) == 'string', map.get($named-ratios, $scale), $scale);
+
+  @if meta.type-of($ratio) != number {
+    @warn 'Typographic ratio not defined.';
+  }
+
+  // Sizes according to typographic scale.
+  $md: 1rem;
+  $sm: math.div($md, $ratio);
+  $xs: math.div($sm, $ratio);
+  $xxs: math.div($xs, $ratio);
+  $lg: $md * $ratio;
+  $xl: $lg * $ratio;
+  $xxl: $xl * $ratio;
+
+  // Sizes for h1 through 6.
+  $heading-sizes: ('var(--xxl)', 'var(--xl)', 'var(--lg)', 'var(--md)', 'var(--md)', 'var(--md)');
+
+  // Full font family lists.
+  $font-family-full: $font-family, $system-defaults, $emoji-fonts;
+  $font-family-heading-full: $font-family-heading, $system-defaults, $emoji-fonts;
+  $font-family-mono-full: $font-family-mono, $system-defaults-mono, $emoji-fonts;
+
+  :root {
+    --font-family: #{$font-family-full};
+    --font-family-heading: #{$font-family-heading-full};
+    --font-family-mono: #{$font-family-mono-full};
+
+    --line-height: $line-height;
+
+    // Set the font weight for variable fonts if supplied.
+    @if $base-font-weight {
+      --font-weight: #{$base-font-weight};
+
+      // Increase the weight of the base font
+      // ever so slightly for lower-DPI screens.
+      @media (max-resolution: 1.5dppx) {
+        --font-weight: calc(#{$base-font-weight} * 1.2);
+      }
+    }
+
+    --xxs: #{$xxs};
+    --xs: #{$xs};
+    --sm: #{$sm};
+    --md: #{$md};
+    --lg: #{$lg};
+    --xl: #{$xl};
+    --xxl: #{$xxl};
+  }
+
+  html {
+    font-size: math.div($base-font-size, 16px) * 100%;
+  }
+
+  html,
+  input,
+  textarea,
+  button {
+    font-family: var(--font-family);
+    line-height: $line-height;
+
+    @if $base-font-weight {
+      font-weight: var(--font-weight);
+    }
+  }
+
+  input,
+  textarea,
+  button {
+    // Form elements don't inherit font styles from the root.
+    font-size: 1rem;
+  }
+
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--font-family-mono);
+  }
+
+  // Heading styles.
+  // Generate font-size and margins according to typographic scale.
+  @for $i from 1 through 6 {
+    $heading: 'h#{$i}';
+    $heading-size: #{list.nth($heading-sizes, $i)};
+
+    #{$heading} {
+      margin: $heading-size 0 var(--xs);
+      font-family: var(--font-family-heading);
+      font-size: $heading-size;
+
+      /* stylelint-disable-next-line max-nesting-depth */
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+  }
+}
