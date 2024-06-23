@@ -5,7 +5,7 @@
 // [2] Select the best font-size and line-height.
 // [3] Select a typographic ratio based on that font.
 
-@include typography.type-scale(
+@include type-scale(
   $font-family: Inter,
   $font-family-heading: Satoshi,
   $base-font-size: 22px,
