@@ -46,7 +46,12 @@ function imports(config) {
     .flat()
     .map(({ schemaName }) => DEFAULT_ICONS[schemaName])
     .filter(Boolean)
-    .sort()
+
+  if (config.forms) {
+    icons.push(DEFAULT_ICONS.submissions)
+  }
+
+  icons.sort()
 
   return `
     import { StructureBuilder } from 'sanity/structure'
