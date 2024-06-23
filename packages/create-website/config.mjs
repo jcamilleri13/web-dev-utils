@@ -14,11 +14,12 @@ export default {
       '@sanity/image-url', // TODO: Make this dependent on cms option.
       '@sveltejs/adapter-auto',
       '@sveltejs/kit',
+      '@sveltejs/vite-plugin-svelte',
       '@typescript-eslint/eslint-plugin',
       '@typescript-eslint/parser',
       'eslint-config-prettier',
       'eslint-plugin-import',
-      'eslint-plugin-svelte3',
+      'eslint-plugin-svelte',
       'eslint',
       'lorem-ipsum',
       'postcss-html',

@@ -11,7 +11,7 @@ const BREAKPOINT_STRINGS = Object.entries(CONFIG.BREAKPOINTS).reduce(
     ...replaceConfig,
     [`__breakpoint-${breakpoint}__`]: width,
   }),
-  {},
+  {}
 )
 
 /** @type {import('vite').UserConfig} */
@@ -38,11 +38,6 @@ const config = {
       },
     }),
   ],
-  resolve: {
-    alias: {
-      $assets: path.resolve('./src/assets'),
-    },
-  },
 }
 
 export default config
