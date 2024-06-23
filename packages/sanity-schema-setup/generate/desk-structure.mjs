@@ -23,7 +23,7 @@ export async function generateDeskStructure(cwd, config) {
   const deskStructure = `
     ${imports(config)}
 
-    export const structure = (S: StructureBuilder, context: ConfigContext) =>
+    export const structure = (S: StructureBuilder) =>
       S.list()
         .title('Content')
         .items([${[
@@ -49,7 +49,7 @@ function imports(config) {
     .sort()
 
   return `
-    import { ConfigContext, StructureBuilder } from 'sanity/desk'
+    import { StructureBuilder } from 'sanity/structure'
     import { ${icons.join(',')} } from 'react-icons/ri'
   `
 }
@@ -84,7 +84,7 @@ function generateForms(forms) {
             .title('${deskTitle}')
             .filter('_type == "${schemaName}"')
             .schemaType('${schemaName}')
-        ),
+        )
       `,
     )
   }
@@ -102,7 +102,7 @@ function generatePages(pages) {
         S.list()
           .title('Pages')
           .items([${pages.map(generatePage).join(',')}]),
-      ),`
+      )`
 }
 
 function generatePage({ schemaName, deskTitle, id }) {
@@ -115,5 +115,5 @@ function generatePage({ schemaName, deskTitle, id }) {
           .title('${deskTitle}')
           .schemaType('${schemaName}')
           .documentId('${id}'),
-      ),`
+      )`
 }
