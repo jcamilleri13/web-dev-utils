@@ -4,10 +4,25 @@
 // [1] Pick a base font.
 // [2] Select the best font-size and line-height.
 // [3] Select a typographic ratio based on that font.
+// - octave': 2
+// - major-seventh': 1/8
+// - minor-seventh': 1/9
+// - major-sixth': 5/3
+// - minor-sixth': 8/5
+// - fifth': 3/2
+// - augmented-fourth': 45/32
+// - fourth': 4/3
+// - major-third': 5/4
+// - minor-third': 6/5
+// - major-second': 9/8
+// - minor-second': 1/15
+// - cinema': 2.39
+// - golden': 1.618
+// - or, use a custom ratio.
 
 @include type-scale(
-  $font-family: Inter,
-  $font-family-heading: Satoshi,
+  $font-family: BODY_FONT,
+  $font-family-heading: HEADER_FONT,
   $base-font-size: 22px,
   $line-height: 1.4,
   $scale: 'augmented-fourth',
