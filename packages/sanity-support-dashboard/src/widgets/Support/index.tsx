@@ -4,8 +4,9 @@ import {
   differenceInCalendarDays,
   differenceInCalendarWeeks,
 } from 'date-fns'
-import React from 'react'
-import { HelpCircleIcon } from '@sanity/icons'
+import React, { useCallback, useState } from 'react'
+import { AddDocumentIcon, CloseIcon, HelpCircleIcon } from '@sanity/icons'
+import { SupportDetails } from './SupportDetails'
 
 interface SupportWidgetProps {
   expiry?: string
@@ -14,7 +15,6 @@ interface SupportWidgetProps {
 
 function formatTimeRemaining(expiryDate: Date) {
   const today = new Date()
-  // const expiryDate = addDays(expiry, 1)
 
   const differenceInWeeks = differenceInCalendarWeeks(expiryDate, today)
   const differenceInDays =
@@ -58,16 +58,58 @@ export function SupportWidget(props: SupportWidgetProps) {
     daysTillExpiry <= 7
       ? 'critical'
       : daysTillExpiry <= 180
-      ? 'caution'
-      : 'positive'
+        ? 'caution'
+        : 'positive'
+
+  const [detailsVisible, setDetailsVisible] = useState(false)
+  const onDetailsToggle = useCallback(
+    () => setDetailsVisible((visible) => !visible),
+    [],
+  )
 
   return (
     <Card border padding={4}>
       <Stack space={3}>
         <Flex justify="space-between" align="center">
           <Text>Support level</Text>
-          <Badge tone={levelTone}>{level.toUpperCase()}</Badge>
+          <Flex gap={2}>
+            <Badge tone={levelTone}>{level.toUpperCase()}</Badge>
+            {level !== 'none' && (
+              <Button
+                aria-label={
+                  (detailsVisible ? 'Hide' : 'Show') + ' support level details'
+                }
+                icon={HelpCircleIcon}
+                mode="bleed"
+                onClick={onDetailsToggle}
+                padding={0}
+              />
+            )}
+          </Flex>
         </Flex>
+        {detailsVisible && (
+          <Card
+            padding={4}
+            tone={level === 'standard' ? 'primary' : 'positive'}
+          >
+            <Stack space={2}>
+              <Flex justify="space-between">
+                <Text weight="bold">
+                  {level === 'standard' ? 'Standard' : 'Premium'} support
+                </Text>
+                <Button
+                  aria-label="Close"
+                  icon={CloseIcon}
+                  mode="bleed"
+                  onClick={onDetailsToggle}
+                  padding={0}
+                />
+              </Flex>
+              {/* @ts-expect-error The (i) button for support details will never be visible if support is 'none'. */}
+              <SupportDetails level={level} />
+            </Stack>
+          </Card>
+        )}
         {hasSupport && expiryDate && (
           <Flex justify="space-between" align="center">
             <Text>Support valid until</Text>
@@ -87,7 +129,7 @@ export function SupportWidget(props: SupportWidgetProps) {
               disabled={!hasSupport || supportExpired}
               fontSize={16}
               href="mailto:support@james.mt"
-              icon={HelpCircleIcon}
+              icon={AddDocumentIcon}
               mode="ghost"
               padding={4}
               text="Open support ticket"
