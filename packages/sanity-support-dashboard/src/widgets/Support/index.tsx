@@ -137,6 +137,7 @@ export function SupportWidget(props: SupportDetails) {
         {hasSupport && (
           <Card marginTop={2}>
             <Button
+              as="a"
               disabled={!hasSupport || supportExpired}
               fontSize={16}
               href="mailto:support@james.mt"
