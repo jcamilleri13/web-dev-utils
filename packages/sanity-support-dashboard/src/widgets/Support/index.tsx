@@ -1,17 +1,24 @@
-import { Badge, Button, Card, Flex, Stack, Text } from '@sanity/ui'
+import { AddDocumentIcon, CloseIcon, HelpCircleIcon } from '@sanity/icons'
 import {
-  formatDate,
+  Badge,
+  Box,
+  Button,
+  Card,
+  Flex,
+  Heading,
+  Stack,
+  Text,
+} from '@sanity/ui'
+import {
+  format,
   differenceInCalendarDays,
   differenceInCalendarWeeks,
 } from 'date-fns'
 import React, { useCallback, useState } from 'react'
-import { AddDocumentIcon, CloseIcon, HelpCircleIcon } from '@sanity/icons'
-import { SupportDetails } from './SupportDetails'
 
-interface SupportWidgetProps {
-  expiry?: string
-  level: 'none' | 'standard' | 'premium'
-}
+import { SupportDetails } from '../../types'
+
+import { SupportDescription } from './SupportDescription'
 
 function formatTimeRemaining(expiryDate: Date) {
   const today = new Date()
@@ -35,7 +42,7 @@ function formatTimeRemaining(expiryDate: Date) {
     .join(', ')
 }
 
-export function SupportWidget(props: SupportWidgetProps) {
+export function SupportWidget(props: SupportDetails) {
   const { expiry, level } = props
 
   const hasExpiry = !!(expiry?.length && expiry.length > 0)
@@ -70,6 +77,11 @@ export function SupportWidget(props: SupportWidgetProps) {
   return (
     <Card border padding={4}>
       <Stack space={3}>
+        <Box marginBottom={2}>
+          <Heading as="h2" size={2}>
+            Support Agreement
+          </Heading>
+        </Box>
         <Flex justify="space-between" align="center">
           <Text>Support level</Text>
           <Flex gap={2}>
@@ -105,8 +117,7 @@ export function SupportWidget(props: SupportWidgetProps) {
                   padding={0}
                 />
               </Flex>
-              {/* @ts-expect-error The (i) button for support details will never be visible if support is 'none'. */}
-              <SupportDetails level={level} />
+              <SupportDescription level={level} />
             </Stack>
           </Card>
         )}
@@ -114,7 +125,7 @@ export function SupportWidget(props: SupportWidgetProps) {
           <Flex justify="space-between" align="center">
             <Text>Support valid until</Text>
             <Flex gap={2} align="center">
-              <Text>{formatDate(expiryDate, 'dd/MM/yyyy')}</Text>
+              <Text>{format(expiryDate, 'dd/MM/yyyy')}</Text>
               <Badge tone={daysTillExpiryTone}>
                 {supportExpired
                   ? 'EXPIRED'
