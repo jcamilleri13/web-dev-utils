@@ -1,14 +1,17 @@
 {
   "name": "@james-camilleri/sanity-client-dashboard",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A simple dashboard for keeping freelance clients up to date on their support agreements and any pending issues",
   "main": "index.js",
   "engines": {
     "node": ">=18"
   },
+  "exports": {
+    ".": "./dist/dashboard.mjs"
+  },
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "vite build",
     "prepublishOnly": "pnpm run build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
@@ -17,7 +20,7 @@
     "build-storybook": "storybook build"
   },
   "keywords": [],
-  "author": "",
+  "author": "James Camilleri",
   "license": "ISC",
   "devDependencies": {
     "@chromatic-com/storybook": "1.5.0",
