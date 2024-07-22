@@ -8,6 +8,7 @@ const { GITHUB_ACCESS_TOKEN } = process.env
 export async function getGithubIssues(
   event: HandlerEvent,
   repositoryName: string,
+  repositoryOwner: string,
 ): Promise<HandlerResponse> {
   const headers = getCorsHeaders(event)
 
@@ -18,11 +19,13 @@ export async function getGithubIssues(
     }
 
   try {
-    const issues = await request('GET /issues', {
+    const issues = await request('GET /repos/{owner}/{repo}/issues', {
       headers: {
         authorization: `token ${GITHUB_ACCESS_TOKEN}`,
       },
-      filter: 'all',
+      repo: repositoryName,
+      owner: repositoryOwner,
+      state: 'all',
       labels: 'public',
       sort: 'created',
     })
@@ -31,15 +34,8 @@ export async function getGithubIssues(
     const filteredIssues: Issue[] = issues.data
       .filter(
         (issue) =>
-          // This should already be filtered by the access token permissions.
-          issue.repository?.name === repositoryName &&
-          issue.labels.filter((label) =>
-            typeof label == 'string'
-              ? label === 'public'
-              : label.name === 'public',
-          ) &&
-          (issue.state === 'open' ||
-            issue.closed_at?.localeCompare(threeMonthsAgo)),
+          issue.state === 'open' ||
+          issue.closed_at?.localeCompare(threeMonthsAgo),
       )
       .map(({ closed_at, created_at, id, labels, state, title }) => ({
         closedAt: closed_at,
