@@ -1,3 +1,2 @@
-export { IssuesWidget } from './widgets/Issues'
-export { SupportWidget } from './widgets/Support'
+export { getGithubIssues } from './functions'
 export { supportDashboardTool } from './plugin'

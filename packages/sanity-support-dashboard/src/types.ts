@@ -1,11 +1,11 @@
 export interface Issue {
-  dateCreated: string
-  description: string
-  id: string
-  labels: string[]
-  title: string
-  status: 'open' | 'closed'
   closedOn?: string
+  dateCreated: string
+  description?: string
+  id: number
+  labels: string[]
+  state: 'open' | 'closed'
+  title: string
 }
 
 export enum SUPPORT_LEVEL {
