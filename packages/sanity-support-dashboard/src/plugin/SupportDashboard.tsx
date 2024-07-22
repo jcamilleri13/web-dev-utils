@@ -1,9 +1,9 @@
 import { ElementQuery, Grid, Text } from '@sanity/ui'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Tool } from 'sanity'
 import styled from 'styled-components'
 
-import { SupportDetails } from '../types'
+import { Issue, SupportDetails } from '../types'
 import { IssuesWidget } from '../widgets/Issues'
 import { SupportWidget } from '../widgets/Support'
 
@@ -20,12 +20,21 @@ const GridSizing = styled.div`
     grid-template-columns: 2fr 1fr;
   }
 `
+
 interface SupportDashboardProps {
   tool: Tool<SupportDetails>
 }
 
 export function SupportDashboard(props: SupportDashboardProps) {
   const supportDetails = props.tool.options
+  const [issues, setIssues] = useState([] as Issue[])
+
+  useEffect(() => {
+    fetch(`${window.location.origin}/.netlify/functions/dashboard-issues`)
+      .then((response) => response.json())
+      .then((issues) => setIssues(issues as Issue[]))
+      .catch(console.error)
+  }, [])
 
   if (!supportDetails) {
     return <Text>Error in support dashboard configuration.</Text>
@@ -35,7 +44,7 @@ export function SupportDashboard(props: SupportDashboardProps) {
     <ElementQuery>
       <GridSizing>
         <Grid gap={3} padding={4}>
-          <IssuesWidget />
+          <IssuesWidget issues={issues} />
           <SupportWidget {...supportDetails} />
         </Grid>
       </GridSizing>
