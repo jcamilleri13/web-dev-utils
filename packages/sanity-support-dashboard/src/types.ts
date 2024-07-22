@@ -1,6 +1,6 @@
 export interface Issue {
-  closedOn?: string
-  dateCreated: string
+  closed_at: string | null
+  created_at: string
   description?: string
   id: number
   labels: string[]

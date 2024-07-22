@@ -38,9 +38,8 @@ export async function getGithubIssues(
           issue.closed_at?.localeCompare(threeMonthsAgo),
       )
       .map(({ closed_at, created_at, id, labels, state, title }) => ({
-        closedAt: closed_at,
+        closed_at,
         created_at,
-        dateCreated: created_at,
         id,
         labels: labels
           .map((label) => (typeof label === 'string' ? label : label?.name))
