@@ -26,7 +26,7 @@ export async function getGithubIssues(
       repo: repositoryName,
       owner: repositoryOwner,
       state: 'all',
-      labels: 'public',
+      labels: 'client dashboard',
       sort: 'created',
     })
 
