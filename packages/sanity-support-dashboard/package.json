@@ -1,13 +1,14 @@
 {
   "name": "@james-camilleri/sanity-client-dashboard",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A simple dashboard for keeping freelance clients up to date on their support agreements and any pending issues",
   "main": "index.js",
   "engines": {
     "node": ">=18"
   },
   "exports": {
-    ".": "./dist/dashboard.mjs"
+    ".": "./dist/dashboard.mjs",
+    "./functions": "./dist/functions.mjs"
   },
   "scripts": {
     "dev": "vite",

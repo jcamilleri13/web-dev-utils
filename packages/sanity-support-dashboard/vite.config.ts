@@ -5,9 +5,11 @@ export default defineConfig({
   plugins: [react()],
   build: {
     lib: {
-      entry: './src/index.ts',
+      entry: {
+        dashboard: './src/index.ts',
+        functions: './src/functions/index.ts',
+      },
       formats: ['es'],
-      fileName: 'dashboard',
     },
 
     // TODO: This isn't bundling correctly, the dist folder is over 4mb.
