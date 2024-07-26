@@ -1,3 +1,4 @@
+import { addMonths } from 'date-fns'
 import { IssuesWidget } from '../src/widgets/Issues'
 
 export default {
@@ -23,8 +24,23 @@ export const Default = {
         state: 'open',
         title: 'Generate sitemap for SEO',
       },
+    ],
+  },
+}
+
+export const ClosedIssues = {
+  args: {
+    issues: [
       {
-        closed_at: '2024-07-18T09:56:14Z',
+        closed_at: null,
+        created_at: '2024-07-18T09:56:14Z',
+        id: 2415915489,
+        labels: ['enhancement', 'size: large', 'client dashboard'],
+        state: 'open',
+        title: 'Generate sitemap for SEO',
+      },
+      {
+        closed_at: addMonths(new Date(), -2).toISOString(),
         created_at: '2023-09-07T19:53:32Z',
         id: 1886484405,
         labels: ['bug', 'size: medium', 'client dashboard'],

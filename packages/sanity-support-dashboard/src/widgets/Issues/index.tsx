@@ -44,7 +44,7 @@ export function IssuesWidget(props: IssuesWidgetProps) {
           </Box>
           <IssueList issues={open} />
         </Stack>
-        {closed.length && (
+        {closed.length > 0 && (
           <Stack space={3}>
             <Box marginBottom={3}>
               <Heading as="h2" size={2}>
