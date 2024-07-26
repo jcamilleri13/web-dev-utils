@@ -10,11 +10,8 @@ export async function getGithubIssues(
   repositoryName: string,
   repositoryOwner: string,
 ): Promise<HandlerResponse> {
-  const headers = getCorsHeaders(event)
-
   if (event.httpMethod !== 'GET')
     return {
-      headers,
       statusCode: 400,
     }
 
@@ -49,34 +46,14 @@ export async function getGithubIssues(
       }))
 
     return {
-      headers,
       statusCode: 200,
       body: JSON.stringify(filteredIssues),
     }
   } catch (e) {
     console.error('Error retrieving GitHub issues:', e)
     return {
-      headers,
       statusCode: 500,
       body: `Error retrieving GitHub issues for repository ${repositoryName}`,
     }
   }
-}
-
-function getCorsHeaders(event: HandlerEvent) {
-  const { origin } = event.headers
-
-  if (!origin) {
-    throw new Error(`Missing origin headers`)
-  }
-
-  const originAllowed = event.rawUrl.includes(origin)
-  if (originAllowed) {
-    return {
-      'Access-Control-Allow-Origin': origin,
-      'Access-Control-Allow-Headers': '*',
-    }
-  }
-
-  throw new Error(`Origin "${origin}" forbidden`)
 }
