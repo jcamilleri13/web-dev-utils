@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
+import dts from 'vite-plugin-dts'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), dts({ rollupTypes: true, insertTypesEntry: true })],
   build: {
     lib: {
       entry: {
@@ -12,13 +13,13 @@ export default defineConfig({
       formats: ['es'],
     },
 
-    // TODO: This isn't bundling correctly, the dist folder is over 4mb.
     rollupOptions: {
       external: [
         '@sanity/ui',
         'react',
         'react/jsx-runtime',
         'react-dom',
+        'sanity',
         'styled-components',
       ],
       output: {
