@@ -104,7 +104,7 @@ export function SupportWidget(props: SupportDetails) {
             padding={4}
             tone={level === 'standard' ? 'primary' : 'positive'}
           >
-            <Stack space={2}>
+            <Stack space={4}>
               <Flex justify="space-between">
                 <Text weight="bold">
                   {level === 'standard' ? 'Standard' : 'Premium'} support
