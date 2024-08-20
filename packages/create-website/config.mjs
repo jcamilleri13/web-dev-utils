@@ -1,4 +1,7 @@
 export default {
+  _shared: {
+    devDependencies: ['groq'],
+  },
   'svelte-kit': {
     githubSrc: 'sveltejs/kit/packages/create-svelte/templates/skeleton',
     remove: ['.ignore', '.meta.json', 'package.template.json', 'static/favicon.png'],

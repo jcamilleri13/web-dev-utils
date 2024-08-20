@@ -1,0 +1,5 @@
+{
+  "path": "'../**/{queries,schemas}/*.{ts,tsx,js,jsx}'",
+  "schema": "schema.json",
+  "generates": "../_shared/types/sanity.ts"
+}

@@ -130,5 +130,9 @@ export default createConfig({
   console.log('Generating Sanity schema.')
   await generate(dest, projectInfo, sanityApiKey)
 
+  console.log()
+  console.log('Generating Sanity types.')
+  await spawn('pnpm', ['typegen'], dest)
+
   return dictionary
 }

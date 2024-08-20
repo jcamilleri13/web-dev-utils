@@ -104,6 +104,10 @@ function processConfig(baseConfig, projectInfo, cwd) {
   if (cms === 'sanity') {
     config[0].dest = `${cwd}/sites/web`
 
+    // Add sanity-specific dependencies for SvelteKit
+    config[0].devDependencies.push('@sanity/image-url')
+    config[0].dependencies.push('@sanity/svelte-loader', '@sanity/client', '@sanity/visual-editing')
+
     config.push({
       ...baseConfig[cms],
       name,
@@ -114,6 +118,12 @@ function processConfig(baseConfig, projectInfo, cwd) {
 
     // The front-end also needs the Sanity details if we're using a CMS.
     config[0].sanityProjectId = projectInfo.sanityProjectId
+
+    // Add _shared package
+    config.unshift({
+      dest: `${cwd}/sites/_shared`,
+      template: '_shared',
+    })
   }
 
   return config

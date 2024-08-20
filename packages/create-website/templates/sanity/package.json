@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "sanity dev",
-    "build": "sanity build && node ./node_modules/@james-camilleri/replace-sanity-favicon",
+    "typegen": "sanity schema extract && sanity typegen generate",
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
     "data:clean-assets": "env-cmd node ./scripts/clean-assets.js",
