@@ -23,7 +23,7 @@ export async function configureSanity(config, projectInfo) {
       '.',
       '--typescript',
     ],
-    dest
+    dest,
   )
 
   // `sanity init` seems to be auto-creating a git repository and screwing a
@@ -68,7 +68,12 @@ export async function configureSanity(config, projectInfo) {
 
   console.log()
   console.log('Adding Sanity.io CORS origins:')
-  const corsOrigins = ['http://sveltekit-prerender', `https://${projectInfo.url}`, `https://${projectInfo.sanityUrl}`]
+  const corsOrigins = [
+    'http://sveltekit-prerender',
+    `https://${projectInfo.url}`,
+    `https://${projectInfo.sanityUrl}``https://*--${name}.netlify.app`,
+    `https://*--${name}-cms.netlify.app`,
+  ]
 
   await Promise.all(
     corsOrigins?.map(async (origin) => {
@@ -78,7 +83,7 @@ export async function configureSanity(config, projectInfo) {
         headers,
         body: JSON.stringify({ origin }),
       })
-    })
+    }),
   )
 
   const dictionary = {
@@ -95,9 +100,9 @@ export async function configureSanity(config, projectInfo) {
         replace.map(async (file) => {
           const filePath = `${dest}/${file}`
           await replacePlaceholdersInFile(filePath, dictionary)
-        })
+        }),
       )
-    })
+    }),
   )
 
   console.log()
@@ -105,25 +110,25 @@ export async function configureSanity(config, projectInfo) {
   await fs.writeFile(
     `${dest}/sanity.config.ts`,
     `import { visionTool } from '@sanity/vision'
-import { createConfig } from 'sanity'
-import { deskTool } from 'sanity/desk'
+import { defineConfig } from 'sanity'
+import { structureTool } from 'sanity/structure'
 
 import { schemaTypes } from './schemas'
 import { structure } from './structure'
 
-export default createConfig({
+export default defineConfig({
   name: 'default',
   title: '${name}',
 
   projectId: '${projectId}',
   dataset: 'production',
 
-  plugins: [deskTool({ structure }), visionTool()],
+  plugins: [structureTool({ structure }), visionTool()],
 
   schema: {
     types: schemaTypes,
   },
-})`
+})`,
   )
 
   console.log()
