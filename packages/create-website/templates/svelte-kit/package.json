@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
+    "build": "pnpm lint && pnpm check && vite build",
     "package": "svelte-kit package",
     "sync": "svelte-kit sync",
     "start": "vite dev --open",
