@@ -58,10 +58,11 @@ export function getProjectInfo(defaults) {
       when: ({ initGit }) => initGit,
     },
     {
-      type: 'confirm',
-      name: 'configNetlify',
-      message: 'Configure Netlify:',
-      when: ({ pushToGitHub }) => pushToGitHub,
+      type: 'list',
+      name: 'platform',
+      message: 'Hosting platform:',
+      choices: ['netlify', 'cloudflare', 'none'],
+      default: 'netlify',
     },
   ])
 }

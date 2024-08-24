@@ -1,4 +1,4 @@
-import { crossPlatform, spawn } from '../utils/process.mjs'
+import { spawn } from '../utils/process.mjs'
 
 export async function installDependencies(config) {
   for (const template of config) {

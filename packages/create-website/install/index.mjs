@@ -1,4 +1,5 @@
 export { configureGit } from './configure-git.mjs'
+export { configureCloudflare } from './configure-cloudflare.mjs'
 export { configureNetlify } from './configure-netlify.mjs'
 export { configureSanity } from './configure-sanity.mjs'
 export { configureWorkspace } from './configure-workspace.mjs'

@@ -5,7 +5,7 @@ export default {
   'svelte-kit': {
     githubSrc: 'sveltejs/kit/packages/create-svelte/templates/skeleton',
     remove: ['.ignore', '.meta.json', 'package.template.json', 'static/favicon.png'],
-    replace: ['.env', 'package.json', 'src/config.js'],
+    replace: ['.env', 'package.json', 'svelte.config.js', 'src/config.js'],
     dependencies: [],
     devDependencies: [
       '@eslint/compat',
@@ -16,7 +16,6 @@ export default {
       '@portabletext/svelte',
       '@portabletext/types',
       '@rollup/plugin-replace',
-      '@sveltejs/adapter-auto',
       '@sveltejs/kit',
       '@sveltejs/vite-plugin-svelte',
       '@types/eslint',

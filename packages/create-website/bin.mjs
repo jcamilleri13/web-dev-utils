@@ -2,6 +2,7 @@
 
 import baseConfig from './config.mjs'
 import {
+  configureCloudflare,
   configureGit,
   configureNetlify,
   configureSanity,
@@ -73,17 +74,23 @@ async function initialise() {
     await populateEnvFile(`${cwd}/sites/cms/.env`, environmentVariables)
   }
 
-  if (projectInfo.configNetlify) {
+  if (projectInfo.platform === 'netlify') {
     console.log()
     console.log('Configuring Netlify.')
     await configureNetlify(config)
+  }
+
+  if (projectInfo.platform === 'cloudflare') {
+    console.log()
+    console.log('Configuring Cloudflare.')
+    await configureCloudflare(config)
   }
 
   generateReadme(projectInfo, cwd)
 }
 
 function processConfig(baseConfig, projectInfo, cwd) {
-  const { name, cms } = projectInfo
+  const { name, cms, platform } = projectInfo
   const packageName = name
     .trim()
     .toLowerCase()
@@ -100,6 +107,17 @@ function processConfig(baseConfig, projectInfo, cwd) {
       template: 'svelte-kit',
     },
   ]
+
+  // Add corresponding SvelteKit adapter
+  const adapter =
+    platform === 'netlify'
+      ? '@sveltejs/adapter-netlify'
+      : platform === 'cloudflare'
+        ? '@sveltejs/adapter-cloudflare'
+        : '@sveltejs/adapter-auto'
+
+  config[0].devDependencies.push(adapter)
+  config[0].adapter = adapter
 
   if (cms === 'sanity') {
     config[0].dest = `${cwd}/sites/web`
