@@ -30,7 +30,7 @@ async function initialise() {
   await copyTemplates(config)
   await replacePlaceholders(config)
 
-  if (projectInfo.cms) {
+  if (projectInfo.cms !== 'none') {
     console.log()
     console.log('Setting up monorepo.')
     await configureWorkspace(cwd)
@@ -60,18 +60,18 @@ async function initialise() {
       .filter(([key]) => key[0] === key[0].toUpperCase())
       .reduce((envVariables, [key, value]) => ({ ...envVariables, [key]: value }), []),
 
-    ORGANISATION_NAME: projectInfo.name,
-    FRONT_END_URL: projectInfo.sveltekitUrl,
-    SANITY_STUDIO_API_KEY: sanityConfig.sanityApiKey,
-    SANITY_STUDIO_API_VERSION: sanityConfig.sanityApiVersion,
-    SANITY_STUDIO_PROJECT_ID: sanityConfig.sanityProjectId,
+    ORGANISATION_NAME: projectInfo?.name,
+    FRONT_END_URL: projectInfo?.sveltekitUrl,
+    SANITY_STUDIO_API_KEY: sanityConfig?.sanityApiKey,
+    SANITY_STUDIO_API_VERSION: sanityConfig?.sanityApiVersion,
+    SANITY_STUDIO_PROJECT_ID: sanityConfig?.sanityProjectId,
     SANITY_STUDIO_DATASET: 'production',
     LOG_LEVEL: 'debug',
   }
 
-  await populateEnvFile(`${cwd}/sites/web/.env`, environmentVariables)
-  if (projectInfo.cms === 'sanity') {
-    await populateEnvFile(`${cwd}/sites/cms/.env`, environmentVariables)
+  const envFilePaths = projectInfo.cms === 'none' ? [`${cwd}/.env`] : [`${cwd}/sites/web/.env`, `${cwd}/sites/cms/.env`]
+  for (const path of envFilePaths) {
+    await populateEnvFile(path, environmentVariables)
   }
 
   if (projectInfo.platform === 'netlify') {
