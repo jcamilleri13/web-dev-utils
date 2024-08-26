@@ -69,7 +69,10 @@ async function initialise() {
     LOG_LEVEL: 'debug',
   }
 
-  const envFilePaths = projectInfo.cms === 'none' ? [`${cwd}/.env`] : [`${cwd}/sites/web/.env`, `${cwd}/sites/cms/.env`]
+  const envFilePaths =
+    projectInfo.cms === 'none' ?
+      [`${cwd}/.env`]
+    : [`${cwd}/sites/web/.env`, `${cwd}/sites/cms/.env`]
   for (const path of envFilePaths) {
     await populateEnvFile(path, environmentVariables)
   }
@@ -110,10 +113,8 @@ function processConfig(baseConfig, projectInfo, cwd) {
 
   // Add corresponding SvelteKit adapter
   const adapter =
-    platform === 'netlify'
-      ? '@sveltejs/adapter-netlify'
-      : platform === 'cloudflare'
-        ? '@sveltejs/adapter-cloudflare'
+    platform === 'netlify' ? '@sveltejs/adapter-netlify'
+    : platform === 'cloudflare' ? '@sveltejs/adapter-cloudflare'
         : '@sveltejs/adapter-auto'
 
   config[0].devDependencies.push(adapter)
