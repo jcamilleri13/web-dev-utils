@@ -21,6 +21,7 @@
   @use '../../../styles/breakpoints';
 
   header {
+    view-transition-name: header;
     z-index: 1;
     display: flex;
     align-items: center;

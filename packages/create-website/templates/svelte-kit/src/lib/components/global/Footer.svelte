@@ -5,8 +5,8 @@
   import Twitter from '@fortawesome/fontawesome-free/svgs/brands/twitter.svg'
   import YouTube from '@fortawesome/fontawesome-free/svgs/brands/youtube.svg'
 
-  import { normaliseNavItems } from '$lib/utils/urls'
   import CONFIG from '$lib/config'
+  import { normaliseNavItems } from '$lib/utils/urls'
 
   const links = [
     {
@@ -65,6 +65,7 @@
   @use '../../../styles/breakpoints';
 
   footer {
+    view-transition-name: footer;
     display: flex;
     flex-direction: column;
     align-items: center;

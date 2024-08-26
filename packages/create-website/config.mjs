@@ -18,6 +18,8 @@ export default {
       '@rollup/plugin-replace',
       '@sveltejs/kit',
       '@sveltejs/vite-plugin-svelte',
+      // TODO: Remove this when view transitions are added to the global TS browser types.
+      '@types/dom-view-transitions',
       '@types/eslint',
       'eslint-config-prettier',
       'eslint-plugin-import',
