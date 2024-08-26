@@ -11,8 +11,8 @@ importers:
   packages/create-website:
     dependencies:
       '@james-camilleri/sanity-schema-setup':
-        specifier: ^2.0.3
-        version: 2.0.4
+        specifier: workspace:^
+        version: link:../sanity-schema-setup
       degit:
         specifier: ^2.8.4
         version: 2.8.4
@@ -2253,9 +2253,6 @@ packages:
 
   '@james-camilleri/logger@1.1.0':
     resolution: {integrity: sha512-pAz/IGtz5WcY8PvPwD4uNtpbrN3Dt44FPhtWSuMU8Mf3BCGgdxVosYlKenduUnwgp2RYiweAgWVTDLAi5CzSKg==}
-
-  '@james-camilleri/sanity-schema-setup@2.0.4':
-    resolution: {integrity: sha512-7Df8piBkIu/TY3B0v3vI9lbhWCNVt1nf92lcUi8qcWElScFOc9RePym8dcrO+8BA59Z44Gu5Do6vtfmlaDwoUA==}
 
   '@jest/schemas@29.6.3':
     resolution: {integrity: sha512-mo5j5X+jIZmJQveBKeS/clAueipV7KgiX1vMgCxam1RNYiqE1w62n0/tJJnHtjW8ZHcQco5gY85jA3mi0L+nSA==}
@@ -7125,11 +7122,6 @@ packages:
       prettier: ^3.0.0
       svelte: ^3.2.0 || ^4.0.0-next.0 || ^5.0.0-next.0
 
-  prettier@2.8.8:
-    resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
-    engines: {node: '>=10.13.0'}
-    hasBin: true
-
   prettier@3.3.2:
     resolution: {integrity: sha512-rAVeHYMcv8ATV5d508CFdn+8/pHPpXeIid1DdrPwXnaAdH7cqjVbpJaT5eq4yRAFU/lsbwYwSF/n5iNrdJHPQA==}
     engines: {node: '>=14'}
@@ -11239,15 +11231,6 @@ snapshots:
   '@james-camilleri/logger@1.1.0':
     dependencies:
       nodemailer: 6.9.1
-
-  '@james-camilleri/sanity-schema-setup@2.0.4':
-    dependencies:
-      '@sanity/client': 2.23.2
-      inquirer: 8.2.5
-      pluralize: 8.0.0
-      prettier: 2.8.8
-    transitivePeerDependencies:
-      - supports-color
 
   '@jest/schemas@29.6.3':
     dependencies:
@@ -17006,8 +16989,6 @@ snapshots:
     dependencies:
       prettier: 3.3.3
       svelte: 5.0.0-next.238
-
-  prettier@2.8.8: {}
 
   prettier@3.3.2: {}
 
