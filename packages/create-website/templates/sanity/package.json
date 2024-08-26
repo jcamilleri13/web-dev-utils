@@ -6,9 +6,10 @@
   "type": "module",
   "scripts": {
     "dev": "sanity dev",
-    "lint": "prettier --check & eslint .",
+    "lint": "prettier --check && eslint .",
+    "check": "tsc --noEmit",
     "typegen": "sanity schema extract && sanity typegen generate",
-    "build": "pnpm lint & sanity build && node ./node_modules/@james-camilleri/replace-sanity-favicon",
+    "build": "pnpm lint && pnpm check && sanity build && node ./node_modules/@james-camilleri/replace-sanity-favicon",
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
     "data:clean-assets": "env-cmd node ./scripts/clean-assets.js",

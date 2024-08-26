@@ -6,6 +6,8 @@ import svelte from 'eslint-plugin-svelte'
 import globals from 'globals'
 import ts from 'typescript-eslint'
 
+// TODO: Migrate "@sanity/eslint-config-studio" to new flat structure.
+
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   js.configs.recommended,
