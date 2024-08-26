@@ -60,7 +60,6 @@ function createPageSchemas(pages) {
         name: '${schemaName}',
         type: 'document',
         title: '${deskTitle}',
-        __experimental_actions: ['update', 'publish'],
         fields: [
           defineField({
             name: 'title',
