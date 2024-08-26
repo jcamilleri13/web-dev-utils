@@ -4,10 +4,10 @@ import stripAnsi from 'strip-ansi'
 import { generate } from '@james-camilleri/sanity-schema-setup/generate/index.mjs'
 
 import { replacePlaceholdersInFile } from '../utils/file.mjs'
-import { crossPlatform, spawn, exec } from '../utils/process.mjs'
+import { spawn, exec } from '../utils/process.mjs'
 
 export async function configureSanity(config, projectInfo) {
-  const { name, dest } = config[1]
+  const { name, dest } = config[2]
 
   await spawn(
     'pnpm',
@@ -34,6 +34,11 @@ export async function configureSanity(config, projectInfo) {
     // Don't worry if the git repository hasn't actually been created.
   }
 
+  // Also delete the "schemaTypes" folder it's creating.
+  try {
+    await fs.rm(`${dest}/schemaTypes`, { recursive: true, force: true })
+  } catch {}
+
   let sanityConfig
   try {
     sanityConfig = await fs.readFile(`${dest}/sanity.config.ts`, 'utf8')
@@ -42,9 +47,11 @@ export async function configureSanity(config, projectInfo) {
     return
   }
 
-  const [_, projectId] = sanityConfig.match(/export default defineConfig\({[\s\S]+projectId:\s+'(.*)',/m)
+  const [_, projectId] = sanityConfig.match(
+    /export default defineConfig\({[\s\S]+projectId:\s+'(.*)',/m,
+  )
 
-  const sanityInfo = stripAnsi(await exec(crossPlatform('sanity debug --secrets')), dest)
+  const sanityInfo = stripAnsi(await exec('pnpm exec sanity debug --secrets', dest))
   const [, sanityAuthToken] = sanityInfo.match(/Auth token:\s+'(.*)'/)
 
   const sanityApiVersion = new Date().toISOString().slice(0, 8) + '01'
@@ -55,14 +62,17 @@ export async function configureSanity(config, projectInfo) {
   }
 
   console.log('Creating Sanity.io API key.')
-  const sanityApiKey = await fetch(`https://api.sanity.io/v${sanityApiVersion}/projects/${projectId}/tokens`, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
-      label: 'website',
-      roleName: 'editor',
-    }),
-  })
+  const sanityApiKey = await fetch(
+    `https://api.sanity.io/v${sanityApiVersion}/projects/${projectId}/tokens`,
+    {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        label: 'website',
+        roleName: 'editor',
+      }),
+    },
+  )
     .then((response) => response.json())
     .then(({ key }) => key)
 
@@ -71,7 +81,9 @@ export async function configureSanity(config, projectInfo) {
   const corsOrigins = [
     'http://sveltekit-prerender',
     `https://${projectInfo.url}`,
-    `https://${projectInfo.sanityUrl}``https://*--${name}.netlify.app`,
+    // TODO: Add Cloudflare origins.
+    `https://${projectInfo.sanityUrl}`,
+    `https://*--${name}.netlify.app`,
     `https://*--${name}-cms.netlify.app`,
   ]
 
@@ -94,7 +106,7 @@ export async function configureSanity(config, projectInfo) {
 
   await Promise.all(
     config.map(async (config) => {
-      const { dest, replace } = config
+      const { dest, replace = [] } = config
 
       await Promise.all(
         replace.map(async (file) => {
@@ -111,10 +123,16 @@ export async function configureSanity(config, projectInfo) {
     `${dest}/sanity.config.ts`,
     `import { visionTool } from '@sanity/vision'
 import { defineConfig } from 'sanity'
+import { presentationTool } from 'sanity/presentation'
 import { structureTool } from 'sanity/structure'
 
 import { schemaTypes } from './schemas'
 import { structure } from './structure'
+
+const SANITY_STUDIO_PREVIEW_URL =
+  process.env.PUBLIC_SANITY_STUDIO_PREVIEW_URL || 'http://localhost:5173'
+
+const dev = process.env.MODE === 'development'
 
 export default defineConfig({
   name: 'default',
@@ -123,10 +141,29 @@ export default defineConfig({
   projectId: '${projectId}',
   dataset: 'production',
 
-  plugins: [structureTool({ structure }), visionTool()],
+  plugins: [
+    structureTool({ structure }),
+    presentationTool({
+      previewUrl: {
+        origin: SANITY_STUDIO_PREVIEW_URL,
+        previewMode: {
+          enable: '/preview/enable',
+          disable: '/preview/disable',
+        },
+      },
+    }),
+    ...(dev ? [visionTool()] : []),
+  ],
 
   schema: {
     types: schemaTypes,
+  },
+
+  document: {
+    newDocumentOptions: (prev, context) =>
+      prev.filter(({ templateId }) => {
+        return templateId !== 'global' && !templateId.startsWith('page')
+      }),
   },
 })`,
   )
