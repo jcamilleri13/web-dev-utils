@@ -5,8 +5,6 @@ import importPlugin from 'eslint-plugin-import'
 import globals from 'globals'
 import ts from 'typescript-eslint'
 
-// TODO: Migrate "@sanity/eslint-config-studio" to new flat structure.
-
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   js.configs.recommended,
@@ -19,9 +17,6 @@ export default [
         ...globals.node,
       },
     },
-  },
-  {
-    ignores: ['.sanity/', 'build/', 'dist/'],
   },
   {
     plugins: {

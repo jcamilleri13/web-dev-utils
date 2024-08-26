@@ -3,7 +3,6 @@
   "author": "James Camilleri",
   "version": "1.0.0",
   "private": true,
-  "main": "index.ts",
   "type": "module",
   "exports": {
     "./queries": "./queries/index.ts",
