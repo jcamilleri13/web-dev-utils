@@ -5,6 +5,7 @@ import prettier from 'prettier'
 import PRETTIER_SETTINGS from './prettier-settings.mjs'
 
 const DEFAULT_ICONS = {
+  global: 'RiGlobalLine',
   pageAbout: 'RiInformationLine',
   pageAboutUs: 'RiInformationLine',
   pageContact: 'RiMailLine',
@@ -29,14 +30,15 @@ export async function generateDeskStructure(cwd, config) {
         .items([${[
           generateCollections(features),
           generateCollections(collections),
-          generateForms(forms),
           generatePages(pages),
+          generateGlobal(),
+          generateForms(forms),
         ]
           .filter(Boolean)
           .join(',S.divider(),')}])
   `
 
-  const formatted = prettier.format(deskStructure, PRETTIER_SETTINGS)
+  const formatted = await prettier.format(deskStructure, PRETTIER_SETTINGS)
 
   await fs.writeFile(`${cwd}/structure.ts`, formatted)
 }
@@ -47,15 +49,16 @@ function imports(config) {
     .map(({ schemaName }) => DEFAULT_ICONS[schemaName])
     .filter(Boolean)
 
-  if (config.forms) {
+  if (config.forms.length) {
     icons.push(DEFAULT_ICONS.submissions)
   }
 
+  icons.push(DEFAULT_ICONS.global)
   icons.sort()
 
   return `
-    import { StructureBuilder } from 'sanity/structure'
     import { ${icons.join(',')} } from 'react-icons/ri'
+    import { StructureBuilder } from 'sanity/structure'
   `
 }
 
@@ -108,6 +111,20 @@ function generatePages(pages) {
           .title('Pages')
           .items([${pages.map(generatePage).join(',')}]),
       )`
+}
+
+function generateGlobal() {
+  return `
+      S.listItem()
+        .title('Global')
+        .icon(${DEFAULT_ICONS['global']})
+        .child(
+          S.document()
+            .title('Global')
+            .schemaType('global')
+            .documentId('global'),
+        )
+      `
 }
 
 function generatePage({ schemaName, deskTitle, id }) {

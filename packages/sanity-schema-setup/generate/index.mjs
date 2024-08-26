@@ -1,6 +1,5 @@
 import { deskTitle, id, schemaName } from '../utils/identifiers.mjs'
 import { generateDeskStructure } from './desk-structure.mjs'
-import { generatePages } from './pages.mjs'
 import { generateSchema } from './schema.mjs'
 
 const DEFAULT_CONFIGS = {
@@ -29,7 +28,6 @@ export async function generate(cwd, userInput, apiKey) {
 
   await generateSchema(cwd, config)
   await generateDeskStructure(cwd, config)
-  await generatePages(cwd, config, apiKey)
 }
 
 function createConfig({ features, pages, collections, forms }) {

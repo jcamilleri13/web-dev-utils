@@ -15,6 +15,7 @@ export async function generateSchema(cwd, config) {
         ),
       ),
       await writeSubSchemaFiles(cwd, 'pages', createPageSchemas(pages)),
+      await writeSubSchemaFiles(cwd, undefined, createGlobalSchema()),
       await writeSubSchemaFiles(cwd, 'collections', createSchemas(collections)),
       await writeSubSchemaFiles(cwd, 'form-submissions', createSchemas(forms)),
     ])
@@ -28,9 +29,7 @@ export async function generateSchema(cwd, config) {
       .map(
         ({ filePath, schemaName }) =>
           `import ${schemaName} from './${filePath
-            .split('/')
-            .slice(-2)
-            .join('/')
+            .replace(/.*\/schemas\//, '')
             .replace('.ts', '')}'`,
       )
       .join('\n')}
@@ -46,8 +45,69 @@ export async function generateSchema(cwd, config) {
 
   await fs.writeFile(
     `${cwd}/schemas/index.ts`,
-    prettier.format(rootSchema, PRETTIER_SETTINGS),
+    await prettier.format(rootSchema, PRETTIER_SETTINGS),
   )
+}
+
+function createGlobalSchema() {
+  const filename = 'global.ts'
+  const schemaName = 'global'
+  const schema = `
+    import { defineField, defineType } from 'sanity'
+
+    export default defineType({
+      name: '${schemaName}',
+      type: 'document',
+      title: 'Global',
+      fields: [
+        defineField({
+          name: 'title',
+          title: 'Site title',
+          type: 'string',
+          description:
+            'This will appear in the browser title bar, the copyright footer, etc.',
+          validation: (Rule) => Rule.required(),
+        }),
+        defineField({
+          name: 'socialMediaLinks',
+          type: 'array',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                {
+                  name: 'platform',
+                  type: 'string',
+                  options: {
+                    list: [
+                      { title: 'Facebook', value: 'facebook' },
+                      { title: 'GitHub', value: 'github' },
+                      { title: 'Instagram', value: 'instagram' },
+                      { title: 'Mastadon', value: 'mastadon' },
+                      { title: 'TikTok', value: 'tiktok' },
+                      { title: 'Twitter/X', value: 'twitter' },
+                      { title: 'WhatsApp', value: 'whatsapp' },
+                      { title: 'YouTube', value: 'youtube' },
+                    ],
+                  },
+                  validation: (Rule) => Rule.required(),
+                },
+                {
+                  name: 'url',
+                  title: 'URL',
+                  type: 'url',
+                  validation: (Rule) => Rule.required(),
+                },
+              ],
+            },
+          ],
+        }),
+      ]
+    })
+  `
+
+  // The write function is expecting an array of schemas.
+  return [{ filename, schema, schemaName }]
 }
 
 function createPageSchemas(pages) {
@@ -102,12 +162,17 @@ function createSchemas(config) {
 }
 
 async function writeSubSchemaFiles(cwd, type, schemas) {
-  await fs.mkdir(`${cwd}/schemas/${type}`, { recursive: true })
+  if (type) {
+    await fs.mkdir(`${cwd}/schemas/${type}`, { recursive: true })
+  }
 
   return Promise.all(
     schemas.map(async ({ filename, schema, schemaName }) => {
-      const filePath = `${cwd}/schemas/${type}/${filename}`
-      await fs.writeFile(filePath, prettier.format(schema, PRETTIER_SETTINGS))
+      const filePath = `${cwd}/schemas/${type ? `${type}/` : ''}${filename}`
+      await fs.writeFile(
+        filePath,
+        await prettier.format(schema, PRETTIER_SETTINGS),
+      )
 
       return { filePath, schemaName }
     }),
