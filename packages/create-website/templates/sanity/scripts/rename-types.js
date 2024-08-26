@@ -1,5 +1,13 @@
 import fs from 'node:fs/promises'
 
+function pascalCase(string) {
+  return string
+    .split('_')
+    .map((word) => word.toLowerCase())
+    .map((word) => `${word.slice(0, 1).toUpperCase()}${word.slice(1)}`)
+    .join('')
+}
+
 async function renameTypes() {
   console.log('Renaming query types.')
   const typeGenConfig = await fs.readFile('./sanity-typegen.json', {
@@ -8,16 +16,19 @@ async function renameTypes() {
 
   const outputPath = JSON.parse(typeGenConfig).generates
 
-  const types = await fs.readFile(outputPath, 'utf-8')
-  const renamedTypes = types.replaceAll(/export type ([A-Z\d_]*)Result =/g, (_, typeName) => {
-    const pascalCase = typeName
-      .split('_')
-      .map((word) => word.toLowerCase())
-      .map((word) => `${word.slice(0, 1).toUpperCase()}${word.slice(1)}`)
-      .join('')
+  const typesFile = await fs.readFile(outputPath, 'utf-8')
+  const typesToRename = typesFile.matchAll(/export type ([A-Z\d_]*)Result =/g)
 
-    return `export type ${pascalCase}Result =`
-  })
+  let renamedTypes = typesFile
+  for (const match of typesToRename) {
+    if (!match[1]) {
+      continue
+    }
+
+    const originalName = `${match[1]}Result`
+    const newName = `${pascalCase(match[1])}Result`
+    renamedTypes = renamedTypes.replaceAll(originalName, newName)
+  }
 
   await fs.writeFile(outputPath, renamedTypes, 'utf-8')
 }
