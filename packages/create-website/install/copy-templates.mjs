@@ -4,7 +4,7 @@ import degit from 'degit'
 
 import { copyDir, deleteFiles } from '../utils/file.mjs'
 
-export async function copyTemplates(config) {
+export async function copyTemplates(config, cwd) {
   await Promise.all(
     config.map(async (config) => {
       const { dest, githubSrc, remove = [], template } = config
@@ -18,4 +18,6 @@ export async function copyTemplates(config) {
       await deleteFiles(remove, dest)
     }),
   )
+
+  await copyDir(fileURLToPath(new URL(`../templates/workspace`, import.meta.url).href), cwd)
 }

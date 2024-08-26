@@ -27,7 +27,7 @@ async function initialise() {
 
   console.log()
   console.log('Copying templates.')
-  await copyTemplates(config)
+  await copyTemplates(config, cwd)
   await replacePlaceholders(config)
 
   if (projectInfo.cms !== 'none') {
