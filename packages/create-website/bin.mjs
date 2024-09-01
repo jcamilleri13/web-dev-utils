@@ -60,13 +60,15 @@ async function initialise() {
       .filter(([key]) => key[0] === key[0].toUpperCase())
       .reduce((envVariables, [key, value]) => ({ ...envVariables, [key]: value }), []),
 
-    ORGANISATION_NAME: projectInfo?.name,
     FRONT_END_URL: projectInfo?.sveltekitUrl,
-    SANITY_STUDIO_API_KEY: sanityConfig?.sanityApiKey,
-    SANITY_STUDIO_API_VERSION: sanityConfig?.sanityApiVersion,
-    SANITY_STUDIO_PROJECT_ID: sanityConfig?.sanityProjectId,
-    SANITY_STUDIO_DATASET: 'production',
     LOG_LEVEL: 'debug',
+    ORGANISATION_NAME: projectInfo?.name,
+    PUBLIC_SANITY_API_VERSION: sanityConfig?.sanityApiVersion,
+    PUBLIC_SANITY_DATASET: 'production',
+    PUBLIC_SANITY_PROJECT_ID: sanityConfig?.sanityProjectId,
+    PUBLIC_SANITY_STUDIO_URL: projectInfo?.sanityUrl,
+    SANITY_API_KEY: sanityConfig?.sanityApiKey,
+    SANITY_PREVIEW_URL: projectInfo?.sveltekitUrl?.replace('https://', 'https://edit.'),
   }
 
   const envFilePaths =
@@ -115,7 +117,7 @@ function processConfig(baseConfig, projectInfo, cwd) {
   const adapter =
     platform === 'netlify' ? '@sveltejs/adapter-netlify'
     : platform === 'cloudflare' ? '@sveltejs/adapter-cloudflare'
-        : '@sveltejs/adapter-auto'
+    : '@sveltejs/adapter-auto'
 
   config[0].devDependencies.push(adapter)
   config[0].adapter = adapter

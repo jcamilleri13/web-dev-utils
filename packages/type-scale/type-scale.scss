@@ -87,6 +87,14 @@ $named-ratios: (
 
     --line-height: #{$line-height};
 
+    --xxs: #{$xxs};
+    --xs: #{$xs};
+    --sm: #{$sm};
+    --md: #{$md};
+    --lg: #{$lg};
+    --xl: #{$xl};
+    --xxl: #{$xxl};
+
     // Set the font weight for variable fonts if supplied.
     @if $base-font-weight {
       --font-weight: #{$base-font-weight};
@@ -97,14 +105,6 @@ $named-ratios: (
         --font-weight: calc(#{$base-font-weight} * 1.2);
       }
     }
-
-    --xxs: #{$xxs};
-    --xs: #{$xs};
-    --sm: #{$sm};
-    --md: #{$md};
-    --lg: #{$lg};
-    --xl: #{$xl};
-    --xxl: #{$xxl};
   }
 
   html {
