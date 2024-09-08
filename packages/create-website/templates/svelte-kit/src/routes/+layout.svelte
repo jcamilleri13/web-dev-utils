@@ -1,19 +1,24 @@
 <script lang="ts">
   import '../styles/global.scss'
 
-  import type { PageData } from './$types'
+  import type { LayoutData } from './$types'
+  import type { GLOBAL } from 'shared/types'
 
-  import { setContext } from 'svelte'
+  import { useLiveMode, useQuery } from '@sanity/svelte-loader'
+  import { VisualEditing, isPreviewing } from '@sanity/visual-editing/svelte'
+  import { Snippet, setContext } from 'svelte'
 
+  import { onNavigate } from '$app/navigation'
+  import { page } from '$app/stores'
   import Footer from '$lib/components/global/Footer.svelte'
   import Header from '$lib/components/global/Header.svelte'
-  import CONFIG from '$lib/config'
+  import { checkIfEmbedded, client } from '$lib/sanity/client'
 
-  setContext('CONFIG', CONFIG)
+  let { children, data: pageData }: { children: Snippet; data: LayoutData } = $props()
+  const query = useQuery<GlobalResult>(GLOBAL, undefined, { initial: pageData.initial })
+  let { data } = $derived($query)
 
-  export let data: PageData
-
-
+  const isEmbedded = checkIfEmbedded()
 
   // Trigger CSS view transitions.
   onNavigate((navigation) => {
@@ -26,14 +31,29 @@
       })
     })
   })
+
+  $effect(() => {
+    pageData.preview && useLiveMode({ client })
+  })
 </script>
 
-<div class="grid">
-  <Header />
-  <main>
-      <slot />
-  </main>
-  <Footer />
+<div>
+  {#if $isPreviewing}
+    <VisualEditing />
+    {#if !isEmbedded}
+      <a class="preview-bar" href="/preview/disable?redirect={$page.url.pathname}"
+        >Live preview enabled. Click to disable.</a
+      >
+    {/if}
+  {/if}
+
+  <div class="grid">
+    <Header />
+    <main>
+      {@render children()}
+    </main>
+    <Footer />
+  </div>
 </div>
 
 <style>
@@ -41,8 +61,18 @@
     display: grid;
     grid-template-rows: auto 1fr auto;
     height: 100vh;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
+  }
+
+  .preview-bar {
+    display: block;
+    width: 100%;
+    padding: var(--xs) 0;
+    font-weight: bold;
+    color: var(--foreground);
+    text-align: center;
+    text-decoration: none;
+    background: var(--error);
   }
 
   main {

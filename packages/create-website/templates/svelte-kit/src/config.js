@@ -9,16 +9,6 @@ export default {
     lg: '100em',
   },
 
-  SNIPCART: {
-    enabled: false,
-  },
-
-  SANITY: {
-    projectId: '{{sanityProjectId}}',
-    dataset: 'production',
-    apiVersion: '{{sanityApiVersion}}',
-  },
-
   CONTACT_EMAIL: {
     destination: 'info@__________.___',
     host: 'in-v3.mailjet.com',

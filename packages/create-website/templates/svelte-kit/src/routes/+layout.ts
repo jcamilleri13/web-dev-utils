@@ -1,3 +1,11 @@
-import type { PageLoad } from './$types'
+import type { LayoutLoad } from './$types'
 
-export const load: PageLoad = async ({ url }) => ({ url })
+import { setPreviewing } from '@sanity/visual-editing/svelte'
+
+export const prerender = true
+
+export const load: LayoutLoad = ({ data: { initial, preview } }) => {
+  setPreviewing(preview)
+
+  return { initial, preview }
+}
