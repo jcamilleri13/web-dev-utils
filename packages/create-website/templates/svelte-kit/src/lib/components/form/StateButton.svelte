@@ -64,11 +64,11 @@
 
 <style>
   .icon {
-    height: 1em;
-    margin-inline-start: var(--xs);
+    height: 1.2em;
+    margin-inline: calc(var(--xxs) * -1) var(--xs);
 
     :global(svg) {
-      vertical-align: baseline;
+      vertical-align: text-bottom;
     }
   }
 </style>
