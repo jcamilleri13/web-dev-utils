@@ -1,15 +1,14 @@
 <script lang="ts">
-  import Title from '$lib/components/global/Title.svelte'
+  import Heading from '$lib/components/global/Heading.svelte'
   import FullWidth from '$lib/components/layout/FullWidth.svelte'
   import Grid from '$lib/components/layout/Grid.svelte'
   import LoremIpsum from '$lib/components/prototyping/LoremIpsum.svelte'
   import Placeholder from '$lib/components/prototyping/Placeholder.svelte'
   import Transition from '$lib/components/transition/Transition.svelte'
-
   import CONFIG from '$lib/config'
 </script>
 
-<Title text={CONFIG.GENERAL.siteTitle} />
+<Heading title={CONFIG.GENERAL.siteTitle} />
 <Grid>
   <Transition order={0}>
     <LoremIpsum sentences={2} />
