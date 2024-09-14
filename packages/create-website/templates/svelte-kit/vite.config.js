@@ -1,17 +1,19 @@
-import path from 'path'
-
 import svg from '@poppanator/sveltekit-svg'
 import replace from '@rollup/plugin-replace'
 import { sveltekit } from '@sveltejs/kit/vite'
 
-import CONFIG from './src/config.js'
+const BREAKPOINTS = {
+  sm: '30em',
+  md: '70em',
+  lg: '100em',
+}
 
-const BREAKPOINT_STRINGS = Object.entries(CONFIG.BREAKPOINTS).reduce(
+const BREAKPOINT_STRINGS = Object.entries(BREAKPOINTS).reduce(
   (replaceConfig, [breakpoint, width]) => ({
     ...replaceConfig,
     [`__breakpoint-${breakpoint}__`]: width,
   }),
-  {}
+  {},
 )
 
 /** @type {import('vite').UserConfig} */

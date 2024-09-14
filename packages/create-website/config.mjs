@@ -22,7 +22,7 @@ export default {
   'svelte-kit': {
     githubSrc: 'sveltejs/kit/packages/create-svelte/templates/skeleton',
     remove: ['.ignore', '.meta.json', 'package.template.json', 'static/favicon.png'],
-    replace: ['.env', 'package.json', 'svelte.config.js', 'src/config.js'],
+    replace: ['.env', 'package.json', 'svelte.config.js'],
     dependencies: [],
     devDependencies: [
       ...lintDependencies,

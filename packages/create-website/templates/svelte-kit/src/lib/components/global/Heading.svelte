@@ -1,5 +1,5 @@
 <script lang="ts">
-  import CONFIG from '$lib/config'
+  import { KEYS, getContext } from '$lib/context'
 
   interface Props {
     title: string
@@ -9,7 +9,7 @@
 
   let { title, subtitle, hidden }: Props = $props()
 
-  const prefix = CONFIG.GENERAL.siteTitle
+  const prefix = getContext(KEYS.TITLE)
 </script>
 
 <svelte:head>

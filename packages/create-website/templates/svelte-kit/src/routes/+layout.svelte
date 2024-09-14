@@ -3,17 +3,13 @@
 
   import type { PageData } from './$types'
 
-  import { setContext } from 'svelte'
-
   import Footer from '$lib/components/global/Footer.svelte'
   import Header from '$lib/components/global/Header.svelte'
-  import CONFIG from '$lib/config'
+  import { KEYS, setContext } from '$lib/context'
 
-  setContext('CONFIG', CONFIG)
+  setContext(KEYS.TITLE, 'Site Title')
 
   export let data: PageData
-
-
 
   // Trigger CSS view transitions.
   onNavigate((navigation) => {
@@ -31,7 +27,7 @@
 <div class="grid">
   <Header />
   <main>
-      <slot />
+    <slot />
   </main>
   <Footer />
 </div>
@@ -41,8 +37,7 @@
     display: grid;
     grid-template-rows: auto 1fr auto;
     height: 100vh;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
   }
 
   main {
