@@ -48,6 +48,8 @@ export default {
       'svelte-inline-svg',
       'svelte-loading-spinners',
       'svelte',
+      'sveltekit-superforms',
+      'zod',
       'tslib',
       'vite',
     ],
