@@ -5,10 +5,12 @@
   import LoremIpsum from '$lib/components/prototyping/LoremIpsum.svelte'
   import Placeholder from '$lib/components/prototyping/Placeholder.svelte'
   import Transition from '$lib/components/transition/Transition.svelte'
-  import CONFIG from '$lib/config'
+  import { KEYS, getContext } from '$lib/context'
+
+  const title = getContext(KEYS.TITLE)
 </script>
 
-<Heading title={CONFIG.GENERAL.siteTitle} />
+<Heading {title} />
 <Grid>
   <Transition order={0}>
     <LoremIpsum sentences={2} />
