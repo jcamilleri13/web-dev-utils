@@ -1,10 +1,10 @@
 {
-  "plugins": ["prettier-plugin-svelte"],
-  "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }],
   "experimentalTernaries": true,
+  "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }],
+  "plugins": ["prettier-plugin-svelte"],
+  "printWidth": 100,
   "semi": false,
   "singleQuote": true,
   "trailingComma": "all",
-  "useTabs": false,
-  "printWidth": 100
+  "useTabs": false
 }
