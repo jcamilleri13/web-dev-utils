@@ -6,7 +6,7 @@
     SUCCESS: 'success',
   } as const
 
-  export type State = typeof STATE[keyof typeof STATE]
+  export type State = (typeof STATE)[keyof typeof STATE]
 
   export interface StatusMessages {
     [STATE.WAITING]?: string
@@ -16,52 +16,53 @@
 </script>
 
 <script lang="ts">
-  import Exclamation from '@fortawesome/fontawesome-free/svgs/solid/circle-exclamation.svg'
+  import type { ComponentProps } from 'svelte'
+
   import Check from '@fortawesome/fontawesome-free/svgs/solid/circle-check.svg'
+  import Exclamation from '@fortawesome/fontawesome-free/svgs/solid/circle-exclamation.svg'
+  import { scale } from 'svelte/transition'
   import { Jumper } from 'svelte-loading-spinners'
 
   import Button from './Button.svelte'
 
-  export let primary = false
-  export let disabled = false
-  export let linkTo: string = null
-  export let state: State = STATE.IDLE
-  export let messages: StatusMessages = {}
+  interface Props extends ComponentProps<Button> {
+    state?: State
+    messages?: StatusMessages
+  }
+
+  let { state = STATE.IDLE, messages = {}, children, onclick, ...props }: Props = $props()
 </script>
 
 <Button
-  {primary}
-  {disabled}
-  {linkTo}
-  info={state === STATE.WAITING}
+  {...props}
   success={state === STATE.SUCCESS}
-  error={state === STATE.ERROR}
-  on:click
+  danger={state === STATE.ERROR}
+  onclick={state === STATE.WAITING ? undefined : onclick}
 >
-  {#if state === STATE.IDLE || !messages[state]}
-    <slot />
-  {:else}
-    {messages[state]}
-  {/if}
-
   {#if state === STATE.WAITING}
-    <span class="icon">
-      <Jumper size="1.5" unit="em" color="var(--background)" duration="1s" />
+    <span class="icon" transition:scale>
+      <Jumper size="1.5" unit="em" color="currentColor" duration="1s" />
     </span>
   {/if}
   {#if state === STATE.SUCCESS}
-    <span class="icon">
+    <span class="icon" transition:scale>
       <Check />
     </span>
   {/if}
   {#if state === STATE.ERROR}
-    <span class="icon">
+    <span class="icon" transition:scale>
       <Exclamation />
     </span>
   {/if}
+
+  {#if state === STATE.IDLE || !messages[state]}
+    {@render children()}
+  {:else}
+    {messages[state]}
+  {/if}
 </Button>
 
-<style lang="scss">
+<style>
   .icon {
     height: 1em;
     margin-inline-start: var(--xs);

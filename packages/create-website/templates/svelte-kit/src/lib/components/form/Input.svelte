@@ -1,88 +1,84 @@
 <script lang="ts">
-  import { fade } from 'svelte/transition'
-  import { uniqueId } from './uniqueId.js'
   import Exclamation from '@fortawesome/fontawesome-free/svgs/solid/circle-exclamation.svg'
+  import { fade } from 'svelte/transition'
+
   import FormGroup from './FormGroup.svelte'
 
-  type Validation = (value: string) => string | undefined
-
-  export let name: string
-  export let label: string = null
-  export let hint: string = null
-  export let type: string = 'text'
-  export let value: string = ''
-  export let optional = false
-  export let width: 'short' | 'long' | 'full' = 'short'
-
-  export let validations: Validation[] = []
-  export let validate = false
-  export let valid = true
-  let errorText
-
-  // Default validation for required fields.
-  const requiredValidation = (value) =>
-    !optional && value == '' && `${label ?? capitalise(name)} is required`
-
-  $: {
-    errorText =
-      validate &&
-      [requiredValidation, ...validations]
-        .map((validation) => validation(value))
-        .filter((error) => typeof error === 'string')[0] // Show the first error if multiple exist.
-
-    valid = !errorText
+  interface Props {
+    name: string
+    label?: string
+    hint?: string
+    type?: string
+    pattern?: string
+    value?: string
+    optional?: boolean
+    disabled?: boolean
+    width?: 'short' | 'long' | 'full'
+    errors?: string[]
   }
 
-  const id = uniqueId('input-')
+  let {
+    name,
+    label,
+    hint,
+    type = 'text',
+    pattern,
+    value = $bindable(),
+    optional = false,
+    disabled = false,
+    width = 'short',
+    errors = [],
+  }: Props = $props()
+
+  let errorText = $derived(errors[0])
+
+  const id = `input-${Math.random().toString().split('.')[1]}`
   if (!name) throw new Error(`Input ${id} requires a name`)
 
   const capitalise = (string: string) => {
     return `${string.slice(0, 1).toLocaleUpperCase()}${string.slice(1)}`
   }
-
-  // Binding to the value doesn't work if the type can be changed.
-  const onChange = (e) => {
-    value = e.target.value
-  }
 </script>
 
 <FormGroup {width}>
-  <label for={id}
-    >{label ?? capitalise(name)}{#if optional}<span class="optional">optional</span>{/if}</label
-  >
-
-  {#if hint}<span class="hint">{hint}</span>{/if}
-  {#if errorText}
-    <span class="error">
-      <span class="error-icon">
-        <Exclamation />
+  <div class="label-wrapper">
+    <label for={id}>{label ?? capitalise(name)}</label>
+    {#if optional}<span class="optional">optional</span>{/if}
+    {#if hint}<span class="hint">{hint}</span>{/if}
+    {#if errorText}
+      <span class="error">
+        <span class="error-icon">
+          <Exclamation />
+        </span>
+        <span in:fade class="error-text">{errorText}</span>
       </span>
-      <span in:fade class="error-text">{errorText}</span>
-    </span>
-  {/if}
+    {/if}
+  </div>
 
   {#if type === 'textarea'}
     <textarea
       {id}
       {name}
-      type="text"
+      {disabled}
+      aria-invalid={errorText ? 'true' : undefined}
       style={errorText ? '--border-colour: var(--error)' : ''}
       bind:value
-    />
+    ></textarea>
   {:else}
     <input
       {id}
       {name}
       {type}
-      {value}
+      {pattern}
+      {disabled}
+      aria-invalid={errorText ? 'true' : undefined}
       style={errorText ? '--border-colour: var(--error)' : ''}
-      on:change={onChange}
-      on:keydown={onChange}
+      bind:value
     />
   {/if}
 </FormGroup>
 
-<style lang="scss">
+<style>
   textarea {
     max-height: 200px;
   }
@@ -100,6 +96,16 @@
     &:hover {
       box-shadow: 0 0 0 var(--border-width) var(--primary);
     }
+  }
+
+  label {
+    margin-inline-end: var(--xxs);
+  }
+
+  .label-wrapper {
+    display: flex;
+    gap: var(--xs);
+    align-items: center;
   }
 
   .optional {
@@ -128,8 +134,8 @@
   }
 
   .error-icon {
-    height: 1em;
-    margin-inline-end: var(--xs);
+    height: 0.9em;
+    margin-inline-end: var(--xxs);
     color: var(--error);
 
     :global(svg) {
