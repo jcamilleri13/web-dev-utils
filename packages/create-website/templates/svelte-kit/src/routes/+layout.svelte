@@ -3,6 +3,7 @@
 
   import type { PageData } from './$types'
 
+  import { onNavigate } from '$app/navigation'
   import Footer from '$lib/components/global/Footer.svelte'
   import Header from '$lib/components/global/Header.svelte'
   import { KEYS, setContext } from '$lib/context'
