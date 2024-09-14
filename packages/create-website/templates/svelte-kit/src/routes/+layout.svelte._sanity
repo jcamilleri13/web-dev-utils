@@ -1,0 +1,87 @@
+<script lang="ts">
+  import '../styles/global.scss'
+
+  import type { LayoutData } from './$types'
+  import type { GLOBAL } from 'shared/types'
+
+  import { useLiveMode, useQuery } from '@sanity/svelte-loader'
+  import { VisualEditing, isPreviewing } from '@sanity/visual-editing/svelte'
+  import { Snippet } from 'svelte'
+
+  import { onNavigate } from '$app/navigation'
+  import { page } from '$app/stores'
+  import Footer from '$lib/components/global/Footer.svelte'
+  import Header from '$lib/components/global/Header.svelte'
+  import { KEYS, setContext } from '$lib/context'
+  import { client, isRunningInIFrame } from '$lib/sanity/client'
+
+  setContext(KEYS.TITLE, 'Site Title')
+
+  let { children, data: pageData }: { children: Snippet; data: LayoutData } = $props()
+  const query = useQuery<GlobalResult>(GLOBAL, undefined, { initial: pageData.initial })
+  let { data } = $derived($query)
+
+  const isEmbedded = isRunningInIFrame()
+
+  // Trigger CSS view transitions.
+  onNavigate((navigation) => {
+    if (!document.startViewTransition) return
+
+    return new Promise((resolve) => {
+      document.startViewTransition(async () => {
+        resolve()
+        await navigation.complete
+      })
+    })
+  })
+
+  $effect(() => {
+    if (pageData.preview) {
+      useLiveMode({ client })
+    }
+  })
+</script>
+
+<div>
+  {#if $isPreviewing}
+    <VisualEditing />
+    {#if !isEmbedded}
+      <a class="preview-bar" href="/preview/disable?redirect={$page.url.pathname}"
+        >Live preview enabled. Click to disable.</a
+      >
+    {/if}
+  {/if}
+
+  <div class="grid">
+    <Header />
+    <main>
+      {@render children()}
+    </main>
+    <Footer />
+  </div>
+</div>
+
+<style>
+  .grid {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    height: 100vh;
+    overflow: hidden auto;
+  }
+
+  .preview-bar {
+    display: block;
+    width: 100%;
+    padding: var(--xs) 0;
+    font-weight: bold;
+    color: var(--foreground);
+    text-align: center;
+    text-decoration: none;
+    background: var(--error);
+  }
+
+  main {
+    position: relative;
+    margin: 0 var(--gutter);
+  }
+</style>
