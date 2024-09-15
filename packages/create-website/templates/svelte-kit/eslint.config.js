@@ -9,10 +9,13 @@ import ts from 'typescript-eslint'
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   js.configs.recommended,
-  ...ts.configs.recommended,
+  ...ts.configs.recommendedTypeChecked,
   ...svelte.configs['flat/recommended'],
-  prettier,
-  ...svelte.configs['flat/prettier'],
+
+  {
+    ignores: ['.netlify/', '.svelte-kit/', 'build/', 'dist/'],
+  },
+
   {
     languageOptions: {
       globals: {
@@ -21,6 +24,7 @@ export default [
       },
     },
   },
+
   {
     files: ['**/*.svelte'],
     languageOptions: {
@@ -29,9 +33,7 @@ export default [
       },
     },
   },
-  {
-    ignores: ['build/', '.svelte-kit/', 'dist/'],
-  },
+
   {
     plugins: {
       import: fixupPluginRules(importPlugin),
@@ -57,13 +59,18 @@ export default [
             'object',
           ],
 
+          // Sort imported members,
+          // i.e. the bits in between {} in "import { a, b, c } from 'my-module".
+          // TODO: Enable this when the change is merged to `eslint-plugin-import`.
+          // named: {
+          //     enabled: true,
+          //     types: 'types-first'
+          // },
+
           'newlines-between': 'always',
         },
       ],
-    },
-  },
-  {
-    rules: {
+      // TODO: Remove this once the eslint-plugin-import change is merged.
       'sort-imports': [
         'error',
         {
@@ -72,4 +79,7 @@ export default [
       ],
     },
   },
+
+  prettier,
+  ...svelte.configs['flat/prettier'],
 ]

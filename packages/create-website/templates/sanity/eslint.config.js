@@ -10,8 +10,12 @@ import ts from 'typescript-eslint'
 /** @type {import('eslint').Linter.Config[]} */
 export default [
   js.configs.recommended,
-  ...ts.configs.recommended,
-  prettier,
+  ...ts.configs.recommendedTypeChecked,
+
+  {
+    ignores: ['.netlify/', '.sanity/', 'build/', 'dist/'],
+  },
+
   {
     languageOptions: {
       globals: {
@@ -20,9 +24,7 @@ export default [
       },
     },
   },
-  {
-    ignores: ['.sanity/', 'build/', 'dist/'],
-  },
+
   {
     plugins: {
       import: fixupPluginRules(importPlugin),
@@ -48,13 +50,18 @@ export default [
             'object',
           ],
 
+          // Sort imported members,
+          // i.e. the bits in between {} in "import { a, b, c } from 'my-module".
+          // TODO: Enable this when the change is merged to `eslint-plugin-import`.
+          // named: {
+          //     enabled: true,
+          //     types: 'types-first'
+          // },
+
           'newlines-between': 'always',
         },
       ],
-    },
-  },
-  {
-    rules: {
+      // TODO: Remove this once the eslint-plugin-import change is merged.
       'sort-imports': [
         'error',
         {
@@ -63,4 +70,6 @@ export default [
       ],
     },
   },
+
+  prettier,
 ]
