@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Exclamation from '@fortawesome/fontawesome-free/svgs/solid/circle-exclamation.svg'
+  import Exclamation from '@fortawesome/fontawesome-free/svgs/solid/circle-exclamation.svg?component'
   import { fade } from 'svelte/transition'
 
   import FormGroup from './FormGroup.svelte'

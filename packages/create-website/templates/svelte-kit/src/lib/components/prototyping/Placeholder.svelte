@@ -4,7 +4,7 @@
 </script>
 
 <div class="placeholder" style:--height={`${height}px`}>
-  <div class="diagonals" />
+  <div class="diagonals"></div>
   {#if caption}
     <strong>{caption}</strong>
   {/if}

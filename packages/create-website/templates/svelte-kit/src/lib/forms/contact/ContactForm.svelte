@@ -7,7 +7,6 @@
   import Input from '$lib/components/form/Input.svelte'
   import StateButton, { STATE, type State } from '$lib/components/form/StateButton.svelte'
   import Grid from '$lib/components/layout/Grid.svelte'
-  import { t } from '$lib/translations'
 
   interface Props {
     data: SuperValidated<Infer<ContactFormSchema>>
@@ -70,10 +69,10 @@
       type="submit"
       {state}
       messages={{
-        [STATE.WAITING]: $t('message-sending'),
-        [STATE.ERROR]: $t('message-error'),
-        [STATE.SUCCESS]: $t('message-success'),
-      }}>{$t('submit')}</StateButton
+        [STATE.WAITING]: 'Sending',
+        [STATE.ERROR]: 'Error sending message',
+        [STATE.SUCCESS]: 'Message sent successfully',
+      }}>Submit</StateButton
     >
   </Grid>
 </form>

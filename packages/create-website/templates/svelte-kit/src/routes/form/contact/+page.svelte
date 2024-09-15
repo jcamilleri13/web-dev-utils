@@ -8,5 +8,5 @@
 </script>
 
 <Grid>
-  <ContactForm background="white" data={data.form} />
+  <ContactForm data={data.form} />
 </Grid>

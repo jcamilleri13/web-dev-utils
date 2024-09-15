@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { SvelteComponent } from 'svelte'
 
-  type Row = Array<any>
+  type Row = Array<Record<string, unknown>>
 
   export let data: Row[] = []
   export let header: Row | undefined = undefined

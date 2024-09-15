@@ -1,6 +1,6 @@
 <script lang="ts">
   export let columns: number | Array<number | string> = 1
-  export let repeat: number | string = null
+  export let repeat: number | string | undefined = undefined
   export let stackAt = 'sm'
   export let gap = 'var(--gutter)'
 

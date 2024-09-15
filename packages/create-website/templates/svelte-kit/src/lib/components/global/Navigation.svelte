@@ -1,12 +1,12 @@
 <script lang="ts">
+  import type { RawNavItem } from '$lib/utils/urls'
+
   import Cart from '@fortawesome/fontawesome-free/svgs/solid/cart-shopping.svg'
   import User from '@fortawesome/fontawesome-free/svgs/solid/user.svg'
 
-  import type { RawNavItem } from '$lib/utils/urls'
-
   import { page } from '$app/stores'
-  import { normaliseNavItems } from '$lib/utils/urls'
   import CONFIG from '$lib/config'
+  import { normaliseNavItems } from '$lib/utils/urls'
 
   export let items: RawNavItem[] = []
 
@@ -15,7 +15,7 @@
   // we need to store all refs and just use the first one for focus capture.
   // https://github.com/sveltejs/svelte/issues/4570
   let navItemRefs: HTMLElement[] = []
-  let menuButtonRef: HTMLElement = null
+  let menuButtonRef: HTMLElement | undefined = undefined
 
   function close() {
     navOpen = false
@@ -63,7 +63,6 @@
             href={link}
             on:click={close}
             bind:this={navItemRefs[i]}
-            data-sveltekit-preload-data
           >
             {text}
           </a>
@@ -103,10 +102,7 @@
   nav {
     // Full-screen mobile navigation.
     position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+    inset: 0;
     z-index: 1;
 
     display: flex;
@@ -199,9 +195,8 @@
 
   .snipcart-icons {
     display: flex;
-    align-content: center;
+    place-content: center center;
     align-items: center;
-    justify-content: center;
     margin-top: var(--xxl);
 
     @media (min-width: breakpoints.$md) {
@@ -273,7 +268,7 @@
     }
 
     // Scale button back down after it's clicked on.
-    &:focus:not(:focus-visible):not(:hover) {
+    &:focus:not(:focus-visible, :hover) {
       transform: scale(1);
     }
 

@@ -1,12 +1,14 @@
 <script lang="ts">
-  import Facebook from '@fortawesome/fontawesome-free/svgs/brands/facebook.svg'
-  import Github from '@fortawesome/fontawesome-free/svgs/brands/github.svg'
-  import Instagram from '@fortawesome/fontawesome-free/svgs/brands/instagram.svg'
-  import Twitter from '@fortawesome/fontawesome-free/svgs/brands/twitter.svg'
-  import YouTube from '@fortawesome/fontawesome-free/svgs/brands/youtube.svg'
+  import Facebook from '@fortawesome/fontawesome-free/svgs/brands/facebook.svg?component'
+  import Github from '@fortawesome/fontawesome-free/svgs/brands/github.svg?component'
+  import Instagram from '@fortawesome/fontawesome-free/svgs/brands/instagram.svg?component'
+  import Twitter from '@fortawesome/fontawesome-free/svgs/brands/twitter.svg?component'
+  import YouTube from '@fortawesome/fontawesome-free/svgs/brands/youtube.svg?component'
 
-  import CONFIG from '$lib/config'
+  import { KEYS, getContext } from '$lib/context'
   import { normaliseNavItems } from '$lib/utils/urls'
+
+  const title = getContext(KEYS.TITLE)
 
   const links = [
     {
@@ -37,7 +39,7 @@
             {text}
           </a>
         {:else}
-          <a href={link} sveltekit:prefetch>
+          <a href={link}>
             {text}
           </a>
         {/if}
@@ -56,7 +58,7 @@
     </div>
   {/if}
 
-  <span class="copyright">&copy; {CONFIG.GENERAL.siteTitle} {new Date().getFullYear()}</span>
+  <span class="copyright">&copy; {title} {new Date().getFullYear()}</span>
 </footer>
 
 <style lang="scss">

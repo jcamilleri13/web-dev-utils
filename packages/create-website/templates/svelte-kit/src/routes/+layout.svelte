@@ -1,7 +1,8 @@
 <script lang="ts">
   import '../styles/global.scss'
 
-  import type { PageData } from './$types'
+  import type { LayoutData } from './$types'
+  import type { Snippet } from 'svelte'
 
   import { onNavigate } from '$app/navigation'
   import Footer from '$lib/components/global/Footer.svelte'
@@ -10,7 +11,7 @@
 
   setContext(KEYS.TITLE, 'Site Title')
 
-  export let data: PageData
+  let { children, data }: { children: Snippet; data: LayoutData } = $props()
 
   // Trigger CSS view transitions.
   onNavigate((navigation) => {
@@ -28,7 +29,7 @@
 <div class="grid">
   <Header />
   <main>
-    <slot />
+    {@render children()}
   </main>
   <Footer />
 </div>

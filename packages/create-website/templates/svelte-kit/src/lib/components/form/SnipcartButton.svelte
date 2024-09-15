@@ -1,7 +1,9 @@
 <script lang="ts">
-  import { get } from '$lib/utils/get'
-  import Button from './Button.svelte'
   import type { Product } from '$lib/types/collections'
+
+  import { get } from '$lib/utils/get'
+
+  import Button from './Button.svelte'
 
   export let product: Product
 

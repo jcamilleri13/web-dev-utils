@@ -2,7 +2,7 @@
   import { KEYS, getContext } from '$lib/context'
 
   interface Props {
-    title: string
+    title?: string
     subtitle?: string
     hidden: boolean
   }

@@ -1,11 +1,15 @@
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
 
-import type { LoaderLocals } from '@sanity/svelte-loader'
+import '@poppanator/sveltekit-svg/dist/svg'
 
 declare global {
   namespace App {
-    interface Locals extends LoaderLocals {}
+    // interface Locals {}
+    // interface Error {}
+    // interface PageData {}
+    // interface PageState {}
+    // interface Platform {}
   }
 }
 

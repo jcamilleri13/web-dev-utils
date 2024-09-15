@@ -114,17 +114,6 @@
       box-shadow: none;
     }
 
-    &.disabled {
-      --colour: var(--foreground);
-      --background-colour: var(--neutral);
-      --highlight-colour: var(--foreground);
-      --highlight-background-colour: var(--highlight-colour);
-
-      cursor: not-allowed;
-      box-shadow: none;
-      opacity: 0.8;
-    }
-
     &.primary {
       --colour: var(--background);
       --active-colour: var(--primary);

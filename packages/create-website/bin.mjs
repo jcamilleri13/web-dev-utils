@@ -63,6 +63,7 @@ async function initialise() {
     FRONT_END_URL: projectInfo?.sveltekitUrl,
     LOG_LEVEL: 'debug',
     ORGANISATION_NAME: projectInfo?.name,
+    CONTACT_FORM_EMAIL_ADDRESS: projectInfo?.email,
     PUBLIC_SANITY_API_VERSION: sanityConfig?.sanityApiVersion,
     PUBLIC_SANITY_DATASET: 'production',
     PUBLIC_SANITY_PROJECT_ID: sanityConfig?.sanityProjectId,

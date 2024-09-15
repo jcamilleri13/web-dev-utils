@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
   export const STATE = {
     IDLE: 'idle',
     WAITING: 'waiting',
@@ -18,8 +18,8 @@
 <script lang="ts">
   import type { ComponentProps } from 'svelte'
 
-  import Check from '@fortawesome/fontawesome-free/svgs/solid/circle-check.svg'
-  import Exclamation from '@fortawesome/fontawesome-free/svgs/solid/circle-exclamation.svg'
+  import Check from '@fortawesome/fontawesome-free/svgs/solid/circle-check.svg?component'
+  import Exclamation from '@fortawesome/fontawesome-free/svgs/solid/circle-exclamation.svg?component'
   import { scale } from 'svelte/transition'
   import { Jumper } from 'svelte-loading-spinners'
 
