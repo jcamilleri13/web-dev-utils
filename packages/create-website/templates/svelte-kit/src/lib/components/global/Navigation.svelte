@@ -84,7 +84,13 @@
     </ul>
   </nav>
 
-  <button aria-controls="navigation" class="menu-button" type="button" on:click={toggle} bind:this={menuButtonRef}>
+  <button
+    aria-controls="navigation"
+    class="menu-button"
+    type="button"
+    on:click={toggle}
+    bind:this={menuButtonRef}
+  >
     <div class="hamburger" class:active={navOpen}>
       <span class="screen-reader-only">Open/close navigation</span>
     </div>
@@ -111,7 +117,9 @@
     background: var(--background);
     opacity: 0.98;
 
-    transition: opacity var(--transition-fast) ease-in-out, transform 0s ease-in-out var(--transition-fast);
+    transition:
+      opacity var(--transition-fast) ease-in-out,
+      transform 0s ease-in-out var(--transition-fast);
 
     &:not(.open) {
       opacity: 0;
@@ -158,7 +166,9 @@
     text-decoration: none;
     overflow-wrap: normal;
 
-    transition: color var(--transition-fast) ease-in-out, background-color var(--transition-fast) ease-in-out;
+    transition:
+      color var(--transition-fast) ease-in-out,
+      background-color var(--transition-fast) ease-in-out;
 
     &:hover,
     &:focus {
@@ -299,12 +309,16 @@
 
     &::before {
       top: calc(var(--bar-height) * -1.5);
-      transition: top 0.1s 0.25s ease-in, opacity 0.1s ease-in;
+      transition:
+        top 0.1s 0.25s ease-in,
+        opacity 0.1s ease-in;
     }
 
     &::after {
       bottom: calc(var(--bar-height) * -1.5);
-      transition: bottom 0.1s 0.25s ease-in, transform 0.22s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+      transition:
+        bottom 0.1s 0.25s ease-in,
+        transform 0.22s cubic-bezier(0.55, 0.055, 0.675, 0.19);
     }
   }
 
@@ -318,12 +332,16 @@
     &::before {
       top: 0;
       opacity: 0;
-      transition: top 0.1s ease-out, opacity 0.1s 0.12s ease-out;
+      transition:
+        top 0.1s ease-out,
+        opacity 0.1s 0.12s ease-out;
     }
 
     &::after {
       bottom: 0;
-      transition: bottom 0.1s ease-out, transform 0.22s 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
+      transition:
+        bottom 0.1s ease-out,
+        transform 0.22s 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
       transform: rotate(-90deg);
     }
   }

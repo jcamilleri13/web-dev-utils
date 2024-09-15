@@ -13,5 +13,4 @@ const client = sanityClient({
   useCdn: false,
 })
 
-export const handler: Handler = async (event) =>
-  optimiseImage(event, client, UPDATE_FUNCTION)
+export const handler: Handler = async (event) => optimiseImage(event, client, UPDATE_FUNCTION)

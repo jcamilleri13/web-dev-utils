@@ -12,5 +12,4 @@ const client = sanityClient({
   useCdn: false,
 })
 
-export const handler: Handler = async (event) =>
-  updateImageMetadata(event, client)
+export const handler: Handler = async (event) => updateImageMetadata(event, client)

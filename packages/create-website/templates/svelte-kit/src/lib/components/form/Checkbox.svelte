@@ -75,7 +75,8 @@
     outline: none;
     box-shadow: 0 0 0 var(--border-width) var(--border-colour);
 
-    transition: box-shadow var(--transition-fast) ease-in-out,
+    transition:
+      box-shadow var(--transition-fast) ease-in-out,
       background var(--transition-fast) ease-in-out;
     transform: translateY(calc(var(--border-width) / -1.5)); // Magic number.
 
@@ -86,7 +87,8 @@
       content: '';
       background-color: var(--foreground);
       opacity: 0;
-      transition: transform var(--transition-fast) ease-in-out,
+      transition:
+        transform var(--transition-fast) ease-in-out,
         opacity var(--transition-fast) ease-in-out;
       transform: scale(0.5);
     }

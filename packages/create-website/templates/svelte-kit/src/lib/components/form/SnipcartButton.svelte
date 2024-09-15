@@ -19,11 +19,6 @@
   }
 </script>
 
-<Button
-  primary
-  class="snipcart-add-item"
-  on:click={onAddToCart}
-  {dataAttributes}
->
+<Button primary class="snipcart-add-item" on:click={onAddToCart} {dataAttributes}>
   <slot />
 </Button>

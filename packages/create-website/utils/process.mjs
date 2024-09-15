@@ -23,7 +23,11 @@ export async function spawn(command, args, cwd) {
     proc.on('error', reject)
     proc.on('exit', (exitCode) => {
       if (exitCode !== 0) {
-        reject(new Error(`The command "${command} ${args.join(' ')}" exited with status code ${exitCode}`))
+        reject(
+          new Error(
+            `The command "${command} ${args.join(' ')}" exited with status code ${exitCode}`,
+          ),
+        )
       } else {
         resolve()
       }

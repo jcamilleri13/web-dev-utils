@@ -6,13 +6,10 @@
 
   if (!Array.isArray(columns)) columns = Array(columns).fill(1)
 
-  let cssColumns = repeat
-    ? `repeat(auto-fit, minmax(min(${repeat}${
-        typeof repeat == 'number' ? 'rem' : ''
-      }, 100%), 1fr))`
-    : columns
-        .map((ratio) => (typeof ratio === 'number' ? `${ratio}fr` : ratio))
-        .join(' ')
+  let cssColumns =
+    repeat ?
+      `repeat(auto-fit, minmax(min(${repeat}${typeof repeat == 'number' ? 'rem' : ''}, 100%), 1fr))`
+    : columns.map((ratio) => (typeof ratio === 'number' ? `${ratio}fr` : ratio)).join(' ')
 </script>
 
 <div class={`grid ${stackAt}`} style:--columns={cssColumns} style:--gap={gap}>

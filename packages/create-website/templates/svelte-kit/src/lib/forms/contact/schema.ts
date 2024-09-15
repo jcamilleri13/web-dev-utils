@@ -4,7 +4,8 @@ export const contactFormSubmissionSchema = z.object({
   name: z.string().optional(),
   email: z
     .string({
-      errorMap: (_, context) => (context.data === '' ? { message: 'email-required' } : { message: 'email-invalid' }),
+      errorMap: (_, context) =>
+        context.data === '' ? { message: 'email-required' } : { message: 'email-invalid' },
     })
     .email(),
   subject: z.string().optional(),

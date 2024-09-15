@@ -19,10 +19,10 @@ client
     console.log(`Queueing breakpoint generation for ${images.length} images.`)
     Promise.all(
       images.map((image) =>
-        fetch(
-          'https://manage.fondazzjoniu.org/.netlify/functions/optimise-image',
-          { method: 'POST', body: JSON.stringify(image) },
-        ),
+        fetch('https://manage.fondazzjoniu.org/.netlify/functions/optimise-image', {
+          method: 'POST',
+          body: JSON.stringify(image),
+        }),
       ),
     )
   })

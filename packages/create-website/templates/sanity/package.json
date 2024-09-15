@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "sanity dev",
-    "lint": "prettier --check && eslint .",
+    "lint": "prettier . --check && eslint .",
     "check": "tsc --noEmit",
     "typegen": "sanity schema extract && sanity typegen generate && node .\\scripts\\rename-types.js",
     "build": "pnpm lint && pnpm check && sanity build && node ./node_modules/@james-camilleri/replace-sanity-favicon",

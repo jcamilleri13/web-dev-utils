@@ -56,9 +56,7 @@
     </div>
   {/if}
 
-  <span class="copyright"
-    >&copy; {CONFIG.GENERAL.siteTitle} {new Date().getFullYear()}</span
-  >
+  <span class="copyright">&copy; {CONFIG.GENERAL.siteTitle} {new Date().getFullYear()}</span>
 </footer>
 
 <style lang="scss">
