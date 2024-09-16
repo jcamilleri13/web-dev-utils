@@ -4,8 +4,8 @@
   import { uniqueId } from './uniqueId.js'
 
   export let name: string
-  export let label: string = null
-  export let hint: string = null
+  export let label: string | undefined = undefined
+  export let hint: string | undefined = undefined
   export let value: boolean = false
   export let disabled: boolean
 
@@ -56,17 +56,18 @@
   }
 
   input {
+    display: grid;
+
+    place-content: center;
+    width: var(--checkbox-size);
+    height: var(--checkbox-size);
+    margin: 0; // Not removed via appearance.
+
     // Remove most all native input styles
     // (Safari only supports this with a prefix until v15.3.
     // stylelint-disable-next-line
     -webkit-appearance: none;
     appearance: none;
-
-    display: grid;
-    place-content: center;
-    width: var(--checkbox-size);
-    height: var(--checkbox-size);
-    margin: 0; // Not removed via appearance.
     cursor: pointer;
     background-color: var(--background); // iOS < 15 fix
 

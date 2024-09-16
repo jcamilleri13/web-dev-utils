@@ -36,6 +36,7 @@ export default {
       '@storybook/addon-essentials',
       '@storybook/addon-interactions',
       '@storybook/addon-links',
+      '@storybook/addon-svelte-csf',
       '@storybook/blocks',
       '@storybook/svelte',
       '@storybook/sveltekit',

@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { loremIpsum, ILoremIpsumParams } from 'lorem-ipsum'
+  import { type ILoremIpsumParams, loremIpsum } from 'lorem-ipsum'
 
-  export let paragraphs: number = null
-  export let sentences: number = null
-  export let words: number = null
+  export let paragraphs: number | undefined = undefined
+  export let sentences: number | undefined = undefined
+  export let words: number | undefined = undefined
 
   let props = { paragraphs, sentences, words } as const
-  let text = []
+  let text: string[] = []
 
   $: {
     const config = Object.entries(props).filter(([_, value]) => value != null)
@@ -19,7 +19,7 @@
 
     const unit = config[0]?.[0] ?? 'paragraphs'
     text = loremIpsum({
-      count: props[unit] ?? 1,
+      count: props[unit as 'paragraphs' | 'sentences' | 'words'] ?? 1,
       units: unit as ILoremIpsumParams['units'],
     }).split('\n')
   }

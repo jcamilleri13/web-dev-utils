@@ -8,6 +8,7 @@ import {
   MAILJET_API_KEY,
   MAILJET_SECRET_KEY,
 } from '$env/static/private'
+import { client } from '$lib/sanity/server'
 
 import { type ContactFormSubmission, contactFormSubmissionSchema } from './schema'
 
@@ -51,6 +52,19 @@ async function sendEmail(svelteFetch: typeof fetch, payload: ContactFormSubmissi
   }
 }
 
+async function postToSanity(payload: ContactFormSubmission) {
+  const { name, email, subject, message } = payload
+
+  await client.create({
+    // TODO: Update schema type.
+    _type: 'submissionContact',
+    name,
+    email,
+    subject,
+    message,
+  })
+}
+
 export async function contactFormAction<Event extends RequestEvent>({ fetch, request }: Event) {
   const form = await superValidate(request, zod(contactFormSubmissionSchema))
 
@@ -59,7 +73,7 @@ export async function contactFormAction<Event extends RequestEvent>({ fetch, req
   }
 
   try {
-    await sendEmail(fetch, form.data)
+    await Promise.all([sendEmail(fetch, form.data), postToSanity(form.data)])
   } catch (e) {
     console.error(e)
     return message(form, { valid: false }, { status: 500 })

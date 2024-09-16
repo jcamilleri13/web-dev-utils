@@ -5,6 +5,7 @@
   interface Props {
     big?: boolean
     children: Snippet
+    class?: string
     danger?: boolean
     info?: boolean
     linkTo?: string
@@ -19,6 +20,7 @@
   let {
     big,
     children,
+    class: _class,
     danger,
     info,
     linkTo,
@@ -28,6 +30,7 @@
     stretch,
     success,
     type,
+    ...attributes
   }: Props = $props()
 </script>
 
@@ -42,11 +45,13 @@
   class:small
   class:stretch
   class:primary
+  class={_class}
   href={linkTo ?? undefined}
   onclick={!linkTo ? onclick : undefined}
   rel={linkTo && linkTo.startsWith('http') ? 'noopener' : undefined}
   target={linkTo && linkTo.startsWith('http') ? '_blank' : undefined}
   type={!linkTo ? type : undefined}
+  {...attributes}
 >
   {@render children()}
 </svelte:element>

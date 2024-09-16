@@ -1,8 +1,10 @@
+import type { Page, PageId } from '$lib/types/pages'
+import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+
 import { prefetchImageMetadata } from '@james-camilleri/sanity-web-image'
 import imageUrlBuilder from '@sanity/image-url'
-import type { SanityImageSource } from '@sanity/image-url/lib/types/types'
+
 import CONFIG from '$lib/config'
-import type { Page, PageId } from '$lib/types/pages'
 
 const THUMBNAIL_SIZE = 200
 const REQUEST_OPTIONS = { mode: 'cors' } as const

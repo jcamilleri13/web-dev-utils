@@ -4,7 +4,7 @@
   interface Props {
     title?: string
     subtitle?: string
-    hidden: boolean
+    hidden?: boolean
   }
 
   let { title, subtitle, hidden }: Props = $props()

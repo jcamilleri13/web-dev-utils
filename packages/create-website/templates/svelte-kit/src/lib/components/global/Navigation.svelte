@@ -1,14 +1,15 @@
 <script lang="ts">
   import type { RawNavItem } from '$lib/utils/urls'
 
-  import Cart from '@fortawesome/fontawesome-free/svgs/solid/cart-shopping.svg'
-  import User from '@fortawesome/fontawesome-free/svgs/solid/user.svg'
+  import Cart from '@fortawesome/fontawesome-free/svgs/solid/cart-shopping.svg?component'
+  import User from '@fortawesome/fontawesome-free/svgs/solid/user.svg?component'
 
   import { page } from '$app/stores'
-  import CONFIG from '$lib/config'
   import { normaliseNavItems } from '$lib/utils/urls'
 
   export let items: RawNavItem[] = []
+
+  const SNIPCART_ENABLED = false
 
   let navOpen = false
   // There's no way to use bind:this conditionally as of 20/02/2022, so
@@ -43,7 +44,7 @@
 
       if (navItemRefs[0] === document.activeElement && e.shiftKey) {
         e.preventDefault()
-        menuButtonRef.focus()
+        menuButtonRef?.focus()
         console.log('document.activeElement', document.activeElement)
         return
       }
@@ -68,7 +69,7 @@
           </a>
         </li>
       {/each}
-      {#if CONFIG.SNIPCART.enabled}
+      {#if SNIPCART_ENABLED}
         <li class="snipcart-icons">
           <button class="snipcart-checkout nav-item">
             <Cart />
