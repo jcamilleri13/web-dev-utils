@@ -83,7 +83,7 @@ function createGlobalSchema() {
                       { title: 'Facebook', value: 'facebook' },
                       { title: 'GitHub', value: 'github' },
                       { title: 'Instagram', value: 'instagram' },
-                      { title: 'Mastadon', value: 'mastadon' },
+                      { title: 'Mastodon', value: 'mastodon' },
                       { title: 'TikTok', value: 'tiktok' },
                       { title: 'Twitter/X', value: 'twitter' },
                       { title: 'WhatsApp', value: 'whatsapp' },
@@ -169,10 +169,7 @@ async function writeSubSchemaFiles(cwd, type, schemas) {
   return Promise.all(
     schemas.map(async ({ filename, schema, schemaName }) => {
       const filePath = `${cwd}/schemas/${type ? `${type}/` : ''}${filename}`
-      await fs.writeFile(
-        filePath,
-        await prettier.format(schema, PRETTIER_SETTINGS),
-      )
+      await fs.writeFile(filePath, await prettier.format(schema, PRETTIER_SETTINGS))
 
       return { filePath, schemaName }
     }),
