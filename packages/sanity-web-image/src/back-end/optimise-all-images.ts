@@ -12,21 +12,15 @@ export async function optimiseAllImages(
   baseUrl: string,
   breakpointNotificationFunction: string,
 ) {
-  const images = await client.fetch<SanityImageAssetDocument>(
-    `*[_type == "${IMAGE_TYPE}"]`,
-  )
+  const images = await client.fetch<SanityImageAssetDocument>(`*[_type == "${IMAGE_TYPE}"]`)
   const imagesToOptimise = images.filter(
     (image: OptimisedSanityImage) =>
       !(image.label === 'optimised' || image.metadata?.breakpoints?.length > 0),
   )
 
   for (const image of imagesToOptimise) {
-    image.extension === SVG_EXTENSION
-      ? await optimiseSvg(image, client)
-      : await generateImageBreakpoints(
-          image,
-          baseUrl,
-          breakpointNotificationFunction,
-        )
+    image.extension === SVG_EXTENSION ?
+      await optimiseSvg(image, client)
+    : await generateImageBreakpoints(image, baseUrl, breakpointNotificationFunction)
   }
 }

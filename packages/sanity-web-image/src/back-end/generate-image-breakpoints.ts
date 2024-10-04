@@ -1,5 +1,4 @@
 import { log } from '@james-camilleri/logger'
-import { HandlerResponse } from '@netlify/functions'
 import { SanityImageAssetDocument } from '@sanity/client'
 import { v2 as cloudinary } from 'cloudinary'
 
@@ -10,38 +9,30 @@ export async function generateImageBreakpoints(
   payload: SanityImageAssetDocument,
   rawUrl: string,
   breakpointNotificationFunction: string,
-): Promise<HandlerResponse> {
+) {
   try {
     const { _id, url } = payload
 
     log.setHeader(`Generating breakpoints for image ${_id}`)
 
     const width = payload.metadata.dimensions.width
-    const notificationUrl = createNotificationUrl(
-      rawUrl,
-      breakpointNotificationFunction,
-      _id,
-    )
+    const notificationUrl = createNotificationUrl(rawUrl, breakpointNotificationFunction, _id)
 
     await queueBreakpointGeneration(url, width, notificationUrl)
   } catch (error) {
     log.error(`${error}`)
     await log.flushAll()
 
-    return { statusCode: 500 }
+    return new Response('Error queueing image breakpoint generation.', { status: 500 })
   }
 
   log.success('Breakpoint generation task queued')
   await log.flush()
 
-  return { statusCode: 200 }
+  return new Response(null, { status: 200 })
 }
 
-function createNotificationUrl(
-  rawUrl: string,
-  breakpointNotificationFunction: string,
-  id: string,
-) {
+function createNotificationUrl(rawUrl: string, breakpointNotificationFunction: string, id: string) {
   const baseUrl = rawUrl.split('/').slice(0, -1).join('/')
   const notificationUrl = `${baseUrl}/${breakpointNotificationFunction}?id=${id}`
   log.debug(`Generated Cloudinary notification URL: ${notificationUrl}`)

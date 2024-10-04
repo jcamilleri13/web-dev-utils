@@ -1,34 +1,24 @@
 import { Readable } from 'stream'
 
 import { log } from '@james-camilleri/logger'
-import { HandlerResponse } from '@netlify/functions'
-import {
-  SanityClient,
-  SanityDocument,
-  SanityImageAssetDocument,
-} from '@sanity/client'
+import { SanityClient, SanityDocument, SanityImageAssetDocument } from '@sanity/client'
 import { optimize } from 'svgo'
 
 import { deepMap } from '../utils/deep-map.js'
 import { isWebImage } from '../utils/type-guards.js'
 
-export async function optimiseSvg(
-  payload: SanityImageAssetDocument,
-  client: SanityClient,
-): Promise<HandlerResponse> {
+export async function optimiseSvg(payload: SanityImageAssetDocument, client: SanityClient) {
   const { _id, label, url } = payload
 
   // Don't re-optimise an optimised SVG.
-  if (label === 'optimised') return { statusCode: 200 }
+  if (label === 'optimised') return new Response('SVG already optimised.', { status: 200 })
 
   log.setHeader(`Optimising SVG ${_id}`)
 
   try {
     const originalSvg = await fetchSvg(url)
     const optimisedSvg = optimiseSvgString(originalSvg)
-    log.info(
-      `Optimised SVG (from ${originalSvg.length} to ${optimisedSvg.length})`,
-    )
+    log.info(`Optimised SVG (from ${originalSvg.length} to ${optimisedSvg.length})`)
     const newId = await uploadSvg(client, optimisedSvg)
 
     await replaceAllReferences(client, _id, newId)
@@ -37,13 +27,13 @@ export async function optimiseSvg(
     log.error(`${error}`)
     await log.flushAll()
 
-    return { statusCode: 500 }
+    return new Response('Error optimising SVG.', { status: 500 })
   }
 
   log.success('SVG optimised and replaced')
   await log.flush()
 
-  return { statusCode: 200 }
+  return new Response(null, { status: 200 })
 }
 
 async function fetchSvg(url: string): Promise<string> {
@@ -66,20 +56,12 @@ function optimiseSvgString(svg: string): string {
     ],
   })
 
-  if (optimised.error !== undefined) {
-    return ''
-  }
-
   return optimised.data
 }
 
 async function uploadSvg(client: SanityClient, svg: string): Promise<string> {
   const readable = Readable.from([svg])
-  const { _id } = await client.assets.upload(
-    'image',
-    readable as unknown as ReadableStream<any>, // Node streams and web streams aren't quite compatible
-    { label: 'optimised' },
-  )
+  const { _id } = await client.assets.upload('image', readable, { label: 'optimised' })
 
   log.info(`Optimised SVG ${_id} uploaded`)
 
@@ -107,18 +89,13 @@ async function replaceAllReferences(
   )
 
   await Promise.all(
-    updatedDocuments.map((document) =>
-      client.patch(document._id).set(document).commit(),
-    ),
+    updatedDocuments.map((document) => client.patch(document._id).set(document).commit()),
   )
 
   log.debug('Updated all references')
 }
 
-async function getReferencedDocuments(
-  client: SanityClient,
-  id: string,
-): Promise<SanityDocument[]> {
+async function getReferencedDocuments(client: SanityClient, id: string): Promise<SanityDocument[]> {
   const query = `*[references("${id}")]`
   const result = await client.fetch(query)
   log.info(`Found ${result.length} documents referencing ${id}`)
