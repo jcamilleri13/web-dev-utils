@@ -2,28 +2,18 @@
   import type { WebImage } from '../types/web-image'
 
   import { decode } from 'blurhash'
-  import { getContext, onMount } from 'svelte'
-  import imageUrlBuilder from '@sanity/image-url'
+  import { onMount } from 'svelte'
+  import type { ImageUrlBuilder } from 'sanity'
 
   interface Sizes {
     [key: string]: string
   }
 
-  interface ConfigContext {
-    SANITY: {
-      projectId: string
-      dataset: string
-      apiVersion: string
-    }
-  }
-
   const SVG = 'svg'
   const CANVAS_SIZE = 32
-  const CONFIG = getContext<ConfigContext>('CONFIG')
 
-  export let sanityConfig = CONFIG.SANITY
-
-  export let image: WebImage
+  export let image: WebImage | undefined
+  export let imageUrlBuilder: ImageUrlBuilder
   export let sizes: Sizes | undefined = undefined
   export let cropRatio: number | undefined = undefined
   export let contain = false
@@ -31,23 +21,25 @@
   export let maxHeight: string | undefined = undefined
   export let lazy = true
 
-  $: alt = image.alt
-  $: metadata = image.metadata
-  $: blurHash = metadata.blurHash
-  $: breakpoints = metadata.breakpoints
-  $: dimensions = metadata.dimensions
-  $: extension = metadata.extension
-  $: aspectRatio = dimensions.aspectRatio
-  $: width = dimensions.width
-  $: height = dimensions.height
+  $: alt = image?.alt
+  $: metadata = image?.metadata
+  $: blurHash = metadata?.blurHash
+  $: breakpoints = metadata?.breakpoints
+  $: dimensions = metadata?.dimensions
+  $: extension = metadata?.extension
+  $: aspectRatio = dimensions?.aspectRatio
+  $: width = dimensions?.width
+  $: height = dimensions?.height
 
-  $: urlBuilder = image && imageUrlBuilder(sanityConfig).image(image)
-  $: src = image && urlBuilder.url()
+  $: urlBuilder = image && imageUrlBuilder.image(image)
+  $: src = urlBuilder?.url() ?? ''
   $: sizesString = generateSizesString(sizes)
-  $: croppedHeight = cropRatio ? Math.floor(width / cropRatio) : height
+  $: croppedHeight = cropRatio && width ? Math.floor(width / cropRatio) : height
 
   let canvas: HTMLCanvasElement | undefined
-  let loaded = false
+
+  // Default loaded to true and set to false on mount, just in case javascript is disabled.
+  let loaded = true
   const onLoad = () => {
     loaded = true
   }
@@ -67,6 +59,10 @@
   }
 
   function breakpointUrl(breakpoint: number, format?: 'webp') {
+    if (!urlBuilder) {
+      return ''
+    }
+
     let builder = urlBuilder.width(breakpoint)
 
     if (cropRatio) {
@@ -80,7 +76,7 @@
     return `${builder.url()} ${breakpoint}w`
   }
 
-  async function fetchSvgSource(src: string, extension: string) {
+  async function fetchSvgSource(src: string, extension?: string) {
     if (extension !== SVG) {
       return
     }
@@ -92,11 +88,10 @@
       }
 
       const source = await response.text()
-      return alt
-        ? source.replace(
+      return alt ?
+          source.replace(
             /(<.*?>)(.*)/,
-            (_, openingTag, svgContent) =>
-              `${openingTag}<title>${alt}</title>${svgContent}`,
+            (_, openingTag, svgContent) => `${openingTag}<title>${alt}</title>${svgContent}`,
           )
         : source
     } catch (e) {
@@ -104,26 +99,33 @@
     }
   }
 
-  $: svgSource = fetchSvgSource(src, extension)
-
-  onMount(() => {
-    if (extension === SVG || !image) return
+  function renderBlurHash(blurHash?: string) {
+    if (!blurHash) {
+      return
+    }
 
     const pixels = decode(blurHash, CANVAS_SIZE, CANVAS_SIZE)
     const ctx = canvas?.getContext('2d')
 
-    if (!ctx) return
+    if (!ctx) {
+      return
+    }
+
     const imageData = ctx.createImageData(CANVAS_SIZE, CANVAS_SIZE)
     imageData.data.set(pixels)
     ctx?.putImageData(imageData, 0, 0)
+  }
+
+  onMount(() => {
+    if (extension !== SVG) {
+      loaded = false
+      renderBlurHash(blurHash)
+    }
   })
 
-  $: srcset = breakpoints
-    ?.map((breakpoint) => breakpointUrl(breakpoint))
-    .join(', ')
-  $: webpSrcset = breakpoints
-    ?.map((breakpoint) => breakpointUrl(breakpoint, 'webp'))
-    .join(', ')
+  $: svgSource = fetchSvgSource(src, extension)
+  $: srcset = breakpoints?.map((breakpoint) => breakpointUrl(breakpoint)).join(', ')
+  $: webpSrcset = breakpoints?.map((breakpoint) => breakpointUrl(breakpoint, 'webp')).join(', ')
 
   $: imgAttributes = {
     class: contain ? 'contain' : 'cover',
@@ -138,11 +140,7 @@
 </script>
 
 {#if image}
-  <div
-    class="image-wrapper"
-    style="height: {maxHeight ?? '100%'};"
-    style:--align={align}
-  >
+  <div class="image-wrapper" style="height: {maxHeight ?? '100%'};" style:--align={align}>
     {#if extension === SVG && svgSource}
       {#await svgSource then src}
         {@html src}
@@ -153,9 +151,7 @@
         class:loaded
         width={CANVAS_SIZE}
         height={CANVAS_SIZE}
-        style={contain
-          ? `aspect-ratio: ${cropRatio || aspectRatio}`
-          : 'height: 100%'}
+        style={contain ? `aspect-ratio: ${cropRatio || aspectRatio}` : 'height: 100%'}
       />
       <picture>
         <source type="image/webp" srcset={webpSrcset} sizes={sizesString} />
@@ -165,7 +161,7 @@
   </div>
 {/if}
 
-<style lang="scss">
+<style>
   .image-wrapper {
     position: relative;
     overflow: hidden;
@@ -176,7 +172,7 @@
     width: 100%;
     height: 100%;
     z-index: -1;
-    transition: opacity var(--transition-speed-medium) ease-in;
+    transition: opacity var(--image-fade-transition-speed, 0.2s) ease-in;
 
     &.loaded {
       opacity: 0;
@@ -187,7 +183,7 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    transition: opacity var(--transition-speed-medium) ease-in;
+    transition: opacity var(--image-fade-transition-speed, 0.2s) ease-in;
 
     &.loaded {
       opacity: 1;

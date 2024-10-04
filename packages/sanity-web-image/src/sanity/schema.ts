@@ -5,10 +5,9 @@ export const WebImageSchema = {
   fields: [
     {
       title: 'Alternative Text',
-      description:
-        'A textual description of the image for visually-impaired users',
+      description: 'A textual description of the image for visually-impaired users',
       name: 'alt',
       type: 'string',
     },
   ],
-}
+} as const
