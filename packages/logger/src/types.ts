@@ -1,4 +1,11 @@
-export type Loggable = string | number | boolean | null | undefined
+export type Loggable =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | Record<PropertyKey, unknown>
+  | Error
 
 export enum LOG_LEVEL {
   ERROR = 'error',

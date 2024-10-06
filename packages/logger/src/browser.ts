@@ -1,18 +1,6 @@
-import { LOG_LEVEL, Loggable, LoggerPlugin } from './types.js'
+import { Logger } from './logger.js'
 
-export class Logger {
-  constructor(plugins?: LoggerPlugin[]) {}
-
-  setLogLevel(level: LOG_LEVEL) {}
-  setHeader(header: string) {}
-
-  debug(...logs: Loggable[]) {}
-  info(...logs: Loggable[]) {}
-  warn(...logs: Loggable[]) {}
-  success(...logs: Loggable[]) {}
-  error(...logs: Loggable[]) {}
-
-  async flush() {}
-  async flushAll() {}
-  clear() {}
-}
+export { LOG_LEVEL } from './types.js'
+export { LoggerPlugin, SlackPlugin } from './plugins/index.js'
+export { Logger }
+export const log = new Logger()
