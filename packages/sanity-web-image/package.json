@@ -1,17 +1,9 @@
 {
   "name": "@james-camilleri/sanity-web-image",
-  "version": "3.0.0-next.0",
+  "version": "3.0.0-next.23",
   "description": "Definition and tools for automatically optimising Sanity web images",
   "type": "module",
-  "main": "dist/webhooks.js",
-  "browser": "dist/schema.js",
-  "types": "dist/index.d.ts",
-  "svelte": "dist/svelte.js",
   "exports": {
-    ".": {
-      "browser": "./dist/schema.js",
-      "default": "./dist/webhooks.js"
-    },
     "./schema": "./dist/schema.js",
     "./webhooks": "./dist/webhooks.js",
     "./svelte": "./dist/svelte.js",
@@ -21,31 +13,38 @@
     "./dist/**/*"
   ],
   "scripts": {
-    "clear": "rimraf dist",
-    "copy-svelte": "shx cp -r ./src/svelte ./dist/svelte",
+    "check": "svelte-check && tsc --noEmit",
+    "lint": "prettier . --check && eslint . && stylelint \"**/*.{css,scss,svelte}\"",
+    "clear": "shx rm -rf dist",
+    "copy-svelte": "shx rm -rf ./dist/svelte/* && shx cp -r ./src/svelte ./dist",
     "build": "npm run clear && svelte-check && tsc && npm run copy-svelte",
     "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "James Camilleri",
   "license": "ISC",
+  "prettier": "@james-camilleri/config/prettier",
   "devDependencies": {
-    "@types/node": "^18.19.54",
+    "@james-camilleri/config": "workspace:^",
+    "@types/node": "^22.8.2",
     "@types/svgo": "^3.0.0",
-    "rimraf": "^6.0.1",
-    "sanity": "^3.59.0",
-    "sass": "^1.79.4",
+    "eslint": "^9.13.0",
+    "eslint-plugin-import": "^2.31.0",
+    "prettier": "^3.3.3",
+    "prettier-plugin-svelte": "^3.2.7",
+    "sanity": "^3.62.2",
+    "sass": "^1.80.4",
     "shx": "^0.3.4",
+    "stylelint": "^16.10.0",
     "svelte-check": "^3.8.6",
-    "typescript": "^5.6.2"
+    "typescript": "^5.6.3"
   },
   "dependencies": {
-    "@james-camilleri/logger": "^1.1.0",
-    "@sanity/client": "^6.22.1",
+    "@james-camilleri/logger": "workspace:^",
+    "@sanity/client": "^6.22.2",
     "@sanity/image-url": "^1.0.2",
-    "blurhash": "^1.1.5",
-    "cloudinary": "^2.5.0",
-    "svelte": "^4.2.19",
+    "blurhash": "^2.0.5",
+    "svelte": "^5.1.4",
     "svgo": "^3.3.2"
   }
 }

@@ -11,7 +11,9 @@ export async function updateImageMetadata(request: Request, client: SanityClient
 
     log.setHeader(`Updating breakpoints for image ${id}`)
 
-    const payload = await request.json()
+    const payload = (await request.json()) as {
+      responsive_breakpoints: { breakpoints?: { width: number }[] }[]
+    }
     log.debug(`PAYLOAD:\n--------\n\n${JSON.stringify(payload, null, 2)}`)
     const breakpoints = payload.responsive_breakpoints[0].breakpoints
     if (!breakpoints) return new Response('No breakpoints found.', { status: 400 })
@@ -21,7 +23,7 @@ export async function updateImageMetadata(request: Request, client: SanityClient
 
     await client.patch(id).set({ 'metadata.breakpoints': widths }).commit()
   } catch (error) {
-    log.error(`${error}`)
+    log.error(`${error as string}`)
     await log.flushAll()
 
     return new Response('Error updating image metadata.', { status: 400 })

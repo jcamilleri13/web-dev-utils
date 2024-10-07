@@ -1,148 +1,136 @@
 <script lang="ts">
-  import type { WebImage } from '../types/web-image'
+  import type { ImageWithMetadata } from '../types/web-image.js'
+  import type { Image, ImageUrlBuilder } from 'sanity'
 
-  import { decode } from 'blurhash'
   import { onMount } from 'svelte'
-  import type { ImageUrlBuilder } from 'sanity'
 
-  interface Sizes {
-    [key: string]: string
+  import {
+    type AlternateImage,
+    type AlternateImageWithMetadata,
+    type Sizes,
+    CANVAS_SIZE,
+    SVG,
+  } from './types.js'
+  import {
+    checkAlternateImagesMetadata,
+    fetchSvgSource,
+    generateSizesString,
+    generateSrcset,
+    generateWebpSrcset,
+    getImageWithMetadata,
+    isImageWithMetaData,
+    renderBlurHash,
+  } from './utils.js'
+
+  interface Props {
+    imageUrlBuilder: ImageUrlBuilder
+    image?: Image | ImageWithMetadata
+    alternateImages?: AlternateImage[]
+
+    align?: 'top' | 'center' | 'bottom'
+    contain?: boolean
+    cropRatio?: number
+    lazy?: boolean
+    maxHeight?: string
+    sizes?: Sizes
   }
 
-  const SVG = 'svg'
-  const CANVAS_SIZE = 32
+  let {
+    image,
+    imageUrlBuilder,
+    alternateImages,
+    sizes,
+    cropRatio,
+    contain = false,
+    align = 'top',
+    maxHeight,
+    lazy = true,
+  }: Props = $props()
 
-  export let image: WebImage | undefined
-  export let imageUrlBuilder: ImageUrlBuilder
-  export let sizes: Sizes | undefined = undefined
-  export let cropRatio: number | undefined = undefined
-  export let contain = false
-  export let align: 'top' | 'center' | 'bottom' = 'top'
-  export let maxHeight: string | undefined = undefined
-  export let lazy = true
+  let canvas: HTMLCanvasElement | undefined = $state()
+  let imageWithMetadata: ImageWithMetadata | undefined = $state(
+    isImageWithMetaData(image) ? image : undefined,
+  )
 
-  $: alt = image?.alt
-  $: metadata = image?.metadata
-  $: blurHash = metadata?.blurHash
-  $: breakpoints = metadata?.breakpoints
-  $: dimensions = metadata?.dimensions
-  $: extension = metadata?.extension
-  $: aspectRatio = dimensions?.aspectRatio
-  $: width = dimensions?.width
-  $: height = dimensions?.height
-
-  $: urlBuilder = image && imageUrlBuilder.image(image)
-  $: src = urlBuilder?.url() ?? ''
-  $: sizesString = generateSizesString(sizes)
-  $: croppedHeight = cropRatio && width ? Math.floor(width / cropRatio) : height
-
-  let canvas: HTMLCanvasElement | undefined
+  let alternateImagesWithMetadata: AlternateImageWithMetadata[] | undefined = $state(
+    !checkAlternateImagesMetadata(alternateImages) ? undefined : alternateImages,
+  )
 
   // Default loaded to true and set to false on mount, just in case javascript is disabled.
-  let loaded = true
+  let loaded = $state(true)
   const onLoad = () => {
     loaded = true
   }
 
-  function generateSizesString(sizes?: Sizes) {
-    const FALLBACK_WIDTH = '100vw'
-
-    if (sizes === undefined) return FALLBACK_WIDTH
-
-    const queryList = Object.entries(sizes).map(([query, size]) => {
-      const queryString = /\(.*\)/.test(query) ? query : `(min-width: ${query})`
-      return `${queryString} ${size}`
-    })
-
-    queryList.push(FALLBACK_WIDTH)
-    return queryList.join(', ')
-  }
-
-  function breakpointUrl(breakpoint: number, format?: 'webp') {
-    if (!urlBuilder) {
-      return ''
-    }
-
-    let builder = urlBuilder.width(breakpoint)
-
-    if (cropRatio) {
-      builder = builder.height(Math.floor(breakpoint / cropRatio)).fit('min')
-    }
-
-    if (format) {
-      builder = builder.format(format)
-    }
-
-    return `${builder.url()} ${breakpoint}w`
-  }
-
-  async function fetchSvgSource(src: string, extension?: string) {
-    if (extension !== SVG) {
-      return
-    }
-
-    try {
-      const response = await fetch(src)
-      if (!response.ok) {
-        throw response.statusText
-      }
-
-      const source = await response.text()
-      return alt ?
-          source.replace(
-            /(<.*?>)(.*)/,
-            (_, openingTag, svgContent) => `${openingTag}<title>${alt}</title>${svgContent}`,
-          )
-        : source
-    } catch (e) {
-      console.error('Error retrieving SVG source', e)
-    }
-  }
-
-  function renderBlurHash(blurHash?: string) {
-    if (!blurHash) {
-      return
-    }
-
-    const pixels = decode(blurHash, CANVAS_SIZE, CANVAS_SIZE)
-    const ctx = canvas?.getContext('2d')
-
-    if (!ctx) {
-      return
-    }
-
-    const imageData = ctx.createImageData(CANVAS_SIZE, CANVAS_SIZE)
-    imageData.data.set(pixels)
-    ctx?.putImageData(imageData, 0, 0)
-  }
-
-  onMount(() => {
-    if (extension !== SVG) {
-      loaded = false
-      renderBlurHash(blurHash)
+  $effect(() => {
+    if (image && !isImageWithMetaData(image)) {
+      getImageWithMetadata(image, imageUrlBuilder).then((image) => {
+        imageWithMetadata = image
+      })
     }
   })
 
-  $: svgSource = fetchSvgSource(src, extension)
-  $: srcset = breakpoints?.map((breakpoint) => breakpointUrl(breakpoint)).join(', ')
-  $: webpSrcset = breakpoints?.map((breakpoint) => breakpointUrl(breakpoint, 'webp')).join(', ')
+  $effect(() => {
+    if (alternateImages && !checkAlternateImagesMetadata(alternateImages)) {
+      Promise.all(
+        alternateImages.map(async (alternateImage) => {
+          if (alternateImage.image) {
+            return {
+              ...alternateImage,
+              image: await getImageWithMetadata(alternateImage.image, imageUrlBuilder),
+            }
+          }
 
-  $: imgAttributes = {
+          return alternateImage
+        }),
+      )
+
+      getImageWithMetadata(image, imageUrlBuilder).then((image) => {
+        imageWithMetadata = image
+      })
+    }
+  })
+
+  let {
+    alt,
+    metadata: {
+      blurHash,
+      breakpoints,
+      dimensions: { aspectRatio, width, height } = {},
+      extension,
+    } = {},
+  } = $derived<ImageWithMetadata | Record<string, undefined>>(imageWithMetadata ?? {})
+
+  let urlBuilder = $derived(imageWithMetadata && imageUrlBuilder.image(imageWithMetadata))
+  let src = $derived(urlBuilder?.url())
+  let sizesString = $derived(generateSizesString(sizes))
+  let croppedHeight = $derived(cropRatio && width ? Math.floor(width / cropRatio) : height)
+  let svgSource = $derived(fetchSvgSource(src, extension))
+
+  let imgAttributes = $derived({
     class: contain ? 'contain' : 'cover',
     decoding: 'async' as const,
     height: croppedHeight,
     loading: lazy ? ('lazy' as const) : undefined,
     sizes: sizesString,
     src,
-    srcset,
-    width,
-  }
+    srcset: generateSrcset(urlBuilder, breakpoints, cropRatio),
+    width: width,
+  })
+
+  onMount(() => {
+    if (extension !== SVG) {
+      loaded = false
+      renderBlurHash(canvas, blurHash)
+    }
+  })
 </script>
 
 {#if image}
   <div class="image-wrapper" style="height: {maxHeight ?? '100%'};" style:--align={align}>
     {#if extension === SVG && svgSource}
       {#await svgSource then src}
+        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
         {@html src}
       {/await}
     {:else}
@@ -152,10 +140,28 @@
         width={CANVAS_SIZE}
         height={CANVAS_SIZE}
         style={contain ? `aspect-ratio: ${cropRatio || aspectRatio}` : 'height: 100%'}
-      />
+      ></canvas>
       <picture>
-        <source type="image/webp" srcset={webpSrcset} sizes={sizesString} />
-        <img {alt} {...imgAttributes} on:load={onLoad} class:loaded />
+        {#if alternateImagesWithMetadata}
+          {#each alternateImagesWithMetadata as { maxWidth, image: alternateImage, cropRatio }}
+            <!-- TODO: Filter out unnecessary breakpoints? -->
+            <source
+              type="image/webp"
+              media="(max-width: {maxWidth})"
+              srcset={generateWebpSrcset(
+                alternateImage ? imageUrlBuilder.image(alternateImage) : urlBuilder,
+                alternateImage?.metadata.breakpoints ?? breakpoints,
+                cropRatio,
+              )}
+            />
+          {/each}
+        {/if}
+        <source
+          type="image/webp"
+          srcset={generateWebpSrcset(urlBuilder, breakpoints, cropRatio)}
+          sizes={sizesString}
+        />
+        <img {alt} {...imgAttributes} onload={onLoad} class:loaded />
       </picture>
     {/if}
   </div>
@@ -169,9 +175,9 @@
 
   canvas {
     position: absolute;
+    z-index: -1;
     width: 100%;
     height: 100%;
-    z-index: -1;
     transition: opacity var(--image-fade-transition-speed, 0.2s) ease-in;
 
     &.loaded {

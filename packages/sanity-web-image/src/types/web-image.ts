@@ -1,25 +1,23 @@
-import { SanityImageAssetDocument } from '@sanity/client'
-import { SanityImageDimensions, SanityReference } from '@sanity/image-url/lib/types/types'
+import type { Image, ImageAsset, Reference } from 'sanity'
 
-type SanityMetadata = SanityImageAssetDocument['metadata']
+type SanityMetadata = ImageAsset['metadata']
 type BreakpointMetadata = {
   breakpoints: number[]
 }
 
 interface Metadata extends SanityMetadata, BreakpointMetadata {}
 
-export interface OptimisedSanityImage extends SanityImageAssetDocument {
+export interface OptimisedSanityImage extends ImageAsset {
   metadata: Metadata
 }
 
-export interface WebImage {
-  _type: 'webImage'
+export interface ImageWithMetadata extends Image {
   alt?: string
-  asset: SanityReference
+  asset: Reference
   metadata: {
     blurHash: string
     breakpoints: number[]
     extension: string
-    dimensions: SanityImageDimensions
+    dimensions: ImageAsset['metadata']['dimensions']
   }
 }

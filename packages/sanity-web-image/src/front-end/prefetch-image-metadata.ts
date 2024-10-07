@@ -1,12 +1,25 @@
+import type { ImageWithMetadata } from '../types/web-image.js'
 import type { SanityDocument } from 'sanity'
 
-import { asyncDeepMap } from '../utils/deep-map.js'
-import { isWebImage } from '../utils/type-guards.js'
+import { deepMap } from '../utils/deep-map.js'
+import { isBlockType, isWebImage } from '../utils/type-guards.js'
 
 interface SanityConfig {
   apiVersion: string
   dataset: string
   projectId: string
+}
+
+// Just a helper function to avoid re-writing the guard conditions multiple times.
+function createMapFunction(mappedFunction: (input: ImageWithMetadata) => unknown) {
+  return (input: unknown) => {
+    // Return block content as is to prevent unnecessary recursion.
+    if (isBlockType(input)) return input
+    if (!isWebImage(input)) return
+    if (!input?.asset) return input
+
+    return mappedFunction(input)
+  }
 }
 
 export async function prefetchImageMetadata<
@@ -16,25 +29,40 @@ export async function prefetchImageMetadata<
   sanityConfig: SanityConfig,
   fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response>,
 ): Promise<T> {
-  const fetchMetadata = async (input: any) => {
-    // Return block content as is to prevent unnecessary recursion.
-    if (input?._type === 'block') return input
-    if (!isWebImage(input)) return
-    if (!input?.asset) return input
+  const { apiVersion, dataset, projectId } = sanityConfig
+  const idsToFetch: string[] = []
 
-    const url = metadataUrl(input.asset._ref, sanityConfig)
-    const metadata = await fetch(url, { mode: 'cors' })
-      .then((response) => response.json())
-      .then((payload) => payload.result)
+  // Traverse tree and collect all asset IDs requiring fetching.
+  deepMap(
+    input,
+    createMapFunction((input) => {
+      idsToFetch.push(input.asset._ref)
+      return input
+    }),
+  )
 
-    return { ...input, metadata }
+  const query = `*[_id in [${idsToFetch.map((id) => `"${id}"`).join(',')}]]{ _id, extension, ...metadata{ blurHash, breakpoints, dimensions }}`
+  const response = (await fetch(
+    `https://${projectId}.apicdn.sanity.io/v${apiVersion}/data/query/${dataset}?query=${query}`,
+    { mode: 'cors' },
+  ).then((result) => result.json())) as {
+    result: (ImageWithMetadata['metadata'] & { _id: string })[]
   }
 
-  return asyncDeepMap(input, fetchMetadata)
-}
+  const metadata = response.result.reduce(
+    (metadata, item) => {
+      const { _id, ...rest } = item
+      return {
+        ...metadata,
+        [_id]: rest,
+      }
+    },
+    {} as Record<string, ImageWithMetadata['metadata']>,
+  )
 
-function metadataUrl(id: string, config: SanityConfig) {
-  const { apiVersion, dataset, projectId } = config
-  const query = `*[_id == "${id}"]{ extension, ...metadata{ blurHash, breakpoints, dimensions }}[0]`
-  return `https://${projectId}.apicdn.sanity.io/v${apiVersion}/data/query/${dataset}?query=${query}`
+  // Update metadata
+  return deepMap(
+    input,
+    createMapFunction((input) => ({ ...input, metadata: metadata[input.asset._ref] })),
+  ) as T
 }

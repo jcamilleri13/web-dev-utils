@@ -1,4 +1,6 @@
-export const WebImageSchema = {
+import { defineType } from 'sanity'
+
+export const WebImageSchema = defineType({
   title: 'Web image',
   name: 'webImage',
   type: 'image',
@@ -8,6 +10,10 @@ export const WebImageSchema = {
       description: 'A textual description of the image for visually-impaired users',
       name: 'alt',
       type: 'string',
+      validation: (Rule) => Rule.required(),
     },
   ],
-} as const
+  options: {
+    hotspot: true,
+  },
+})

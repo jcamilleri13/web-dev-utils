@@ -9,4 +9,4 @@ export { WebImageSchema } from './sanity/schema.js'
 
 export { ResponsiveImage, ResponsiveImage as default }
 
-export type { WebImage } from './types/web-image.js'
+export type { ImageWithMetadata as WebImage } from './types/web-image.js'
