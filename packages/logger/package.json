@@ -1,22 +1,22 @@
 {
   "name": "@james-camilleri/logger",
-  "version": "1.1.1",
+  "version": "1.1.3",
   "description": "Tool for logging to a variety of online endpoints",
   "type": "module",
   "exports": {
     "node": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/logger.js",
+      "import": "./dist/logger.esm.js",
       "require": "./dist/logger.cjs"
     },
     "default": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/browser.d.ts",
       "default": "./dist/browser.js"
     }
   },
   "source": "src/index.ts",
   "scripts": {
-    "build": "vitest run && rimraf dist && tsc --noEmit && microbundle && microbundle -i ./src/browser.ts -o ./dist/browser.js --no-pkg-main",
+    "build": "vitest run && rimraf dist && tsc --noEmit && microbundle -f esm,cjs && microbundle -i ./src/browser.ts -o ./dist/browser.js -f esm --no-pkg-main",
     "prepublish": "pnpm build",
     "test": "vitest"
   },
