@@ -19,7 +19,11 @@
     "no-descending-specificity": null,
     "max-nesting-depth": [
       1,
-      { "ignore": ["pseudo-classes"], "ignoreAtRules": ["each", "media", "supports", "include"] }
+      {
+        "ignore": ["pseudo-classes"],
+        "ignoreRules": ["&::before", "&::after"],
+        "ignoreAtRules": ["each", "media", "supports", "include"]
+      }
     ],
     "order/properties-alphabetical-order": null,
     "scss/at-import-partial-extension-disallowed-list": ["scss"],
