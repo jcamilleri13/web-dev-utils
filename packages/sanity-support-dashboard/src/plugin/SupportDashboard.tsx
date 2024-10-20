@@ -29,12 +29,17 @@ export function SupportDashboard(props: SupportDashboardProps) {
   const supportDetails = props.tool.options
   const [issues, setIssues] = useState([] as Issue[])
 
+  const url =
+    supportDetails?.functionUrl.startsWith('/') ?
+      supportDetails?.functionUrl
+    : '/' + supportDetails?.functionUrl
+
   useEffect(() => {
-    fetch(`${window.location.origin}/.netlify/functions/dashboard-issues`)
+    fetch(`${window.location.origin}${url}`)
       .then((response) => response.json())
       .then((issues) => setIssues(issues as Issue[]))
       .catch(console.error)
-  }, [])
+  }, [url])
 
   if (!supportDetails) {
     return <Text>Error in support dashboard configuration.</Text>

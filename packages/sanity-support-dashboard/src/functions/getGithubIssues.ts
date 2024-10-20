@@ -1,24 +1,31 @@
-import { HandlerEvent, HandlerResponse } from '@netlify/functions'
-import { request } from '@octokit/request'
+import { request as githubRequest } from '@octokit/request'
 import { subMonths } from 'date-fns'
 import { Issue } from '../types'
 
-const { GITHUB_ACCESS_TOKEN } = process.env
+interface GitHubDetails {
+  repositoryName: string
+  repositoryOwner: string
+  accessToken?: string
+}
 
 export async function getGithubIssues(
-  event: HandlerEvent,
-  repositoryName: string,
-  repositoryOwner: string,
-): Promise<HandlerResponse> {
-  if (event.httpMethod !== 'GET')
-    return {
-      statusCode: 400,
-    }
+  request: Request,
+  { repositoryName, repositoryOwner, accessToken }: GitHubDetails,
+) {
+  if (request.method !== 'GET') {
+    return new Response(null, { status: 400 })
+  }
+
+  const token = accessToken ?? process.env.GITHUB_ACCESS_TOKEN
+
+  if (!token) {
+    return new Response(null, { status: 401 })
+  }
 
   try {
-    const issues = await request('GET /repos/{owner}/{repo}/issues', {
+    const issues = await githubRequest('GET /repos/{owner}/{repo}/issues', {
       headers: {
-        authorization: `token ${GITHUB_ACCESS_TOKEN}`,
+        authorization: `token ${token}`,
       },
       repo: repositoryName,
       owner: repositoryOwner,
@@ -29,11 +36,7 @@ export async function getGithubIssues(
 
     const threeMonthsAgo = subMonths(new Date(), 3).toISOString()
     const filteredIssues: Issue[] = issues.data
-      .filter(
-        (issue) =>
-          issue.state === 'open' ||
-          issue.closed_at?.localeCompare(threeMonthsAgo),
-      )
+      .filter((issue) => issue.state === 'open' || issue.closed_at?.localeCompare(threeMonthsAgo))
       .map(({ closed_at, created_at, id, labels, state, title }) => ({
         closed_at,
         created_at,
@@ -45,15 +48,11 @@ export async function getGithubIssues(
         title,
       }))
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify(filteredIssues),
-    }
+    return new Response(JSON.stringify(filteredIssues))
   } catch (e) {
     console.error('Error retrieving GitHub issues:', e)
-    return {
-      statusCode: 500,
-      body: `Error retrieving GitHub issues for repository ${repositoryName}`,
-    }
+    return new Response(`Error retrieving GitHub issues for repository ${repositoryName}`, {
+      status: 500,
+    })
   }
 }

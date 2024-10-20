@@ -16,5 +16,6 @@ export enum SUPPORT_LEVEL {
 
 export interface SupportDetails {
   expiry?: string
+  functionUrl: string
   level: SUPPORT_LEVEL
 }

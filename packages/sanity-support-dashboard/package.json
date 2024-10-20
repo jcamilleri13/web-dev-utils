@@ -1,6 +1,6 @@
 {
-  "name": "@james-camilleri/sanity-client-dashboard",
-  "version": "0.0.6",
+  "name": "@james-camilleri/sanity-support-dashboard",
+  "version": "0.0.8",
   "description": "A simple dashboard for keeping freelance clients up to date on their support agreements and any pending issues",
   "main": "index.js",
   "engines": {
@@ -31,7 +31,6 @@
   "license": "ISC",
   "devDependencies": {
     "@chromatic-com/storybook": "1.5.0",
-    "@netlify/functions": "^0.7.2",
     "@sanity/icons": "^3.3.1",
     "@sanity/ui": "^2.8.8",
     "@storybook/addon-a11y": "^8.2.5",
