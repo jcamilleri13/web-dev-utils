@@ -1,0 +1,24 @@
+{
+  "name": "@james-camilleri/config",
+  "version": "1.0.0",
+  "description": "Linter/formatter configs",
+  "type": "module",
+  "exports": {
+    "./eslint": "./eslint.base.config.js",
+    "./eslint-svelte": "./eslint.svelte.config.js",
+    "./prettier": "./.prettierrc.json",
+    "./stylelint": "./.stylelintrc.json"
+  },
+  "author": "James Camilleri",
+  "license": "ISC",
+  "dependencies": {
+    "@eslint/js": "^9.13.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.3",
+    "eslint-plugin-import": "^2.31.0",
+    "globals": "^15.11.0",
+    "stylelint-config-standard-scss": "^13.1.0",
+    "svelte-eslint-parser": "^0.43.0",
+    "typescript-eslint": "^8.11.0"
+  }
+}
