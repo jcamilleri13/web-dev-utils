@@ -4,16 +4,16 @@
 
   import { onMount } from 'svelte'
 
+  import { SVG } from '../utils/svg.js'
+
   import {
     type AlternateImage,
     type AlternateImageWithMetadata,
     type Sizes,
     CANVAS_SIZE,
-    SVG,
   } from './types.js'
   import {
     checkAlternateImagesMetadata,
-    fetchSvgSource,
     generateSizesString,
     generateSrcset,
     generateWebpSrcset,
@@ -62,6 +62,33 @@
     loaded = true
   }
 
+  let {
+    alt,
+    svgMarkup,
+    metadata: {
+      blurHash,
+      breakpoints,
+      dimensions: { aspectRatio, width, height } = {},
+      extension,
+    } = {},
+  } = $derived<ImageWithMetadata | Record<string, undefined>>(imageWithMetadata ?? {})
+
+  let urlBuilder = $derived(imageWithMetadata && imageUrlBuilder.image(imageWithMetadata))
+  let src = $derived(urlBuilder?.url())
+  let sizesString = $derived(generateSizesString(sizes))
+  let croppedHeight = $derived(cropRatio && width ? Math.floor(width / cropRatio) : height)
+
+  let imgAttributes = $derived({
+    class: contain ? 'contain' : 'cover',
+    decoding: 'async' as const,
+    height: croppedHeight,
+    loading: lazy ? ('lazy' as const) : undefined,
+    sizes: sizesString,
+    src,
+    srcset: generateSrcset(urlBuilder, breakpoints, cropRatio),
+    width: width,
+  })
+
   $effect(() => {
     if (image && !isImageWithMetaData(image)) {
       getImageWithMetadata(image, imageUrlBuilder).then((image) => {
@@ -91,33 +118,6 @@
     }
   })
 
-  let {
-    alt,
-    metadata: {
-      blurHash,
-      breakpoints,
-      dimensions: { aspectRatio, width, height } = {},
-      extension,
-    } = {},
-  } = $derived<ImageWithMetadata | Record<string, undefined>>(imageWithMetadata ?? {})
-
-  let urlBuilder = $derived(imageWithMetadata && imageUrlBuilder.image(imageWithMetadata))
-  let src = $derived(urlBuilder?.url())
-  let sizesString = $derived(generateSizesString(sizes))
-  let croppedHeight = $derived(cropRatio && width ? Math.floor(width / cropRatio) : height)
-  let svgSource = $derived(fetchSvgSource(src, extension))
-
-  let imgAttributes = $derived({
-    class: contain ? 'contain' : 'cover',
-    decoding: 'async' as const,
-    height: croppedHeight,
-    loading: lazy ? ('lazy' as const) : undefined,
-    sizes: sizesString,
-    src,
-    srcset: generateSrcset(urlBuilder, breakpoints, cropRatio),
-    width: width,
-  })
-
   onMount(() => {
     if (extension !== SVG) {
       loaded = false
@@ -128,11 +128,9 @@
 
 {#if image}
   <div class="image-wrapper" style="height: {maxHeight ?? '100%'};" style:--align={align}>
-    {#if extension === SVG && svgSource}
-      {#await svgSource then src}
-        <!-- eslint-disable-next-line svelte/no-at-html-tags -->
-        {@html src}
-      {/await}
+    {#if extension === SVG && svgMarkup}
+      <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+      {@html svgMarkup}
     {:else}
       <canvas
         bind:this={canvas}

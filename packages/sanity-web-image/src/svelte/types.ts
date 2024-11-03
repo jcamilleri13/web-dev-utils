@@ -15,5 +15,4 @@ export interface AlternateImageWithMetadata extends AlternateImage {
   image?: ImageWithMetadata
 }
 
-export const SVG = 'svg'
 export const CANVAS_SIZE = 32

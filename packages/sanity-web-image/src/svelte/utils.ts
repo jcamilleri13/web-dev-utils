@@ -1,14 +1,15 @@
-import type { ImageWithMetadata } from '../types/web-image.js'
+import type { ImageWithMetadata, RawWebImage } from '../types/web-image.js'
 import type { Image, ImageUrlBuilder } from 'sanity'
 
 import { decode } from 'blurhash'
+
+import { SVG, fetchSvgMarkup } from '../utils/svg.js'
 
 import {
   type AlternateImage,
   type AlternateImageWithMetadata,
   type Sizes,
   CANVAS_SIZE,
-  SVG,
 } from './types'
 
 export function isImageWithMetaData(
@@ -25,12 +26,12 @@ export function checkAlternateImagesMetadata(
   })
 }
 
-async function fetchImageMetaData(image: Image, imageUrlBuilder: ImageUrlBuilder) {
+async function fetchImageMetaData(image: RawWebImage, imageUrlBuilder: ImageUrlBuilder) {
   const { asset } = image
   const { dataset, projectId } = imageUrlBuilder.options
 
   if (!asset?._ref || !dataset || !projectId) {
-    return
+    return {}
   }
 
   const query = `*[_id == "${asset?._ref}"]{ extension, ...metadata{ blurHash, breakpoints, dimensions }}[0]`
@@ -41,10 +42,17 @@ async function fetchImageMetaData(image: Image, imageUrlBuilder: ImageUrlBuilder
     const payload = await fetch(url)
     const metadata = ((await payload.json()) as { result: ImageWithMetadata['metadata'] }).result
 
-    return metadata
+    let svgMarkup: string | undefined
+    if (metadata.extension === SVG) {
+      svgMarkup = await fetchSvgMarkup(imageUrlBuilder.image(image).url(), image.alt)
+    }
+
+    return { metadata, svgMarkup }
   } catch (e) {
     console.error(e)
   }
+
+  return {}
 }
 
 export async function getImageWithMetadata(
@@ -55,12 +63,17 @@ export async function getImageWithMetadata(
     return Promise.resolve(undefined)
   }
 
-  return !isImageWithMetaData(image) ?
-      ({
-        ...image,
-        metadata: await fetchImageMetaData(image, imageUrlBuilder),
-      } as ImageWithMetadata)
-    : Promise.resolve(image)
+  if (isImageWithMetaData(image)) {
+    return Promise.resolve(image)
+  }
+
+  const { metadata, svgMarkup } = await fetchImageMetaData(image, imageUrlBuilder)
+
+  return {
+    ...image,
+    ...(svgMarkup ? { svgMarkup } : undefined),
+    metadata,
+  } as ImageWithMetadata
 }
 
 export function generateSizesString(sizes?: Sizes) {
@@ -75,29 +88,6 @@ export function generateSizesString(sizes?: Sizes) {
 
   queryList.push(FALLBACK_WIDTH)
   return queryList.join(', ')
-}
-
-export async function fetchSvgSource(src?: string, alt?: string, extension?: string) {
-  if (!src || extension !== SVG) {
-    return
-  }
-
-  try {
-    const response = await fetch(src)
-    if (!response.ok) {
-      throw Error(response.statusText)
-    }
-
-    const source = await response.text()
-    return alt ?
-        source.replace(
-          /(<.*?>)(.*)/,
-          (_, openingTag, svgContent) => `${openingTag}<title>${alt}</title>${svgContent}`,
-        )
-      : source
-  } catch (e) {
-    console.error('Error retrieving SVG source', e)
-  }
 }
 
 function breakpointUrl(

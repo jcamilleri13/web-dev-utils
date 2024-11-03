@@ -55,6 +55,8 @@ function optimiseSvgString(svg: string) {
           },
         },
       },
+      // Strip out all scripts to protect against (self) XSS attacks.
+      'removeScriptElement',
     ],
   })
 
