@@ -1,18 +1,18 @@
-import type { ImageWithMetadata } from '../types/web-image.js'
-import type { Image } from 'sanity'
+import type { RasterImageWithMetadata, RawImage } from '../types/web-image.js'
 
 export interface Sizes {
   [key: string]: string
 }
 
+// TODO: Types (and implementation) do not currently support alternate SVG images.
 export interface AlternateImage {
   maxWidth: string
-  image?: Image | ImageWithMetadata
+  image?: RawImage | RasterImageWithMetadata
   cropRatio?: number
 }
 
 export interface AlternateImageWithMetadata extends AlternateImage {
-  image?: ImageWithMetadata
+  image?: RasterImageWithMetadata
 }
 
 export const CANVAS_SIZE = 32

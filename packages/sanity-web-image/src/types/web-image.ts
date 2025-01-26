@@ -1,17 +1,6 @@
 import type { Image, ImageAsset, Reference } from 'sanity'
 
-type SanityMetadata = ImageAsset['metadata']
-type BreakpointMetadata = {
-  breakpoints: number[]
-}
-
-interface Metadata extends SanityMetadata, BreakpointMetadata {}
-
-export interface OptimisedSanityImage extends ImageAsset {
-  metadata: Metadata
-}
-
-export interface RawWebImage extends Image {
+export interface RawImage extends Image {
   alt?: string
 }
 
@@ -20,7 +9,6 @@ export interface RasterImageWithMetadata extends Image {
   asset: Reference
   metadata: {
     blurHash: string
-    breakpoints: number[]
     extension: string
     dimensions: ImageAsset['metadata']['dimensions']
   }

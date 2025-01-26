@@ -1,5 +1,5 @@
-import type { ImageWithMetadata, RawWebImage } from '../types/web-image.js'
-import type { Image, ImageUrlBuilder } from 'sanity'
+import type { ImageWithMetadata, RawImage } from '../types/web-image.js'
+import type { ImageUrlBuilder } from 'sanity'
 
 import { decode } from 'blurhash'
 
@@ -13,7 +13,7 @@ import {
 } from './types'
 
 export function isImageWithMetaData(
-  image: Image | ImageWithMetadata | undefined,
+  image: RawImage | ImageWithMetadata | undefined,
 ): image is ImageWithMetadata {
   return !!image && image.metadata != null
 }
@@ -26,7 +26,7 @@ export function checkAlternateImagesMetadata(
   })
 }
 
-async function fetchImageMetaData(image: RawWebImage, imageUrlBuilder: ImageUrlBuilder) {
+async function fetchImageMetaData(image: RawImage, imageUrlBuilder: ImageUrlBuilder) {
   const { asset } = image
   const { dataset, projectId } = imageUrlBuilder.options
 
@@ -34,7 +34,7 @@ async function fetchImageMetaData(image: RawWebImage, imageUrlBuilder: ImageUrlB
     return {}
   }
 
-  const query = `*[_id == "${asset?._ref}"]{ extension, ...metadata{ blurHash, breakpoints, dimensions }}[0]`
+  const query = `*[_id == "${asset?._ref}"]{ extension, ...metadata{ blurHash, dimensions }}[0]`
   const apiVersion = new Date().toISOString().split('T')[0] // Just use current API. We may regret this later.
   const url = `https://${projectId}.apicdn.sanity.io/v${apiVersion}/data/query/${dataset}?query=${query}`
 
@@ -56,7 +56,7 @@ async function fetchImageMetaData(image: RawWebImage, imageUrlBuilder: ImageUrlB
 }
 
 export async function getImageWithMetadata(
-  image: Image | ImageWithMetadata | undefined,
+  image: RawImage | ImageWithMetadata | undefined,
   imageUrlBuilder: ImageUrlBuilder,
 ) {
   if (!image) {
@@ -74,6 +74,23 @@ export async function getImageWithMetadata(
     ...(svgMarkup ? { svgMarkup } : undefined),
     metadata,
   } as ImageWithMetadata
+}
+
+export function generateBreakpoints(width: number) {
+  let nextBreakpoint = 100
+  const breakpoints: number[] = []
+
+  while (nextBreakpoint < width) {
+    breakpoints.push(nextBreakpoint)
+    nextBreakpoint +=
+      nextBreakpoint < 300 ? 50
+      : nextBreakpoint < 1000 ? 100
+      : 150
+  }
+
+  breakpoints.push(width)
+
+  return breakpoints
 }
 
 export function generateSizesString(sizes?: Sizes) {

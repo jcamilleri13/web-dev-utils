@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { ImageWithMetadata } from '../types/web-image.js'
-  import type { Image, ImageUrlBuilder } from 'sanity'
+  import type { ImageWithMetadata, RawImage } from '../types/web-image.js'
+  import type { ImageUrlBuilder } from 'sanity'
 
   import { onMount } from 'svelte'
 
@@ -14,6 +14,7 @@
   } from './types.js'
   import {
     checkAlternateImagesMetadata,
+    generateBreakpoints,
     generateSizesString,
     generateSrcset,
     generateWebpSrcset,
@@ -24,7 +25,7 @@
 
   interface Props {
     imageUrlBuilder: ImageUrlBuilder
-    image?: Image | ImageWithMetadata
+    image?: RawImage | ImageWithMetadata
     alternateImages?: AlternateImage[]
 
     align?: 'top' | 'center' | 'bottom'
@@ -65,17 +66,13 @@
   let {
     alt,
     svgMarkup,
-    metadata: {
-      blurHash,
-      breakpoints,
-      dimensions: { aspectRatio, width, height } = {},
-      extension,
-    } = {},
+    metadata: { blurHash, dimensions: { aspectRatio, width, height } = {}, extension } = {},
   } = $derived<ImageWithMetadata | Record<string, undefined>>(imageWithMetadata ?? {})
 
   let urlBuilder = $derived(imageWithMetadata && imageUrlBuilder.image(imageWithMetadata))
   let src = $derived(urlBuilder?.url())
   let sizesString = $derived(generateSizesString(sizes))
+  let breakpoints = $derived(width ? generateBreakpoints(width) : [])
   let croppedHeight = $derived(cropRatio && width ? Math.floor(width / cropRatio) : height)
 
   let imgAttributes = $derived({
@@ -142,13 +139,13 @@
       <picture>
         {#if alternateImagesWithMetadata}
           {#each alternateImagesWithMetadata as { maxWidth, image: alternateImage, cropRatio }}
-            <!-- TODO: Filter out unnecessary breakpoints? -->
+            {@const width = alternateImage?.metadata.dimensions.width}
             <source
               type="image/webp"
               media="(max-width: {maxWidth})"
               srcset={generateWebpSrcset(
                 alternateImage ? imageUrlBuilder.image(alternateImage) : urlBuilder,
-                alternateImage?.metadata.breakpoints ?? breakpoints,
+                width ? generateBreakpoints(width) : [],
                 cropRatio,
               )}
             />
